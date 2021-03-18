@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "962156617311",
+    "firebase_url": "https://boomonline-bf8ff-default-rtdb.firebaseio.com",
+    "project_id": "boomonline-bf8ff",
+    "storage_bucket": "boomonline-bf8ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962156617311:android:68bd21dbf1d99a5feec5ea",
+        "android_client_info": {
+          "package_name": "com.mygdx.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962156617311-vo73rnmppl1laffmuihlqmp266vbue6c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYf_XZEgGIMbokuvs30Yf602LzyyXqFs8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962156617311-vo73rnmppl1laffmuihlqmp266vbue6c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
