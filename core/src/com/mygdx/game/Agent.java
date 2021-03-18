@@ -7,17 +7,20 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.ArrayList;
+
 public class Agent extends ObjectOnMap {
     //Display
     boolean setBoom =false;
 
     Texture texture;
-    Boom boom;
+
+    ArrayList<Boom> boomList = new ArrayList<Boom>();
     public Agent(){
         x = 200;
         y = 50;
         texture = new Texture("Agent.png");
-        boom = new Boom();
+
 
     }
     public void handleInput(Controller controller) {
@@ -31,11 +34,17 @@ public class Agent extends ObjectOnMap {
             y+=10;
         else if(controller.isSetBoomPressed()){
             setBoom = true;
-            boom.Plant(this.x, this.y);
+            boomList.add(new Boom());
+            boomList.get(boomList.size()-1).Plant(this.x, this.y);
+            setBoom = false;
         }
     }
     public void draw(){
-        boom.draw();
+        for (int i=0; i<boomList.size();i++){
+            if (boomList.get(i).time>0)
+                boomList.get(i).draw();
+            else boomList.remove(i);
+        }
         Main.batch.draw(texture,x,y,size,size);
 
     }
