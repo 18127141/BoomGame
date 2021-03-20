@@ -19,6 +19,6 @@ public class AndroidLauncher extends AndroidApplication {
 		initialize(new Main(), config);
 		database = FirebaseDatabase.getInstance("https://boomonline-bf8ff-default-rtdb.firebaseio.com");
 		Ref= database.getReference("message");
-		Ref.setValue("HELLO");
+		Ref.setValue("Test");
 	}
 }

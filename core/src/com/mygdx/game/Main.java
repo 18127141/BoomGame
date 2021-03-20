@@ -2,22 +2,17 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class Main extends ApplicationAdapter {
+public class Main extends Game {
 	public static SpriteBatch batch;
 	OrthographicCamera cam;
 	Viewport viewport;
@@ -27,6 +22,7 @@ public class Main extends ApplicationAdapter {
 	Map map;
 	@Override
 	public void create() {
+
 		cam = new OrthographicCamera();
 		viewport = new FitViewport(800, 480 , cam);
 		batch = new SpriteBatch();
@@ -34,6 +30,7 @@ public class Main extends ApplicationAdapter {
 		agent = new Agent();
 		map = new Map();
 
+		setScreen(new MyScreen(this));
 	}
 
 	@Override
@@ -46,19 +43,21 @@ public class Main extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		Gdx.gl.glClearColor(1,0,0,1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		super.render();
 
-		agent.handleInput(controller);
-
-
-		batch.begin();
-
-		map.draw();
-		agent.draw();
-		batch.end();
-
-		controller.draw();
+//		Gdx.gl.glClearColor(1,0,0,1);
+//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//
+//		agent.handleInput(controller);
+//
+//
+//		batch.begin();
+//
+//		map.draw();
+//		agent.draw();
+//		batch.end();
+//
+//		controller.draw();
 
 	}
 }

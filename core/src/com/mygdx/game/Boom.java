@@ -26,7 +26,7 @@ public class Boom extends ObjectOnMap{
             Main.batch.draw(texture,x,y,size,size);
         }
     }
-
+    
     public void run() {
         try {
             while(time >=0) {
