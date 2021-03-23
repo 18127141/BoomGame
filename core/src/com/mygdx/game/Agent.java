@@ -34,7 +34,9 @@ public class Agent extends ObjectOnMap {
             y+=10;
         else if(controller.isSetBoomPressed()){
             setBoom = true;
-            boomList.add(new Boom());
+            Boom tmp = new Boom();
+            tmp.start();
+            boomList.add(tmp);
             boomList.get(boomList.size()-1).Plant(this.x, this.y);
             setBoom = false;
         }

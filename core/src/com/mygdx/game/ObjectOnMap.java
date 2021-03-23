@@ -20,7 +20,7 @@ public class ObjectOnMap extends Thread {
 
     public ObjectOnMap(){
         cam = new OrthographicCamera();
-        viewport = new FitViewport(800, 480, cam);
+        viewport = new FitViewport(Main.WIDTH, Main.HEIGHT, cam);
         stage = new Stage(viewport, Main.batch);
         x = 200;
         y = 50;

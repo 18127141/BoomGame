@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -23,25 +25,28 @@ public class Controller {
 
     public Controller(){
         cam = new OrthographicCamera();
-        viewport = new FitViewport(800, 480, cam);
+        viewport = new FitViewport(Main.WIDTH, Main.HEIGHT, cam);
         stage = new Stage(viewport, Main.batch);
 
 
         Gdx.input.setInputProcessor(stage);
 
         Table leftControls = new Table();
-        Table rightControls = new Table();
+
 
         leftControls.left().bottom();
 
 
-
+        int w=20;
+        int h=20;
         Image setBoomImg = new Image(new Texture("flatDark25.png"));
-        setBoomImg.setSize(50, 50);
+        setBoomImg.setSize(w+35, h+35);
         setBoomImg.addListener(new InputListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("HEHE");
+
                 setBoomPressed = true;
                 return true;
             }
@@ -53,7 +58,7 @@ public class Controller {
         });
 
         Image upImg = new Image(new Texture("flatDark25.png"));
-        upImg.setSize(50, 50);
+        upImg.setSize(w, h);
         upImg.addListener(new InputListener() {
 
             @Override
@@ -69,7 +74,7 @@ public class Controller {
         });
 
         Image downImg = new Image(new Texture("flatDark26.png"));
-        downImg.setSize(50, 50);
+        downImg.setSize(w, h);
         downImg.addListener(new InputListener() {
 
             @Override
@@ -85,7 +90,7 @@ public class Controller {
         });
 
         Image rightImg = new Image(new Texture("flatDark24.png"));
-        rightImg.setSize(50, 50);
+        rightImg.setSize(w, h);
         rightImg.addListener(new InputListener() {
 
             @Override
@@ -101,7 +106,7 @@ public class Controller {
         });
 
         Image leftImg = new Image(new Texture("flatDark23.png"));
-        leftImg.setSize(50, 50);
+        leftImg.setSize(w, h);
         leftImg.addListener(new InputListener() {
 
             @Override
@@ -116,18 +121,18 @@ public class Controller {
             }
         });
 
+
         leftControls.add();
         leftControls.add(upImg).size(upImg.getWidth(), upImg.getHeight());
         leftControls.add();
-        leftControls.row().pad(5, 0, 5, 5);
+        leftControls.row().pad(2, 2, 2, 2);
 
 
 
         leftControls.add(leftImg).size(leftImg.getWidth(), leftImg.getHeight());
         leftControls.add();
         leftControls.add(rightImg).size(rightImg.getWidth(), rightImg.getHeight());
-        leftControls.add().padLeft(550);
-        leftControls.add(setBoomImg).size(setBoomImg.getWidth(),setBoomImg.getHeight());
+
         leftControls.row();
         leftControls.add();
         leftControls.add(downImg).size(downImg.getWidth(), downImg.getHeight());
@@ -136,8 +141,29 @@ public class Controller {
 
 
 
+        Table rightControls = new Table();
+        rightControls.setFillParent(true);
+        rightControls.bottom();
 
+
+        Image bottom = new Image(new Texture("bottom.png"));
+        rightControls.add(bottom);
+
+        Table Right = new Table();
+        Right.setFillParent(true);
+
+        Right.bottom().right();
+        Right.padRight(7);
+        Right.padBottom(5);
+        setBoomImg.setColor(0,0,0,0);
+        Right.add(setBoomImg).size(setBoomImg.getWidth(), setBoomImg.getHeight());
+
+
+
+
+        stage.addActor(rightControls);
         stage.addActor(leftControls);
+        stage.addActor(Right);
 
     }
 
@@ -148,10 +174,12 @@ public class Controller {
     public boolean isUpPressed() {
         return upPressed;
     }
-    public boolean isSetBoomPressed() {
+    public boolean isSetBoomPressed()
+    {
         return setBoomPressed;
     }
     public boolean isDownPressed() {
+
         return downPressed;
     }
 

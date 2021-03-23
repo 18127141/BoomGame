@@ -20,9 +20,9 @@ public class Boom extends ObjectOnMap{
     public void draw(){
 
         if(this.OnTime==true){
-            if (time == 5){
-                this.start();
-            }
+//            if (time == 5){
+//                this.start();
+//            }
             Main.batch.draw(texture,x,y,size,size);
         }
     }

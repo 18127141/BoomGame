@@ -6,8 +6,13 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class MyScreen implements Screen {
     private Main game;
+
     MyScreen(Main game){
         this.game = game;
+    }
+    public void update(){
+        game.cam.update();
+        game.renderer.setView(game.cam);
     }
     @Override
     public void show() {
@@ -16,19 +21,24 @@ public class MyScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1,0,0,1);
+        update();
+        Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.agent.handleInput(game.controller);
 
 
-        game.batch.begin();
-
-        game.map.draw();
-        game.agent.draw();
-        game.batch.end();
+//        game.batch.begin();
+//
+//        game.map.draw();
+//        game.agent.draw();
+//        game.batch.end();
+        game.batch.setProjectionMatrix(game.controller.cam.combined);
+        game.renderer.render();
 
         game.controller.draw();
+
+
     }
 
     @Override
