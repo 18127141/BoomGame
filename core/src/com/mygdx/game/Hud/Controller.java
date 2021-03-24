@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.Hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.Main;
 
 /**
  * Created by brentaureli on 10/23/15.
@@ -22,7 +23,7 @@ public class Controller {
     Viewport viewport;
     Stage stage;
     boolean upPressed, downPressed, leftPressed, rightPressed, setBoomPressed;
-    OrthographicCamera cam;
+    public OrthographicCamera cam;
 
     public Controller(){
         cam = new OrthographicCamera();

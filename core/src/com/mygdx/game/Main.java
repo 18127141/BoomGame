@@ -1,10 +1,6 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,29 +10,32 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import java.lang.reflect.WildcardType;
+import com.mygdx.game.Hud.Controller;
+import com.mygdx.game.Screens.MyScreen;
 
 public class Main extends Game {
-	public static int WIDTH =480;
-	public static int HEIGHT =320;
+	public  static float PPM=100;
+	public static float WIDTH =480;
+	public static float HEIGHT =320;
 	public static SpriteBatch batch;
-	OrthographicCamera cam;
-	Viewport viewport;
-	Texture texture;
-	Controller controller;
-	Agent agent;
-	Map map;
+	public OrthographicCamera cam;
+	public Viewport viewport;
+	public Texture texture;
+	public com.mygdx.game.Hud.Controller controller;
+	public Agent agent;
+	public Map map;
 
-
-	TmxMapLoader mapLoader;
-	TiledMap mapp;
-	OrthogonalTiledMapRenderer renderer;
+	//=========================Tiled Map/////=====================
+	public TmxMapLoader mapLoader;
+	public TiledMap mapp;
+	public OrthogonalTiledMapRenderer renderer;
 	@Override
 	public void create() {
+		//Scaling b2d
 
+		//
 		cam = new OrthographicCamera();
-		viewport = new FitViewport(WIDTH, HEIGHT , cam);
+		viewport = new FitViewport(WIDTH/PPM, HEIGHT /PPM, cam);
 		batch = new SpriteBatch();
 		controller = new Controller();
 		agent = new Agent();
@@ -44,8 +43,8 @@ public class Main extends Game {
 		mapLoader = new TmxMapLoader();
 		mapp = mapLoader.load("map/Forest.tmx");
 
-		renderer = new OrthogonalTiledMapRenderer(mapp);
-		cam.position.set(viewport.getWorldWidth()/2-controller.l.getWidth(),viewport.getWorldHeight()/2-(controller.bottom.getHeight()*5/7)
+		renderer = new OrthogonalTiledMapRenderer(mapp,1/PPM);
+		cam.position.set((viewport.getWorldWidth()/2-controller.l.getWidth()/PPM),(viewport.getWorldHeight()/2-(controller.bottom.getHeight()*5/7/PPM))
 				,0);
 
 		cam.update();
