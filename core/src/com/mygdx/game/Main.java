@@ -15,9 +15,11 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.lang.reflect.WildcardType;
+
 public class Main extends Game {
-	public static int WIDTH =400;
-	public static int HEIGHT =250;
+	public static int WIDTH =480;
+	public static int HEIGHT =320;
 	public static SpriteBatch batch;
 	OrthographicCamera cam;
 	Viewport viewport;
@@ -34,15 +36,18 @@ public class Main extends Game {
 	public void create() {
 
 		cam = new OrthographicCamera();
-		viewport = new FitViewport(400, 300 , cam);
+		viewport = new FitViewport(WIDTH, HEIGHT , cam);
 		batch = new SpriteBatch();
 		controller = new Controller();
 		agent = new Agent();
 		map = new Map();
 		mapLoader = new TmxMapLoader();
 		mapp = mapLoader.load("map/Forest.tmx");
+
 		renderer = new OrthogonalTiledMapRenderer(mapp);
-		cam.position.set(viewport.getWorldWidth()/2,viewport.getWorldHeight(),0);
+		cam.position.set(viewport.getWorldWidth()/2-controller.l.getWidth(),viewport.getWorldHeight()/2-(controller.bottom.getHeight()*5/7)
+				,0);
+
 		cam.update();
 		setScreen(new MyScreen(this));
 	}

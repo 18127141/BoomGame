@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Created by brentaureli on 10/23/15.
  */
 public class Controller {
+    public static Image l,bottom;
     Viewport viewport;
     Stage stage;
     boolean upPressed, downPressed, leftPressed, rightPressed, setBoomPressed;
@@ -139,16 +140,25 @@ public class Controller {
         leftControls.add();
         leftControls.row().padBottom(5);
 
+//================================================
+        Table Left = new Table();
+        Left.setFillParent(true);
+        Left.left();
 
+
+        l = new Image(new Texture("Left.png"));
+        Left.add(l);
+        //==================================
 
         Table rightControls = new Table();
         rightControls.setFillParent(true);
         rightControls.bottom();
+        rightControls.padLeft(l.getWidth());
 
 
-        Image bottom = new Image(new Texture("bottom.png"));
+        bottom = new Image(new Texture("bottom.png"));
         rightControls.add(bottom);
-
+        //============================================
         Table Right = new Table();
         Right.setFillParent(true);
 
@@ -159,11 +169,13 @@ public class Controller {
         Right.add(setBoomImg).size(setBoomImg.getWidth(), setBoomImg.getHeight());
 
 
+        //============================
 
-
+        stage.addActor(Left);
         stage.addActor(rightControls);
         stage.addActor(leftControls);
         stage.addActor(Right);
+
 
     }
 
