@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Hud.Controller;
+import com.mygdx.game.ResourceManager.GameManager;
 import com.mygdx.game.Screens.MyScreen;
 
 public class Main extends Game {
@@ -22,28 +23,28 @@ public class Main extends Game {
 	public Viewport viewport;
 	public Texture texture;
 	public com.mygdx.game.Hud.Controller controller;
-	public Agent agent;
-	public Map map;
+
 
 	//=========================Tiled Map/////=====================
 	public TmxMapLoader mapLoader;
 	public TiledMap mapp;
 	public OrthogonalTiledMapRenderer renderer;
+	//====================|GameManager|/////////
+	GameManager manager;
 	@Override
 	public void create() {
-		//Scaling b2d
+		manager = new GameManager();
 
-		//
 		cam = new OrthographicCamera();
 		viewport = new FitViewport(WIDTH/PPM, HEIGHT /PPM, cam);
 		batch = new SpriteBatch();
 		controller = new Controller();
-		agent = new Agent();
-		map = new Map();
+
 		mapLoader = new TmxMapLoader();
 		mapp = mapLoader.load("map/Forest.tmx");
 
 		renderer = new OrthogonalTiledMapRenderer(mapp,1/PPM);
+
 		cam.position.set((viewport.getWorldWidth()/2-controller.l.getWidth()/PPM),(viewport.getWorldHeight()/2-(controller.bottom.getHeight()*5/7/PPM))
 				,0);
 
@@ -63,19 +64,13 @@ public class Main extends Game {
 	public void render() {
 		super.render();
 
-//		Gdx.gl.glClearColor(1,0,0,1);
-//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//
-//		agent.handleInput(controller);
-//
-//
-//		batch.begin();
-//
-//		map.draw();
-//		agent.draw();
-//		batch.end();
-//
-//		controller.draw();
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		mapp.dispose();
+		renderer.dispose();
 
 	}
 }

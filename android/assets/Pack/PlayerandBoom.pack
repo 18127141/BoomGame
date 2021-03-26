@@ -1,0 +1,26 @@
+
+PlayerandBoom.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+playerAnimation
+  rotate: false
+  xy: 1, 1
+  size: 240, 30
+  orig: 240, 30
+  offset: 0, 0
+  index: -1
+Bomb
+  rotate: false
+  xy: 243, 11
+  size: 233, 20
+  orig: 233, 20
+  offset: 0, 0
+  index: -1
+DeadPlayer
+  rotate: false
+  xy: 478, 1
+  size: 140, 30
+  orig: 140, 30
+  offset: 0, 0
+  index: -1
