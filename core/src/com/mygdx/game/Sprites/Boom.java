@@ -14,7 +14,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.CountDown;
 import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.Main;
 import com.mygdx.game.ResourceManager.GameManager;
@@ -31,7 +30,7 @@ public class Boom extends Sprite {
     public Body b2body;
     private Animation CountDown ;
     private Animation TimeOver ;
-    int Time = 200;
+    public int Time = 200;
 
     public Boom(World world, Vector2 position){
         super(GameManager.getAssetManager().get("Pack/PlayerandBoom.pack", TextureAtlas.class).findRegion("Bomb"));

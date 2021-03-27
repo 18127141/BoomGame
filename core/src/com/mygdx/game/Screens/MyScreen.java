@@ -16,30 +16,32 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.*;
 import com.mygdx.game.Builder.WorldBuilder;
 import com.mygdx.game.ResourceManager.GameManager;
-import com.mygdx.game.Sprites.Items;
-import com.mygdx.game.Sprites.Player;
-import com.mygdx.game.Sprites.Walls;
+import com.mygdx.game.Sprites.*;
+import com.badlogic.gdx.utils.Array;
 
 public class MyScreen implements Screen {
     private Main game;
     Player player;
     private TextureAtlas atlas;
+    Array<Boom> BoomList;
 
     //Box2d
     private World world;
     private Box2DDebugRenderer b2dr;
     public MyScreen(Main game){
         this.game = game;
+        BoomList = new Array<Boom>();
         /////==============================================Create Box2d WORld==================================
         world = new World(new Vector2(),true);
         b2dr = new Box2DDebugRenderer();
         //Box2d World
         new WorldBuilder(world,game.mapp);
         //======================================================================
-        player = new Player(world);
+        player = new Player(world,BoomList);
 
 
     }
@@ -48,9 +50,21 @@ public class MyScreen implements Screen {
         player.handleInput(game.controller);
         world.step(1/60f,6,2);
         game.cam.update();
+
         player.update(dt);
 
         game.renderer.setView(game.cam);
+    }
+    public void BoomCountDown(){
+        for (int i=0; i< BoomList.size;i++){
+            Boom Temp = BoomList.get(i);
+            Temp.Time-=1;
+            if (Temp.Time == 0) {
+                Temp.Destroy();
+                BoomList.removeIndex(i);
+                i--;
+            }
+        }
     }
     @Override
     public void show() {
@@ -60,6 +74,7 @@ public class MyScreen implements Screen {
     @Override
 
     public void render(float delta) {
+        BoomCountDown();
         update(delta);
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

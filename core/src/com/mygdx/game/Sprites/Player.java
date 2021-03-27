@@ -42,6 +42,7 @@ public class Player extends Sprite {
     final int MaxBoom = 5;
     final int MaxSpeed = 5;
     final int MaxRange = 5;
+    final int TIME_PREPARE = 100;
     private Array<TextureRegion> stand;
 
     private Animation RunDown;
@@ -50,13 +51,18 @@ public class Player extends Sprite {
     private Animation RunRight;
     private Array<Animation> Run;
     private float stateTimer;
+    //1s nut an se nhan 4 lan thong tin PressTrue nen bien nay de delay so lan dat bom 1s lai
     int TimePlanted = 0;
+    //DEM THOI GIAN CO BOM MOI
+    int PrepareTime = TIME_PREPARE;
+    //SO BOM CO THE DAT
+    int  AvaiableBoom = MaxBoom;
 
-    public Player(World world){
+    public Player(World world,Array<Boom> BoomList){
         super(GameManager.getAssetManager().get("Pack/PlayerandBoom.pack", TextureAtlas.class).findRegion("playerAnimation"));
-
+        this.BoomList = BoomList;
         this.world = world;
-        BoomList = new Array<>();
+
         //==============|Create the box2d body|==========
         BodyDef bdef = new BodyDef();
         bdef.position.set(20/ Main.PPM,20/ Main.PPM);
@@ -134,15 +140,18 @@ public class Player extends Sprite {
     public void update(float dt){
         setPosition(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/3);
         setRegion(getFrame(dt));
-
         //bug
         if (Math.abs(b2body.getLinearVelocity().x) <0.000001 || Math.abs(b2body.getLinearVelocity().y) <0.000001 ){
             b2body.setLinearVelocity(0,0);
         }
         //2 cai nay de tinh thoi gian  dat dc bom moi va thoi gian bom no
 
-        BoomCountDown();
         if(TimePlanted >0) TimePlanted--;
+        if(--PrepareTime==0) {
+            if (MaxBoom > AvaiableBoom ) AvaiableBoom++;
+            PrepareTime = TIME_PREPARE;
+
+        }
     }
     public TextureRegion getFrame(float dt){
         State currentState = getState();
@@ -216,26 +225,15 @@ public class Player extends Sprite {
             direction=0;
         }
         if (controller.isPlanted()){
-            if (TimePlanted == 0)
+            if (TimePlanted == 0  && AvaiableBoom >0)
             {
-                BoomList.add(new Boom(world, b2body.getPosition()));
+                Boom Temp = new Boom(this.world, this.b2body.getPosition());
+                BoomList.add(Temp);
                 System.out.println("HEHE");
                 TimePlanted=10;
+                AvaiableBoom--;
             }
         }
 
     }
-    public void BoomCountDown(){
-        for (int i=0; i< BoomList.size;i++){
-            Boom Temp = BoomList.get(i);
-            Temp.Time-=1;
-            if (Temp.Time == 0) {
-                Temp.Destroy();
-                BoomList.removeIndex(i);
-                i--;
-            }
-        }
-    }
-
-
 }
