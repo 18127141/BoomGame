@@ -43,11 +43,11 @@ public class Controller {
         int h=20;
         Image setBoomImg = new Image(new Texture("flatDark25.png"));
         setBoomImg.setSize(w+35, h+35);
+
         setBoomImg.addListener(new InputListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("HEHE");
 
                 setBoomPressed = true;
                 return true;
@@ -199,7 +199,9 @@ public class Controller {
     public boolean isLeftPressed() {
         return leftPressed;
     }
-
+    public boolean isPlanted() {
+        return setBoomPressed;
+    }
     public boolean isRightPressed() {
         return rightPressed;
     }

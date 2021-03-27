@@ -14,7 +14,6 @@ public class WorldBuilder {
         //Render the items
 //        for (MapObject object: map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
 //            Rectangle rect = ((RectangleMapObject)object).getRectangle();
-//
 //            new Items(world,map,rect);
 //        }
         //Render the walls

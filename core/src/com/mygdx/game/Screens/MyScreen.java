@@ -38,9 +38,7 @@ public class MyScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
         //Box2d World
         new WorldBuilder(world,game.mapp);
-
         //======================================================================
-
         player = new Player(world);
 
 
@@ -51,6 +49,7 @@ public class MyScreen implements Screen {
         world.step(1/60f,6,2);
         game.cam.update();
         player.update(dt);
+
         game.renderer.setView(game.cam);
     }
     @Override

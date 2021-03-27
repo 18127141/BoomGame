@@ -35,6 +35,7 @@ public class Player extends Sprite {
     private State previous;
     public World world;
     public Body b2body;
+    public Array<Boom> BoomList ;
     private int boomCount =0;
     private int speedCount =0;
     private int rangeCount = 0;
@@ -42,18 +43,20 @@ public class Player extends Sprite {
     final int MaxSpeed = 5;
     final int MaxRange = 5;
     private Array<TextureRegion> stand;
+
     private Animation RunDown;
     private Animation RunUp;
     private Animation RunLeft;
     private Animation RunRight;
     private Array<Animation> Run;
     private float stateTimer;
+    int TimePlanted = 0;
 
     public Player(World world){
         super(GameManager.getAssetManager().get("Pack/PlayerandBoom.pack", TextureAtlas.class).findRegion("playerAnimation"));
 
         this.world = world;
-
+        BoomList = new Array<>();
         //==============|Create the box2d body|==========
         BodyDef bdef = new BodyDef();
         bdef.position.set(20/ Main.PPM,20/ Main.PPM);
@@ -136,7 +139,10 @@ public class Player extends Sprite {
         if (Math.abs(b2body.getLinearVelocity().x) <0.000001 || Math.abs(b2body.getLinearVelocity().y) <0.000001 ){
             b2body.setLinearVelocity(0,0);
         }
+        //2 cai nay de tinh thoi gian  dat dc bom moi va thoi gian bom no
 
+        BoomCountDown();
+        if(TimePlanted >0) TimePlanted--;
     }
     public TextureRegion getFrame(float dt){
         State currentState = getState();
@@ -158,7 +164,6 @@ public class Player extends Sprite {
     }
 
     private void updateDirection() {
-        System.out.println(b2body.getLinearVelocity());
         if (b2body.getLinearVelocity().x>0){
             direction=2;
         }
@@ -210,8 +215,28 @@ public class Player extends Sprite {
             this.b2body.applyLinearImpulse(new Vector2(0,-1f),this.b2body.getWorldCenter(),true);
             direction=0;
         }
+        if (controller.isPlanted()){
+            if (TimePlanted == 0)
+            {
+                BoomList.add(new Boom(world, b2body.getPosition()));
+                System.out.println("HEHE");
+                TimePlanted=10;
+            }
+        }
 
         //bug
     }
+    public void BoomCountDown(){
+        for (int i=0; i< BoomList.size;i++){
+            Boom Temp = BoomList.get(i);
+            Temp.Time-=1;
+            if (Temp.Time == 0) {
+                Temp.Destroy();
+                BoomList.removeIndex(i);
+                i--;
+            }
+        }
+    }
+
 
 }

@@ -34,7 +34,6 @@ public class Main extends Game {
 	@Override
 	public void create() {
 		manager = new GameManager();
-
 		cam = new OrthographicCamera();
 		viewport = new FitViewport(WIDTH/PPM, HEIGHT /PPM, cam);
 		batch = new SpriteBatch();
