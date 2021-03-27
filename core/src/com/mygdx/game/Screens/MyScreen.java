@@ -67,11 +67,6 @@ public class MyScreen implements Screen {
 
 
 
-//        game.batch.begin();
-//
-//        game.map.draw();
-//        game.agent.draw();
-//        game.batch.end();
         //=====|MAP RENDERER|===========
         game.batch.setProjectionMatrix(game.controller.cam.combined);
 

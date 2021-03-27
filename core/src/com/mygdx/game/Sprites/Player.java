@@ -35,9 +35,10 @@ public class Player extends Sprite {
     private State previous;
     public World world;
     public Body b2body;
-    private int boomCount =0;
+    //
+    private int boomCount =1;
     private int speedCount =0;
-    private int rangeCount = 0;
+    private int rangeCount = 1;
     final int MaxBoom = 5;
     final int MaxSpeed = 5;
     final int MaxRange = 5;
@@ -132,10 +133,6 @@ public class Player extends Sprite {
         setPosition(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/3);
         setRegion(getFrame(dt));
 
-        //bug
-        if (Math.abs(b2body.getLinearVelocity().x) <0.000001 || Math.abs(b2body.getLinearVelocity().y) <0.000001 ){
-            b2body.setLinearVelocity(0,0);
-        }
 
     }
     public TextureRegion getFrame(float dt){
@@ -158,7 +155,6 @@ public class Player extends Sprite {
     }
 
     private void updateDirection() {
-        System.out.println(b2body.getLinearVelocity());
         if (b2body.getLinearVelocity().x>0){
             direction=2;
         }
@@ -180,13 +176,13 @@ public class Player extends Sprite {
         else return State.Run;
     }
     public void handleInput(Controller controller){
-        if (b2body.getLinearVelocity().x<0.8){
+        if (Math.abs(b2body.getLinearVelocity().x)<0.8+(0.5*speedCount)){
             b2body.setLinearVelocity(0,0);
         }
 
         if ((controller.isRightPressed() || Gdx.input.isKeyPressed(Input.Keys.D))&& this.b2body.getLinearVelocity().x<=2){
             this.b2body.setLinearVelocity(0,0);
-            this.b2body.applyLinearImpulse(new Vector2(1f,0),this.b2body.getWorldCenter(),true);
+            this.b2body.applyLinearImpulse(new Vector2(1f+(0.2f*speedCount),0),this.b2body.getWorldCenter(),true);
             direction = 2;
 
         }
@@ -194,24 +190,23 @@ public class Player extends Sprite {
         if ((controller.isLeftPressed() || Gdx.input.isKeyPressed(Input.Keys.A))&& this.b2body.getLinearVelocity().x >=-2){
             this.b2body.setLinearVelocity(0,0);
 
-            this.b2body.applyLinearImpulse(new Vector2(-1f,0),this.b2body.getWorldCenter(),true);
+            this.b2body.applyLinearImpulse(new Vector2(-1f-(0.2f*speedCount),0),this.b2body.getWorldCenter(),true);
             direction=1;
 
         }
         if ((controller.isUpPressed() || Gdx.input.isKeyPressed(Input.Keys.W))&& this.b2body.getLinearVelocity().y <=2){
             this.b2body.setLinearVelocity(0,0);
 
-            this.b2body.applyLinearImpulse(new Vector2(0,1f),this.b2body.getWorldCenter(),true);
+            this.b2body.applyLinearImpulse(new Vector2(0,1f+(0.2f*speedCount)),this.b2body.getWorldCenter(),true);
             direction=3;
         }
         if ((controller.isDownPressed()|| Gdx.input.isKeyPressed(Input.Keys.S)) && this.b2body.getLinearVelocity().y >=-2){
             this.b2body.setLinearVelocity(0,0);
 
-            this.b2body.applyLinearImpulse(new Vector2(0,-1f),this.b2body.getWorldCenter(),true);
+            this.b2body.applyLinearImpulse(new Vector2(0,-1f-(0.2f*speedCount)),this.b2body.getWorldCenter(),true);
             direction=0;
         }
 
-        //bug
     }
 
 }
