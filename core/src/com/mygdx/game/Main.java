@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.ResourceManager.GameManager;
+import com.mygdx.game.Screens.LoadingScreen;
 import com.mygdx.game.Screens.MyScreen;
 
 public class Main extends Game {
@@ -30,7 +31,7 @@ public class Main extends Game {
 	public TiledMap mapp;
 	public OrthogonalTiledMapRenderer renderer;
 	//====================|GameManager|/////////
-	GameManager manager;
+	public GameManager manager;
 	@Override
 	public void create() {
 		manager = new GameManager();
@@ -48,6 +49,7 @@ public class Main extends Game {
 				,0);
 
 		cam.update();
+//		setScreen(new LoadingScreen(this));
 		setScreen(new MyScreen(this));
 	}
 

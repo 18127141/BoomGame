@@ -1,6 +1,7 @@
 package com.mygdx.game.ResourceManager;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -12,6 +13,13 @@ public class GameManager implements Disposable {
 
         //load Agent
         assetManager.load("Pack/PlayerandBoom.pack", TextureAtlas.class);
+
+        //Load Texture
+        assetManager.load("loadingbarbg.png", Texture.class);
+        assetManager.load("loadingbar.png", Texture.class);
+        assetManager.load("Mainmenu.png", Texture.class);
+        assetManager.load("bottom.png", Texture.class);
+        assetManager.load("title_background-little.png", Texture.class);
 
         assetManager.finishLoading();
 
