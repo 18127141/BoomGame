@@ -59,8 +59,9 @@ public class MyScreen implements Screen {
         for (int i=0; i< BoomList.size;i++){
             Boom Temp = BoomList.get(i);
             Temp.Time-=1;
+            Temp.b2body.setType(BodyDef.BodyType.StaticBody);
             if (Temp.Time == 0) {
-                Temp.Destroy();
+                Temp.Destroy(player);
                 BoomList.removeIndex(i);
                 i--;
             }

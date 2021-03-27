@@ -49,8 +49,8 @@ public class Main extends Game {
 				,0);
 
 		cam.update();
-//		setScreen(new LoadingScreen(this));
-		setScreen(new MyScreen(this));
+		setScreen(new LoadingScreen(this));
+		//setScreen(new MyScreen(this));
 	}
 
 	@Override

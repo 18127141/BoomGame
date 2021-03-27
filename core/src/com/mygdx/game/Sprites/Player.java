@@ -29,6 +29,7 @@ public class Player extends Sprite {
     //1 is Left
     //2 is Right
     //3 is Up
+
     int direction =0;
     public enum State{Run,Stand};
     private State state;
@@ -37,11 +38,13 @@ public class Player extends Sprite {
     public Body b2body;
     public Array<Boom> BoomList ;
     private int boomCount =1;
-    private int speedCount =0;
+    private int speedCount =10;
     private int rangeCount = 1;
+    boolean ALIVE = true;
     final int MaxBoom = 5;
     final int MaxSpeed = 5;
     final int MaxRange = 5;
+    int Power =  5;
     final int TIME_PREPARE = 100;
     private Array<TextureRegion> stand;
 
@@ -138,6 +141,8 @@ public class Player extends Sprite {
 
     }
     public void update(float dt){
+        if (ALIVE == false)
+            return;
         setPosition(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/3);
         setRegion(getFrame(dt));
         //bug
@@ -194,6 +199,7 @@ public class Player extends Sprite {
         else return State.Run;
     }
     public void handleInput(Controller controller){
+        if (ALIVE== false) return;
         if (Math.abs(b2body.getLinearVelocity().x)<0.8+(0.5*speedCount)){
             b2body.setLinearVelocity(0,0);
         }
@@ -225,15 +231,17 @@ public class Player extends Sprite {
             direction=0;
         }
         if (controller.isPlanted()){
-            if (TimePlanted == 0  && AvaiableBoom >0)
+            if (TimePlanted == 0  && AvaiableBoom >0 && ALIVE != false)
             {
-                Boom Temp = new Boom(this.world, this.b2body.getPosition());
+                Boom Temp = new Boom(this.world, this.b2body.getPosition(),Power);
                 BoomList.add(Temp);
                 System.out.println("HEHE");
                 TimePlanted=10;
                 AvaiableBoom--;
             }
         }
-
+    }
+    public void Dead(){
+        ALIVE = false;
     }
 }

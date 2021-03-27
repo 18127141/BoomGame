@@ -31,10 +31,12 @@ public class Boom extends Sprite {
     private Animation CountDown ;
     private Animation TimeOver ;
     public int Time = 200;
+    private int Power = 10;
 
-    public Boom(World world, Vector2 position){
+    public Boom(World world, Vector2 position, int Power  ){
         super(GameManager.getAssetManager().get("Pack/PlayerandBoom.pack", TextureAtlas.class).findRegion("Bomb"));
         this.world = world;
+        this.Power = Power;
         //==============|Create the box2d body|==========
         BodyDef bdef = new BodyDef();
         bdef.position.set(position)  ;
@@ -51,7 +53,10 @@ public class Boom extends Sprite {
 
 
     }
-    public void  Destroy(){
+    public void  Destroy(Player player){
+        if (Math.sqrt(Math.pow((player.b2body.getPosition().x - b2body.getPosition().x), 2) + Math.pow((player.b2body.getPosition().y - b2body.getPosition().y), 2)) < Power/5)
+            player.Dead();
         world.destroyBody(b2body);
     }
+
 }
