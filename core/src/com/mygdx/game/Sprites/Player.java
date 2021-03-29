@@ -38,7 +38,7 @@ public class Player extends Sprite {
     final int MaxBoom = 5;
     final int MaxSpeed = 5;
     final int MaxRange = 5;
-    int Power =  5;
+    int Power =  40;
     final int TIME_PREPARE = 100;
     private Array<TextureRegion> stand;
 
@@ -71,7 +71,9 @@ public class Player extends Sprite {
         shape.setRadius(9f/ Main.PPM);
 
         fdef.shape= shape;
+        fdef.filter.categoryBits =MyScreen.PLAYER ;
         b2body.createFixture(fdef);
+
         //Ham nay se lam cho vat dung im khi khong chiu tac dung luc
 
         b2body.setLinearDamping(10f);
@@ -227,7 +229,7 @@ public class Player extends Sprite {
         if (controller.isPlanted()){
             if (TimePlanted == 0  && AvaiableBoom >0 && ALIVE != false)
             {
-                Boom Temp = new Boom(this.world, this.b2body.getPosition(),Power);
+                Boom Temp = new Boom(this.world, this.b2body.getPosition(), this.direction,Power);
                 BoomList.add(Temp);
                 System.out.println("HEHE");
                 TimePlanted=10;

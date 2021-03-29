@@ -52,7 +52,11 @@ public class Main extends Game {
 				,0);
 
 		cam.update();
+<<<<<<< HEAD
 		//setScreen(new LoadingScreen(this));
+=======
+//		setScreen(new LoadingScreen(this));
+>>>>>>> 3f333202b3cabfb27a9e1a518318c4ee3ac12ab8
 		setScreen(new MyScreen(this));
 	}
 

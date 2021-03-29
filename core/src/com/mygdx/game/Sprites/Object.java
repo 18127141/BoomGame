@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.Main;
+import com.mygdx.game.Screens.MyScreen;
 
 
 public abstract class Object {
@@ -35,6 +36,11 @@ public abstract class Object {
         body = world.createBody(bdef);
         shape.setAsBox((float)bounds.getWidth()/2/Main.PPM,(float)bounds.getHeight()/2/Main.PPM);
         fdef.shape = shape;
+        fdef.filter.categoryBits = MyScreen.ITEMS ;
+        fdef.filter.maskBits = MyScreen.PLAYER ;
         body.createFixture(fdef);
+    }
+    void Destroy(World world){
+        world.destroyBody(body);
     }
 }

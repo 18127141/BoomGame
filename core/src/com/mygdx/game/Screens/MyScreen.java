@@ -23,23 +23,30 @@ import com.mygdx.game.ResourceManager.GameManager;
 import com.mygdx.game.Sprites.*;
 import com.badlogic.gdx.utils.Array;
 
+import javax.swing.Box;
+
 public class MyScreen implements Screen {
     private Main game;
     Player player;
     private TextureAtlas atlas;
     Array<Boom> BoomList;
-
+    Array<Items> BoxList;
+    public static short PLAYER, ITEMS, BOOM;
     //Box2d
     private World world;
     private Box2DDebugRenderer b2dr;
     public MyScreen(Main game){
+        PLAYER = 2;
+        ITEMS = 4;
+        BOOM = 8;
         this.game = game;
         BoomList = new Array<Boom>();
+        BoxList = new Array<Items>();
         /////==============================================Create Box2d WORld==================================
         world = new World(new Vector2(),true);
         b2dr = new Box2DDebugRenderer();
         //Box2d World
-        new WorldBuilder(world,game.mapp);
+        new WorldBuilder(world,game.mapp,BoxList);
         //======================================================================
         player = new Player(world,BoomList);
 
@@ -61,7 +68,7 @@ public class MyScreen implements Screen {
             Temp.Time-=1;
             Temp.b2body.setType(BodyDef.BodyType.StaticBody);
             if (Temp.Time == 0) {
-                Temp.Destroy(player);
+                Temp.Destroy(player,BoxList);
                 BoomList.removeIndex(i);
                 i--;
             }
