@@ -4,16 +4,16 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.Firebase.firebase;
 import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.ResourceManager.GameManager;
-import com.mygdx.game.Screens.LoadingScreen;
 import com.mygdx.game.Screens.MyScreen;
+
 
 public class Main extends Game {
 	public  static float PPM=100;
@@ -24,16 +24,19 @@ public class Main extends Game {
 	public Viewport viewport;
 	public Texture texture;
 	public com.mygdx.game.Hud.Controller controller;
-
+	public firebase db;
 
 	//=========================Tiled Map/////=====================
+
 	public TmxMapLoader mapLoader;
 	public TiledMap mapp;
 	public OrthogonalTiledMapRenderer renderer;
 	//====================|GameManager|/////////
 	public GameManager manager;
+
 	@Override
 	public void create() {
+		db = new firebase();
 		manager = new GameManager();
 		cam = new OrthographicCamera();
 		viewport = new FitViewport(WIDTH/PPM, HEIGHT /PPM, cam);
@@ -49,8 +52,8 @@ public class Main extends Game {
 				,0);
 
 		cam.update();
-		setScreen(new LoadingScreen(this));
-		//setScreen(new MyScreen(this));
+		//setScreen(new LoadingScreen(this));
+		setScreen(new MyScreen(this));
 	}
 
 	@Override

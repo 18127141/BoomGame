@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -17,11 +16,6 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.Main;
 import com.mygdx.game.ResourceManager.GameManager;
-import com.mygdx.game.Screens.MyScreen;
-
-import org.w3c.dom.css.Rect;
-
-import java.util.ArrayList;
 
 public class Player extends Sprite {
     //
