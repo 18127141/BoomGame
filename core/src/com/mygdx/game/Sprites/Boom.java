@@ -32,7 +32,7 @@ public class Boom extends Sprite {
     private Animation TimeOver ;
     public int Time = 200;
     private int Power = 10;
-
+    public FixtureDef fdef;
     public Boom(World world, Vector2 position,int direction, int Power  ){
         super(GameManager.getAssetManager().get("Pack/PlayerandBoom.pack", TextureAtlas.class).findRegion("Bomb"));
         this.world = world;
@@ -41,34 +41,44 @@ public class Boom extends Sprite {
         BodyDef bdef = new BodyDef();
         float x = position.x;
         float y = position.y;
+        System.out.println(x +  " " + y );
         switch (direction){
             case 0://Down
-                y -=1/Main.PPM;
+                y -=20/Main.PPM;
                 break;
             case 1: // Left
-                x-=1/Main.PPM;
+                x-=20/Main.PPM;
                 break;
             case 2: //Right
-                x+=1/Main.PPM;
+                x+=20/Main.PPM;
                 break;
             case 3://Up
-                y+=1/Main.PPM;
+                y+=20/Main.PPM;
                 break;
         }
 
+        System.out.println(x +  " " + y );
+        x = (float) (((int)(position.x*100))/20)/5 + (float)0.1;
+        y =  (float) (((int)(position.y*100))/20)/5 + (float)0.1;
+        System.out.println(x +  " " + y );
+
         bdef.position.set(x, y)  ;
-        bdef.type = BodyDef.BodyType.DynamicBody;
+
+        bdef.type = BodyDef.BodyType.KinematicBody;
         b2body = world.createBody(bdef);
 
-        FixtureDef fdef = new FixtureDef();
+        fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(9f/ Main.PPM);
 
         fdef.shape= shape;
-//        fdef.filter.categoryBits =MyScreen.BOOM ;
-//        fdef.filter.maskBits = MyScreen.PLAYER ;
+        fdef.filter.categoryBits =MyScreen.BOOM ;
+        fdef.filter.maskBits = MyScreen.ITEMS ;
         b2body.createFixture(fdef);
         b2body.setLinearDamping(10f);
+
+
+
 
 
     }

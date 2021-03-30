@@ -72,6 +72,10 @@ public class MyScreen implements Screen {
                 BoomList.removeIndex(i);
                 i--;
             }
+            if (Temp.Time == 150){
+                Temp.fdef.filter.maskBits = MyScreen.PLAYER;
+                Temp.b2body.createFixture(Temp.fdef);
+            }
         }
     }
     @Override
