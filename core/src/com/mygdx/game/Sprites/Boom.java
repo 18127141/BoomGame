@@ -65,8 +65,8 @@ public class Boom extends Sprite {
         shape.setRadius(9f/ Main.PPM);
 
         fdef.shape= shape;
-        fdef.filter.categoryBits =MyScreen.BOOM ;
-        fdef.filter.maskBits = MyScreen.PLAYER ;
+//        fdef.filter.categoryBits =MyScreen.BOOM ;
+//        fdef.filter.maskBits = MyScreen.PLAYER ;
         b2body.createFixture(fdef);
         b2body.setLinearDamping(10f);
 
@@ -88,13 +88,15 @@ public class Boom extends Sprite {
     }
     private boolean CheckDead(Vector2 Point1, Vector2 Point2, float Power){
         double Distance = Math.sqrt(Math.pow((Point1.x  - Point2.x), 2) + Math.pow((Point1.y  - Point2.y), 2));
-        if (Distance <= Power/Main.PPM )
+
+        if (Distance < Power/Main.PPM )
         {
-            if ((Point2.x <=  Point1.x && (Point2.x+20.0/Main.PPM) >= Point1.x) ||(Point2.y <=  Point1.y && (Point2.y+20.0/Main.PPM) >=Point1.y) )
-            return true;
+            System.out.println((int)(Point2.x*100/20) + " "+ (int)(Point1.x*100/20) );
+            System.out.println((int)(Point2.y*100/20) +" "+(int)(Point1.y*100/20));
+            if ((int)(Point2.x*100/20) == (int)(Point1.x*100/20) || (int)(Point2.y*100/20) ==(int)(Point1.y*100/20) )
+                return true;
+            else return false;
         }
-
-
-        return false;
+        else return false;
     }
 }

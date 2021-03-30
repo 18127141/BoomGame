@@ -36,8 +36,8 @@ public abstract class Object {
         body = world.createBody(bdef);
         shape.setAsBox((float)bounds.getWidth()/2/Main.PPM,(float)bounds.getHeight()/2/Main.PPM);
         fdef.shape = shape;
-        fdef.filter.categoryBits = MyScreen.ITEMS ;
-        fdef.filter.maskBits = MyScreen.PLAYER ;
+//        fdef.filter.categoryBits = MyScreen.ITEMS ;
+//        fdef.filter.maskBits = MyScreen.PLAYER ;
         body.createFixture(fdef);
     }
     void Destroy(World world){

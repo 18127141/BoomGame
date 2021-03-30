@@ -38,7 +38,7 @@ public class Player extends Sprite {
     final int MaxBoom = 5;
     final int MaxSpeed = 5;
     final int MaxRange = 5;
-    int Power =  40;
+    int Power =  30;
     final int TIME_PREPARE = 100;
     private Array<TextureRegion> stand;
 
@@ -71,7 +71,7 @@ public class Player extends Sprite {
         shape.setRadius(9f/ Main.PPM);
 
         fdef.shape= shape;
-        fdef.filter.categoryBits =MyScreen.PLAYER ;
+//        fdef.filter.categoryBits = (short) 2 ;
         b2body.createFixture(fdef);
 
         //Ham nay se lam cho vat dung im khi khong chiu tac dung luc
