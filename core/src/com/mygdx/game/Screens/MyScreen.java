@@ -31,6 +31,7 @@ public class MyScreen implements Screen {
     private TextureAtlas atlas;
     Array<Boom> BoomList;
     Array<Items> BoxList;
+    Array<Walls> WallList;
     public static short PLAYER, ITEMS, BOOM;
     //Box2d
     private World world;
@@ -42,11 +43,12 @@ public class MyScreen implements Screen {
         this.game = game;
         BoomList = new Array<Boom>();
         BoxList = new Array<Items>();
+        WallList = new Array<Walls>();
         /////==============================================Create Box2d WORld==================================
         world = new World(new Vector2(),true);
         b2dr = new Box2DDebugRenderer();
         //Box2d World
-        new WorldBuilder(world,game.mapp,BoxList);
+        new WorldBuilder(world,game.mapp,BoxList,WallList);
         //======================================================================
         player = new Player(world,BoomList);
 
@@ -68,7 +70,7 @@ public class MyScreen implements Screen {
             Temp.Time-=1;
             Temp.b2body.setType(BodyDef.BodyType.StaticBody);
             if (Temp.Time == 0) {
-                Temp.Destroy(player,BoxList);
+                Temp.Destroy(player,BoxList,WallList);
                 BoomList.removeIndex(i);
                 i--;
             }

@@ -18,15 +18,16 @@ public abstract class Object {
     protected TiledMapTile tile;
     protected Rectangle bounds;
     protected Body body;
-
+    BodyDef bdef ;
+    FixtureDef fdef;
     public Object(World world, TiledMap map, Rectangle bounds) {
         this.world = world;
         this.map = map;
         this.bounds = bounds;
 
-        BodyDef bdef = new BodyDef();
+         bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
-        FixtureDef fdef = new FixtureDef();
+        fdef = new FixtureDef();
 
         //Render the items
         bdef.type = BodyDef.BodyType.StaticBody;

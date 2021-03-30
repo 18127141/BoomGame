@@ -38,7 +38,7 @@ public class Player extends Sprite {
     final int MaxBoom = 5;
     final int MaxSpeed = 5;
     final int MaxRange = 5;
-    int Power =  50;
+    int Power =  80;
     final int TIME_PREPARE = 100;
     private Array<TextureRegion> stand;
 

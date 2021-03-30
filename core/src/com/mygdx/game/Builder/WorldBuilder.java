@@ -10,7 +10,7 @@ import com.mygdx.game.Sprites.Items;
 import com.mygdx.game.Sprites.Walls;
 
 public class WorldBuilder {
-    public WorldBuilder(World world, TiledMap map, Array<Items> BoxList){
+    public WorldBuilder(World world, TiledMap map, Array<Items> BoxList, Array<Walls> WallsList){
 
         //Render the items
         for (MapObject object: map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
@@ -21,7 +21,8 @@ public class WorldBuilder {
         for (MapObject object: map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
 
-           new Walls(world,map,rect);
+            WallsList.add(new Walls(world,map,rect));
+            System.out.println(WallsList.get(WallsList.size-1));
         }
     }
 }
