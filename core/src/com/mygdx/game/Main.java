@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Firebase.firebase;
 import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.ResourceManager.GameManager;
-import com.mygdx.game.Screens.MyScreen;
+import com.mygdx.game.Screens.Mainmenu;
 
 
 public class Main extends Game {
@@ -25,6 +25,7 @@ public class Main extends Game {
 	public Texture texture;
 	public com.mygdx.game.Hud.Controller controller;
 	public firebase db;
+
 
 	//=========================Tiled Map/////=====================
 
@@ -53,7 +54,8 @@ public class Main extends Game {
 
 		cam.update();
 
-		setScreen(new MyScreen(this));
+		//setScreen(new MyScreen(this));
+		setScreen(new Mainmenu(this));
 	}
 
 	@Override

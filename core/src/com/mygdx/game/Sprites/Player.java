@@ -32,7 +32,7 @@ public class Player extends Sprite {
     public Body b2body;
     public Array<Boom> BoomList ;
     private int boomCount =1;
-    private int speedCount =10;
+    private int speedCount =1;
     private int rangeCount = 1;
     boolean ALIVE = true;
     final int MaxBoom = 5;
@@ -237,7 +237,6 @@ public class Player extends Sprite {
                 }
                 if (Add) BoomList.add(Temp);
                 else world.destroyBody(Temp.b2body);
-                System.out.println("HEHE");
                 TimePlanted=10;
                 AvaiableBoom--;
             }

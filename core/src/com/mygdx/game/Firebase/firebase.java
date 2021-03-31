@@ -9,7 +9,9 @@ public class firebase {
     Firebase db;
     public firebase(){
         db = new Firebase("https://boomonline-bf8ff-default-rtdb.firebaseio.com");
-        db.getRef().child("HOHO").setValue("HEHE");
+//        db.getRef().child("HOHO").setValue("?");
+//        db.getRef().child("Test").setValue("Test");
+
 
         db.addValueEventListener(new ValueEventListener() {
             @Override
