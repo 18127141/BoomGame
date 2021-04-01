@@ -13,6 +13,7 @@ import com.mygdx.game.Firebase.firebase;
 import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.ResourceManager.GameManager;
 import com.mygdx.game.Screens.Mainmenu;
+import com.mygdx.game.Screens.MyScreen;
 
 
 public class Main extends Game {
@@ -23,7 +24,7 @@ public class Main extends Game {
 	public OrthographicCamera cam;
 	public Viewport viewport;
 	public Texture texture;
-	public com.mygdx.game.Hud.Controller controller;
+	public Controller controller;
 	public firebase db;
 
 

@@ -90,7 +90,7 @@ public class Player extends Sprite {
         }
 
 
-        //=================|Run DOWN|
+
         Array<TextureRegion> frame = new Array<>();
         for (int i=1;i<3;i++){
             frame.add(new TextureRegion(getTexture(),i*20,0,20,30));
@@ -227,18 +227,26 @@ public class Player extends Sprite {
             direction=0;
         }
         if (controller.isPlanted()){
+            try{
             if (TimePlanted == 0  && AvaiableBoom >0 && ALIVE != false)
             {
+
                 Boom Temp = new Boom(this.world, this.b2body.getPosition(), this.direction,Power);
                 boolean Add = true;
                 for(int i =0; i< BoomList.size;i++){
                     if ((int)(BoomList.get(i).b2body.getPosition().x*100) == (int)(Temp.b2body.getPosition().x*100) && (int)(BoomList.get(i).b2body.getPosition().y*100) ==(int)(Temp.b2body.getPosition().y*100) )
                         Add = false;
                 }
-                if (Add) BoomList.add(Temp);
+                if (Add) {
+                    BoomList.add(Temp);
+                    TimePlanted=10;
+                    AvaiableBoom--;
+                }
                 else world.destroyBody(Temp.b2body);
-                TimePlanted=10;
-                AvaiableBoom--;
+
+            }
+            }catch (Exception e){
+                System.out.println("plant");
             }
         }
     }

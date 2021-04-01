@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.*;
 import com.mygdx.game.Builder.WorldBuilder;
+import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.ResourceManager.GameManager;
 import com.mygdx.game.Sprites.*;
 import com.badlogic.gdx.utils.Array;
@@ -41,12 +42,14 @@ public class MyScreen implements Screen {
         ITEMS = 4;
         BOOM = 8;
         this.game = game;
+        game.controller = new Controller();
         BoomList = new Array<Boom>();
         BoxList = new Array<Items>();
         WallList = new Array<Walls>();
         /////==============================================Create Box2d WORld==================================
         world = new World(new Vector2(),true);
         b2dr = new Box2DDebugRenderer();
+        b2dr.setDrawBodies(false);
         //Box2d World
         new WorldBuilder(world,game.mapp,BoxList,WallList);
         //======================================================================
@@ -54,7 +57,7 @@ public class MyScreen implements Screen {
 
 
     }
-    
+
     public void update(float dt){
         player.handleInput(game.controller);
         world.step(1/60f,6,2);
@@ -62,22 +65,32 @@ public class MyScreen implements Screen {
 
         player.update(dt);
 
+
         game.renderer.setView(game.cam);
     }
-    public void BoomCountDown(){
+    public void BoomCountDown(float delta){
         for (int i=0; i< BoomList.size;i++){
             Boom Temp = BoomList.get(i);
             Temp.Time-=1;
-            Temp.b2body.setType(BodyDef.BodyType.StaticBody);
-            if (Temp.Time == 0) {
-                Temp.Destroy(player,BoxList,WallList);
-                BoomList.removeIndex(i);
-                i--;
-            }
-            if (Temp.Time == 150){
-                Temp.fdef.filter.maskBits = MyScreen.PLAYER;
-                Temp.b2body.createFixture(Temp.fdef);
-            }
+            Temp.update(delta);
+
+
+                if (Temp.Time == 50) {
+                    Temp.Destroy(player, BoxList, WallList);
+
+                }
+                if (Temp.Time == 0) {
+
+                    BoomList.removeIndex(i);
+                    i--;
+                }
+
+                if (Temp.Time == 150) {
+
+                    Temp.fdef.filter.maskBits = MyScreen.PLAYER;
+                    Temp.b2body.createFixture(Temp.fdef);
+                }
+
         }
     }
     @Override
@@ -88,7 +101,7 @@ public class MyScreen implements Screen {
     @Override
 
     public void render(float delta) {
-        BoomCountDown();
+        BoomCountDown(delta);
         update(delta);
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -106,6 +119,9 @@ public class MyScreen implements Screen {
 
         game.batch.begin();
         player.draw(game.batch);
+        for (Boom boom: BoomList ){
+            boom.draw(game.batch);
+        }
         game.batch.end();
         game.controller.draw();
 

@@ -1,7 +1,9 @@
 package com.mygdx.game.Sprites;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -12,7 +14,7 @@ import com.mygdx.game.Main;
 import com.mygdx.game.Screens.MyScreen;
 
 
-public abstract class Object {
+public abstract class Object  {
     protected World world;
     protected TiledMap map;
     protected TiledMapTile tile;
@@ -41,7 +43,13 @@ public abstract class Object {
         fdef.filter.maskBits = MyScreen.PLAYER ;
         body.createFixture(fdef);
     }
-    void Destroy(World world){
+    public void Destroy(World world,int x,int y){
         world.destroyBody(body);
+        TiledMapTileLayer layer=(TiledMapTileLayer) map.getLayers().get(1);
+        layer.getCell(x,y).setTile(null);
+        layer.getCell(x-1,y).setTile(null);
+        layer.getCell(x,y-1).setTile(null);
+        layer.getCell(x-1,y-1).setTile(null);
+
     }
 }
