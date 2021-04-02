@@ -3,41 +3,49 @@ package com.mygdx.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.*;
 import com.mygdx.game.Builder.WorldBuilder;
 import com.mygdx.game.Hud.Controller;
-import com.mygdx.game.ResourceManager.GameManager;
-import com.mygdx.game.Sprites.*;
-import com.badlogic.gdx.utils.Array;
-
-import javax.swing.Box;
+import com.mygdx.game.Main;
+import com.mygdx.game.Sprites.Boom;
+import com.mygdx.game.Sprites.Items;
+import com.mygdx.game.Sprites.Player;
+import com.mygdx.game.Sprites.Walls;
 
 public class MyScreen implements Screen {
     private Main game;
     Player player;
     private TextureAtlas atlas;
-    Array<Boom> BoomList;
-    Array<Items> BoxList;
-    Array<Walls> WallList;
+    public Array<Boom> BoomList;
+    public Array<Items> BoxList;
+    public Array<Walls> WallList;
     public static short PLAYER, ITEMS, BOOM;
     //Box2d
     private World world;
     private Box2DDebugRenderer b2dr;
+    private String mapName="Forest";
+
+    //=========================Tiled Map/////=====================
+
+    public TmxMapLoader mapLoader;
+    public TiledMap mapp;
+    public OrthogonalTiledMapRenderer renderer;
     public MyScreen(Main game){
+
+        mapLoader = new TmxMapLoader();
+        setMap(mapName);
+
+        //mapp = mapLoader.load("map/Temple.tmx");
+
+        renderer = new OrthogonalTiledMapRenderer(mapp,1/Main.PPM);
+
         PLAYER = 2;
         ITEMS = 4;
         BOOM = 8;
@@ -51,11 +59,14 @@ public class MyScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
         b2dr.setDrawBodies(false);
         //Box2d World
-        new WorldBuilder(world,game.mapp,BoxList,WallList);
+        new WorldBuilder(world,mapp,BoxList,WallList);
         //======================================================================
         player = new Player(world,BoomList);
 
 
+    }
+    public void setMap(String map){
+        mapp = mapLoader.load("map/"+mapName+".tmx");
     }
 
     public void update(float dt){
@@ -66,30 +77,45 @@ public class MyScreen implements Screen {
         player.update(dt);
 
 
-        game.renderer.setView(game.cam);
+        renderer.setView(game.cam);
     }
     public void BoomCountDown(float delta){
+
         for (int i=0; i< BoomList.size;i++){
             Boom Temp = BoomList.get(i);
             Temp.Time-=1;
             Temp.update(delta);
 
+            if (Temp.Time == 50) {
+                Temp.Destroy(player, BoxList, WallList);
+            }
 
-                if (Temp.Time == 50) {
-                    Temp.Destroy(player, BoxList, WallList);
+            if (Temp.Time == 0) {
+                BoomList.removeValue(Temp,true);
+                i--;
+            }
+            if (Temp.Time == 150) {
+                Temp.fdef.filter.maskBits = MyScreen.PLAYER;
+                Temp.b2body.createFixture(Temp.fdef);
+            }
 
-                }
-                if (Temp.Time == 0) {
+        }
+        for (int i=0; i< BoxList.size;i++){
+            Items Temp = BoxList.get(i);
+            if (Temp.isDestroy) {
+                Temp.Time-=1;
 
-                    BoomList.removeIndex(i);
-                    i--;
-                }
+            }
 
-                if (Temp.Time == 150) {
+            Temp.update(delta);
 
-                    Temp.fdef.filter.maskBits = MyScreen.PLAYER;
-                    Temp.b2body.createFixture(Temp.fdef);
-                }
+
+
+            if (Temp.Time == 0) {
+                BoxList.removeIndex(i);
+                i--;
+            }
+
 
         }
     }
@@ -101,8 +127,9 @@ public class MyScreen implements Screen {
     @Override
 
     public void render(float delta) {
-        BoomCountDown(delta);
         update(delta);
+        BoomCountDown(delta);
+
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -111,17 +138,22 @@ public class MyScreen implements Screen {
         //=====|MAP RENDERER|===========
         game.batch.setProjectionMatrix(game.controller.cam.combined);
 
-        game.renderer.render();
+        renderer.render();
         //====|Box2d render|
         b2dr.render(world,game.cam.combined);
 
         game.batch.setProjectionMatrix(game.cam.combined);
 
         game.batch.begin();
-        player.draw(game.batch);
         for (Boom boom: BoomList ){
             boom.draw(game.batch);
         }
+        for (Items item: BoxList){
+
+            item.draw(game.batch);
+        }
+        player.draw(game.batch);
+
         game.batch.end();
         game.controller.draw();
 
@@ -152,5 +184,7 @@ public class MyScreen implements Screen {
     public void dispose() {
         world.dispose();
         b2dr.dispose();
+        mapp.dispose();
+        renderer.dispose();
     }
 }

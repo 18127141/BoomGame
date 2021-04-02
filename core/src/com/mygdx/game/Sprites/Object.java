@@ -1,6 +1,5 @@
 package com.mygdx.game.Sprites;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -43,13 +42,16 @@ public abstract class Object  {
         fdef.filter.maskBits = MyScreen.PLAYER ;
         body.createFixture(fdef);
     }
-    public void Destroy(World world,int x,int y){
+    public void Destroy(World world,float x, float y){
+        int xx=(int)(Math.ceil(x*10));
+        int yy=(int)(Math.ceil(y*10));
+
         world.destroyBody(body);
         TiledMapTileLayer layer=(TiledMapTileLayer) map.getLayers().get(1);
-        layer.getCell(x,y).setTile(null);
-        layer.getCell(x-1,y).setTile(null);
-        layer.getCell(x,y-1).setTile(null);
-        layer.getCell(x-1,y-1).setTile(null);
+        layer.getCell(xx,yy).setTile(null);
+        layer.getCell(xx-1,yy).setTile(null);
+        layer.getCell(xx,yy-1).setTile(null);
+        layer.getCell(xx-1,yy-1).setTile(null);
 
     }
 }

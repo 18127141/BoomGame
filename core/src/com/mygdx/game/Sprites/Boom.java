@@ -1,14 +1,9 @@
 package com.mygdx.game.Sprites;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -16,15 +11,9 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.Main;
 import com.mygdx.game.ResourceManager.GameManager;
 import com.mygdx.game.Screens.MyScreen;
-
-import org.w3c.dom.css.Rect;
-
-import java.sql.Time;
-import java.util.ArrayList;
 
 public class Boom extends Sprite {
 
@@ -84,19 +73,18 @@ public class Boom extends Sprite {
 
         Array<TextureRegion> frame = new Array<>();
         for (int i=12;i<15;i++){
-            frame.add(new TextureRegion(getTexture(),i*20+3,10,20,20));
+            frame.add(new TextureRegion(getTexture(),i*20+3,11,20,20));
 
 
         }
-        frame.add(new TextureRegion(getTexture(),13*20+3,10,20,20));
+        frame.add(new TextureRegion(getTexture(),13*20+3,11,20,20));
 
         CountDown = new Animation(0.3f,frame);
         setBounds(0,0,20/Main.PPM,20/Main.PPM);
 
-        setRegion(frame.get(0));
         frame.clear();
         for (int i=15;i<22;i++){
-            frame.add(new TextureRegion(getTexture(),i*20+3,10,20,20));
+            frame.add(new TextureRegion(getTexture(),i*20+3,11,20,20));
 
 
         }
@@ -123,27 +111,28 @@ public class Boom extends Sprite {
             region = (TextureRegion) CountDown.getKeyFrame(stateTimer,true);
         }
         else{
-            region = (TextureRegion) TimeOver.getKeyFrame(stateTimer,true);
+            region = (TextureRegion) TimeOver.getKeyFrame(stateTimer,false);
         }
         return region;
     }
 
-    public void  Destroy(Player player, Array<Items> BoxList, Array<Walls> WallList){
-
+    public void  Destroy(Player player,  Array<Items> BoxList, Array<Walls> WallList){
         isDestroy=true;
         stateTimer=0;
         if (CheckDead(player.b2body.getPosition(), b2body.getPosition(),Power,WallList))
             player.Dead();
-      world.destroyBody(b2body);
+        world.destroyBody(b2body);
         for (int i=0; i<BoxList.size;i++){
-            Items Temp = BoxList.get(i);
+            final Items Temp = BoxList.get(i);
+
             if (CheckDead(Temp.body.getPosition(),b2body.getPosition(),Power,WallList))
             {
-                Temp.Destroy(world,(int)(Temp.body.getPosition().x*Main.PPM)/10,(int)(Temp.body.getPosition().y*Main.PPM)/10);
+//                Temp.Destroy(world,(int)(Temp.body.getPosition().x*Main.PPM)/10,(int)(Temp.body.getPosition().y*Main.PPM)/10);
+                Temp.Destroy(world,Temp.body.getPosition().x,Temp.body.getPosition().y);
+                //BoxList.removeIndex(i);
+                //i--;
 
-                BoxList.removeIndex(i);
 
-                i--;
             }
         }
     }

@@ -13,7 +13,6 @@ import com.mygdx.game.Firebase.firebase;
 import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.ResourceManager.GameManager;
 import com.mygdx.game.Screens.Mainmenu;
-import com.mygdx.game.Screens.MyScreen;
 
 
 public class Main extends Game {
@@ -28,11 +27,8 @@ public class Main extends Game {
 	public firebase db;
 
 
-	//=========================Tiled Map/////=====================
 
-	public TmxMapLoader mapLoader;
-	public TiledMap mapp;
-	public OrthogonalTiledMapRenderer renderer;
+
 	//====================|GameManager|/////////
 	public GameManager manager;
 
@@ -45,10 +41,7 @@ public class Main extends Game {
 		batch = new SpriteBatch();
 		controller = new Controller();
 
-		mapLoader = new TmxMapLoader();
-		mapp = mapLoader.load("map/Forest.tmx");
 
-		renderer = new OrthogonalTiledMapRenderer(mapp,1/PPM);
 
 		cam.position.set((viewport.getWorldWidth()/2-controller.l.getWidth()/PPM),(viewport.getWorldHeight()/2-(controller.bottom.getHeight()*5/7/PPM))
 				,0);
@@ -76,8 +69,7 @@ public class Main extends Game {
 	@Override
 	public void dispose() {
 		super.dispose();
-		mapp.dispose();
-		renderer.dispose();
+
 
 	}
 }

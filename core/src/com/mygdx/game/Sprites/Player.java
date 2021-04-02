@@ -85,7 +85,7 @@ public class Player extends Sprite {
         //Standing
         stand = new Array<TextureRegion>();
         for (int i=0;i<4;i++){
-            stand.add( new TextureRegion(getTexture(),3*i*20,0,20,30));
+            stand.add( new TextureRegion(getTexture(),3*i*20+1,0,20,30));
 
         }
 
@@ -93,7 +93,7 @@ public class Player extends Sprite {
 
         Array<TextureRegion> frame = new Array<>();
         for (int i=1;i<3;i++){
-            frame.add(new TextureRegion(getTexture(),i*20,0,20,30));
+            frame.add(new TextureRegion(getTexture(),i*20+1,0,20,30));
             frame.add(stand.get(0));
 
         }
@@ -102,7 +102,7 @@ public class Player extends Sprite {
 
         //======================Run LEFT
         for (int i=4;i<6;i++){
-            frame.add(new TextureRegion(getTexture(),i*20,0,20,30));
+            frame.add(new TextureRegion(getTexture(),i*20+1,0,20,30));
             frame.add(stand.get(1));
 
         }
@@ -111,7 +111,7 @@ public class Player extends Sprite {
 
         //===============Run RIGHT
         for (int i=7;i<9;i++){
-            frame.add(new TextureRegion(getTexture(),i*20,0,20,30));
+            frame.add(new TextureRegion(getTexture(),i*20+1,0,20,30));
             frame.add(stand.get(2));
         }
         RunRight = new Animation(0.1f,frame);
@@ -119,7 +119,7 @@ public class Player extends Sprite {
 
         //=======Run UP
         for (int i=10;i<12;i++){
-            frame.add(new TextureRegion(getTexture(),i*20,0,20,30));
+            frame.add(new TextureRegion(getTexture(),i*20+1,0,20,30));
             frame.add(stand.get(3));
 
         }
@@ -139,6 +139,7 @@ public class Player extends Sprite {
     public void update(float dt){
         if (ALIVE == false)
             return;
+
         setPosition(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/3);
         setRegion(getFrame(dt));
         //bug
@@ -227,6 +228,7 @@ public class Player extends Sprite {
             direction=0;
         }
         if (controller.isPlanted()){
+
             try{
             if (TimePlanted == 0  && AvaiableBoom >0 && ALIVE != false)
             {
@@ -242,7 +244,10 @@ public class Player extends Sprite {
                     TimePlanted=10;
                     AvaiableBoom--;
                 }
-                else world.destroyBody(Temp.b2body);
+                else {
+                    world.destroyBody(Temp.b2body);
+
+                }
 
             }
             }catch (Exception e){
