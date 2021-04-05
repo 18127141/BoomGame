@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.Main;
 import com.mygdx.game.ResourceManager.GameManager;
+import com.mygdx.game.Screens.MyScreen;
 
 public class Player extends Sprite {
     //
@@ -23,11 +24,13 @@ public class Player extends Sprite {
     //1 is Left
     //2 is Right
     //3 is Up
-
-    int direction =0;
+    public double x=0,y=0;
+    public boolean main=true;
+    public String name="";
+    public long direction =0;
     public enum State{Run,Stand};
-    private State state;
-    private State previous;
+    public State state;
+    public State previous;
     public World world;
     public Body b2body;
     public Array<Boom> BoomList ;
@@ -38,7 +41,7 @@ public class Player extends Sprite {
     final int MaxBoom = 5;
     final int MaxSpeed = 5;
     final int MaxRange = 5;
-    int Power =  80;
+    public int Power =  80;
     final int TIME_PREPARE = 100;
     private Array<TextureRegion> stand;
 
@@ -54,15 +57,24 @@ public class Player extends Sprite {
     int PrepareTime = TIME_PREPARE;
     //SO BOM CO THE DAT
     int  AvaiableBoom = MaxBoom;
-
-    public Player(World world,Array<Boom> BoomList){
+    //20 20
+    //20 240
+    //400 20
+    //400 240
+    public Player(World world,Array<Boom> BoomList,double x,double y,String name,boolean main){
         super(GameManager.getAssetManager().get("Pack/PlayerandBoom.pack", TextureAtlas.class).findRegion("playerAnimation"));
         this.BoomList = BoomList;
         this.world = world;
-
+        this.name=name;
+        this.main=main;
+        this.x=x/Main.PPM;
+        this.y=y/Main.PPM;
         //==============|Create the box2d body|==========
+        if (main==true){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(20/ Main.PPM,20/ Main.PPM);
+        bdef.position.set((float)x/ Main.PPM,(float)y/ Main.PPM);
+        //bdef.position.set(x,y);
+
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -72,11 +84,13 @@ public class Player extends Sprite {
 
         fdef.shape= shape;
         fdef.filter.categoryBits = (short) 2 ;
+        fdef.filter.maskBits = MyScreen.ITEMS;
         b2body.createFixture(fdef);
 
         //Ham nay se lam cho vat dung im khi khong chiu tac dung luc
 
         b2body.setLinearDamping(10f);
+        }
 
         //===========================|GET Player Graphics|===============
         state=State.Stand;
@@ -142,6 +156,8 @@ public class Player extends Sprite {
 
         setPosition(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/3);
         setRegion(getFrame(dt));
+
+
         //bug
         if (Math.abs(b2body.getLinearVelocity().x) <0.000001 || Math.abs(b2body.getLinearVelocity().y) <0.000001 ){
             b2body.setLinearVelocity(0,0);
@@ -154,23 +170,34 @@ public class Player extends Sprite {
             PrepareTime = TIME_PREPARE;
 
         }
+
+    }
+    public void updateother(float dt){
+        setPosition((float)(x)-getWidth()/2,(float)(y)-getHeight()/3);
+
+        setRegion(getFrame(dt));
+
     }
     public TextureRegion getFrame(float dt){
-        State currentState = getState();
-        updateDirection();
+        if (main==true){
+            State currentState = getState();
+            state=currentState;
+            updateDirection();
+        }
+
         TextureRegion region;
-        switch (currentState){
+        switch (state){
             case Stand:
-                region = stand.get(direction);
+                region = stand.get((int)direction);
                 break;
             case Run:
-                region = (TextureRegion) Run.get(direction).getKeyFrame(stateTimer,true);
+                region = (TextureRegion) Run.get((int)direction).getKeyFrame(stateTimer,true);
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + currentState);
+                throw new IllegalStateException("Unexpected value: " + state);
         }
-        stateTimer=currentState==previous?stateTimer+dt:0;
-        previous=currentState;
+        stateTimer=state==previous?stateTimer+dt:0;
+        previous=state;
         return region;
     }
 
@@ -195,7 +222,7 @@ public class Player extends Sprite {
         }
         else return State.Run;
     }
-    public void handleInput(Controller controller){
+    public void handleInput(Controller controller,Main game){
         if (ALIVE== false) return;
         if (Math.abs(b2body.getLinearVelocity().x)<0.8+(0.5*speedCount)){
             b2body.setLinearVelocity(0,0);
@@ -233,7 +260,7 @@ public class Player extends Sprite {
             if (TimePlanted == 0  && AvaiableBoom >0 && ALIVE != false)
             {
 
-                Boom Temp = new Boom(this.world, this.b2body.getPosition(), this.direction,Power);
+                Boom Temp = new Boom(this.world, this.b2body.getPosition(),(int)this.direction,Power);
                 boolean Add = true;
                 for(int i =0; i< BoomList.size;i++){
                     if ((int)(BoomList.get(i).b2body.getPosition().x*100) == (int)(Temp.b2body.getPosition().x*100) && (int)(BoomList.get(i).b2body.getPosition().y*100) ==(int)(Temp.b2body.getPosition().y*100) )
@@ -243,6 +270,7 @@ public class Player extends Sprite {
                     BoomList.add(Temp);
                     TimePlanted=10;
                     AvaiableBoom--;
+                    game.db.AddBoom(game.roomname,game.playerName);
                 }
                 else {
                     world.destroyBody(Temp.b2body);

@@ -22,7 +22,6 @@ public class WorldBuilder {
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
 
             WallsList.add(new Walls(world,map,rect));
-            System.out.println(WallsList.get(WallsList.size-1));
         }
     }
 }

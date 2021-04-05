@@ -6,6 +6,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -21,6 +23,7 @@ public abstract class Object  {
     protected Body body;
     BodyDef bdef ;
     FixtureDef fdef;
+    protected Fixture fixture;
     public Object(World world, TiledMap map, Rectangle bounds) {
         this.world = world;
         this.map = map;
@@ -52,6 +55,11 @@ public abstract class Object  {
         layer.getCell(xx-1,yy).setTile(null);
         layer.getCell(xx,yy-1).setTile(null);
         layer.getCell(xx-1,yy-1).setTile(null);
+
+    }
+    public void setCategoryFiler(short filterBit){
+        Filter filter =  new Filter();
+        filter.categoryBits = filterBit;
 
     }
 }
