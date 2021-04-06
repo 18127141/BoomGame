@@ -36,7 +36,7 @@ public class MyScreen implements Screen {
     //Box2d
     private World world;
     private Box2DDebugRenderer b2dr;
-    private String mapName="Forest";
+    public static String mapName="Forest";
     float deltatime=0;
     //Room
 

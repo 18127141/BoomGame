@@ -11,7 +11,6 @@ import com.mygdx.game.Sprites.Walls;
 
 public class WorldBuilder {
     public WorldBuilder(World world, TiledMap map, Array<Items> BoxList, Array<Walls> WallsList){
-
         //Render the items
         for (MapObject object: map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject)object).getRectangle();

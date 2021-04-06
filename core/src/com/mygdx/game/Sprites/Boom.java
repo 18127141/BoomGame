@@ -26,6 +26,9 @@ public class Boom extends Sprite {
     float stateTimer;
     public FixtureDef fdef;
     private boolean isDestroy = false;
+
+    //
+    private Animation middle,left_tail,right_tail,up_tail,down_tail,body_x,body_y;
     public Boom(World world, Vector2 position,int direction, int Power ){
         super(GameManager.getAssetManager().get("Pack/PlayerandBoom.pack", TextureAtlas.class).findRegion("Bomb"));
         stateTimer=0;
@@ -90,6 +93,7 @@ public class Boom extends Sprite {
         }
         TimeOver = new Animation(0.2f,frame);
 
+        //
 
 
 
@@ -176,5 +180,6 @@ public class Boom extends Sprite {
         }
         else return false;
     }
+
 
 }

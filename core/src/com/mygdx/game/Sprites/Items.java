@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Main;
 import com.mygdx.game.ResourceManager.GameManager;
+import com.mygdx.game.Screens.MyScreen;
 
 public class Items extends Object{
     public boolean isDestroy=false;
@@ -20,12 +21,17 @@ public class Items extends Object{
     private Sprite sprite;
     private float stateTimer=0;
     public int Time =50;
+    private String name;
     public Items(World world, TiledMap map, Rectangle bounds) {
         super(world, map, bounds);
+
         sprite = new Sprite((Texture) GameManager.getAssetManager().get("Pack/objects.png"));
         Array<TextureRegion> frame = new Array<>();
         for (int i=0;i<6;i++){
-            frame.add(new TextureRegion(sprite.getTexture(),i*20,20,20,20));
+            if (MyScreen.mapName.equals("Forest"))
+                frame.add(new TextureRegion(sprite.getTexture(),i*20,20,20,20));
+            else if (MyScreen.mapName.equals("Temple"))
+                frame.add(new TextureRegion(sprite.getTexture(),i*20,40,20,20));
 
 
         }
