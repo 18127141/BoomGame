@@ -25,7 +25,7 @@ public class Explosion {
         texture = new Array<>();
         sprite = new Sprite((Texture) GameManager.getAssetManager().get("Pack/Boom.png"));
         Array<TextureRegion> frame = new Array<>();
-        float FP=1.5f;
+        float FP=1.2f;
         frame.add(new TextureRegion(sprite.getTexture(),1,1,20,20));
         frame.add(new TextureRegion(sprite.getTexture(),21,1,20,20));
         frame.add(new TextureRegion(sprite.getTexture(),45,1,20,20));
@@ -82,13 +82,13 @@ public class Explosion {
 
         left_tail= new Animation(FP,frame);
         frame.clear();
-        for (int i=0;i<3;i++){
+        for (int i=0;i<4;i++){
 
-            frame.add(new TextureRegion(sprite.getTexture(),i*20,103,20,20));
+            frame.add(new TextureRegion(sprite.getTexture(),1+i*20,103,20,20));
 
 
         }
-        frame.add(new TextureRegion(sprite.getTexture(),1+3*20,103,20,20));
+        //frame.add(new TextureRegion(sprite.getTexture(),1+3*20,103,20,20));
         frame.reverse();
 
         right_tail = new Animation(FP,frame);
