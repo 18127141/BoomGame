@@ -15,17 +15,17 @@ public class Explosion {
     float x,y;
     int l,r,u,d;
     float stateTimer=0;
-    public Explosion(float x,float y,int l,int r,int u,int d){
+    public Explosion(float x,float y,int left,int right,int up,int down){
         this.x=x;
         this.y=y;
-        this.l=l;
-        this.r=r;
-        this.u=u;
-        this.d=d;
+        this.l=left;
+        this.r=right;
+        this.u=up;
+        this.d=down;
         texture = new Array<>();
         sprite = new Sprite((Texture) GameManager.getAssetManager().get("Pack/Boom.png"));
         Array<TextureRegion> frame = new Array<>();
-        float FP=1f;
+        float FP=1.5f;
         frame.add(new TextureRegion(sprite.getTexture(),1,1,20,20));
         frame.add(new TextureRegion(sprite.getTexture(),21,1,20,20));
         frame.add(new TextureRegion(sprite.getTexture(),45,1,20,20));
@@ -82,21 +82,24 @@ public class Explosion {
 
         left_tail= new Animation(FP,frame);
         frame.clear();
-        for (int i=0;i<4;i++){
+        for (int i=0;i<3;i++){
 
             frame.add(new TextureRegion(sprite.getTexture(),i*20,103,20,20));
 
 
         }
+        frame.add(new TextureRegion(sprite.getTexture(),1+3*20,103,20,20));
         frame.reverse();
 
         right_tail = new Animation(FP,frame);
+        frame.clear();
         for (int i=0;i<4;i++){
 
             frame.add(new TextureRegion(sprite.getTexture(),82+i*20,103,20,20));
 
 
         }
+        //103 61
         frame.reverse();
 
         body_y = new Animation(FP,frame);
@@ -150,49 +153,49 @@ public class Explosion {
 
 
         if (i==0){
-            region = (TextureRegion) middle.getKeyFrame(stateTimer,true);
+            region = (TextureRegion) middle.getKeyFrame(stateTimer,false);
         }
         else if (l!=0 && i<l+1){
             //check tail
-            if ( i==1){
-                region = (TextureRegion)left_tail.getKeyFrame(stateTimer,true);
+            if ( i==l){
+                region = (TextureRegion)left_tail.getKeyFrame(stateTimer,false);
 
             }
             else{
-                region = (TextureRegion)body_x.getKeyFrame(stateTimer,true);
+                region = (TextureRegion)body_x.getKeyFrame(stateTimer,false);
 
             }
 
         }
         else if (r!=0 && i<l+1+r){
-            if (i==l+1){
-                region = (TextureRegion)right_tail.getKeyFrame(stateTimer,true);
+            if (i==l+r){
+                region = (TextureRegion)right_tail.getKeyFrame(stateTimer,false);
 
             }
             else{
-                region = (TextureRegion)body_x.getKeyFrame(stateTimer,true);
+                region = (TextureRegion)body_x.getKeyFrame(stateTimer,false);
 
             }
 
         }
         else if (u!=0 && i<l+r+u+1){
-            if (i==l+r+1){
-                region = (TextureRegion)up_tail.getKeyFrame(stateTimer,true);
+            if (i==l+r+u){
+                region = (TextureRegion)up_tail.getKeyFrame(stateTimer,false);
 
             }
             else{
-                region = (TextureRegion)body_y.getKeyFrame(stateTimer,true);
+                region = (TextureRegion)body_y.getKeyFrame(stateTimer,false);
 
             }
 
         }
         else if (d!=0 && i<l+r+u+d+1){
-            if (i==l+r+u+1){
-                region = (TextureRegion)down_tail.getKeyFrame(stateTimer,true);
+            if (i==l+r+u+d){
+                region = (TextureRegion)down_tail.getKeyFrame(stateTimer,false);
 
             }
             else {
-                region = (TextureRegion)body_y.getKeyFrame(stateTimer,true);
+                region = (TextureRegion)body_y.getKeyFrame(stateTimer,false);
 
             }
 

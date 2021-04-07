@@ -146,7 +146,7 @@ public class Boom extends Sprite {
 
             }
         }
-        explosion = new Explosion(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2,1,1,1,1);
+        explosion = new Explosion(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2,2,2,2,2);
 
     }
     private boolean CheckDead(Vector2 Point1, Vector2 Point2, float Power, Array<Walls> WallList){
