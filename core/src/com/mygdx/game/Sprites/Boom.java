@@ -27,7 +27,7 @@ public class Boom extends Sprite {
     float stateTimer;
     public FixtureDef fdef;
     private boolean isDestroy = false;
-
+    Array<Items>   DetroyList;
     //
     Explosion explosion;
 
@@ -130,6 +130,8 @@ public class Boom extends Sprite {
     public void  Destroy(Player player,  Array<Items> BoxList, Array<Walls> WallList){
         isDestroy=true;
         stateTimer=0;
+        Array<Items> MaybeDetroy = new Array();
+
         if (CheckDead(player.b2body.getPosition(), b2body.getPosition(),Power,WallList))
             player.Dead();
         world.destroyBody(b2body);
@@ -138,15 +140,26 @@ public class Boom extends Sprite {
 
             if (CheckDead(Temp.body.getPosition(),b2body.getPosition(),Power,WallList))
             {
-//                Temp.Destroy(world,(int)(Temp.body.getPosition().x*Main.PPM)/10,(int)(Temp.body.getPosition().y*Main.PPM)/10);
-                Temp.Destroy(world,Temp.body.getPosition().x,Temp.body.getPosition().y);
-                //BoxList.removeIndex(i);
-                //i--;
-
-
+                MaybeDetroy.add(Temp);
+                BoxList.removeIndex(i);
+                i--;
             }
         }
+
         explosion = new Explosion(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2,2,2,2,2);
+
+        DetroyList = new Array();
+        for (int i=0; i <MaybeDetroy.size;i++){
+            Items Temp = MaybeDetroy.get(i);
+            if (CheckCollision(Temp.body.getPosition(),b2body.getPosition(),Power,MaybeDetroy)==false){
+                BoxList.add(Temp);
+            }else DetroyList.add(Temp);
+        }
+        for (int i =0;i<DetroyList.size;i++){
+            DetroyList.get(i).Destroy(world,DetroyList.get(i).body.getPosition().x,DetroyList.get(i).body.getPosition().y);
+        }
+        explosion = new Explosion(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2,1,1,1,1);
+
 
     }
     private boolean CheckDead(Vector2 Point1, Vector2 Point2, float Power, Array<Walls> WallList){
@@ -166,10 +179,10 @@ public class Boom extends Sprite {
                 for (int i=0; i<WallList.size;i++){
                     Vector2 Temp = WallList.get(i).body.getPosition();
                     if ( (int)(Temp.x*100/20) == (int)(Point2.x*100/20)){
-                       double Distance2 = Math.sqrt(Math.pow((Temp.x  - Point2.x), 2) + Math.pow((Temp.y  - Point2.y), 2));
-                       if(Distance >= Distance2){
-                           return false;
-                       }
+                        double Distance2 = Math.sqrt(Math.pow((Temp.x  - Point2.x), 2) + Math.pow((Temp.y  - Point2.y), 2));
+                        if(Distance >= Distance2){
+                            return false;
+                        }
                     }
                 }
                 return true;
@@ -189,7 +202,47 @@ public class Boom extends Sprite {
         }
         else return false;
     }
+    private boolean CheckCollision(Vector2 Point1, Vector2 Point2, float Power, Array<Items> WallList){
 
+        double Distance = Math.sqrt(Math.pow((Point1.x  - Point2.x), 2) + Math.pow((Point1.y  - Point2.y), 2));
+
+        if (Distance < Power/Main.PPM )
+        {
+//            System.out.println((int)(Point2.x*100/20) + " "+ (int)(Point1.x*100/20) );
+//            System.out.println((int)(Point2.y*100/20) +" "+(int)(Point1.y*100/20));
+//
+//            System.out.println("Distance: " + Distance);
+//            System.out.println(Power/Main.PPM);
+//            System.out.println(Point1.x + " "+ Point1.y);
+            if ((int)(Point2.x*100/20) == (int)(Point1.x*100/20) )
+            {
+
+                for (int i=0; i<WallList.size;i++){
+                    Vector2 Temp = WallList.get(i).body.getPosition();
+                    if ( (int)(Temp.x*100/20) == (int)(Point2.x*100/20)){
+                        double Distance2 = Math.sqrt(Math.pow((Temp.x  - Point2.x), 2) + Math.pow((Temp.y  - Point2.y), 2));
+                        if(Distance > Distance2){
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }else if ((int)(Point2.y*100/20) ==(int)(Point1.y*100/20)){
+                for (int i=0; i<WallList.size;i++){
+                    Vector2 Temp = WallList.get(i).body.getPosition();
+                    if ((int)(Point2.y*100/20) ==(int)(Temp.y*100/20)){
+                        double Distance2 = Math.sqrt(Math.pow((Temp.x  - Point2.x), 2) + Math.pow((Temp.y  - Point2.y), 2));
+                        if(Distance > Distance2){
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+            else return false;
+        }
+        else return false;
+    }
     @Override
     public void draw(Batch batch) {
         super.draw(batch);
