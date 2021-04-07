@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.Array;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.mygdx.game.Builder.WorldBuilder;
 import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.Main;
@@ -96,6 +95,7 @@ public class MyScreen implements Screen {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
                 if (!dataSnapshot.getName().equals(game.playerName)){
                     //get the right Player to update
                     int index=0;
@@ -104,9 +104,7 @@ public class MyScreen implements Screen {
                         if (p.name.equals(dataSnapshot.getName())) break;
                         index++;
                     }
-//                    for (DataSnapshot data: dataSnapshot.getChildren()){
-//                        System.out.println("hehe "+data.getValue());
-//                    }
+
                     if ( dataSnapshot.child("State").getValue().equals("Run")){
                         PlayerList.get(index).state= Player.State.Run;
                     }
@@ -156,22 +154,11 @@ public class MyScreen implements Screen {
         });
 
     }
-    public void GetData(){
-        game.db.db.child("rooms/"+game.roomname).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-            }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-    }
     public void initPlayer(){
         player = new Player(world,BoomList,Main.posx[c],Main.poxy[c],game.playerName,true);
         getPlayerfromDataBase();
-        GetData();
+
     }
     public void setMap(String map){
         mapp = mapLoader.load("map/"+mapName+".tmx");

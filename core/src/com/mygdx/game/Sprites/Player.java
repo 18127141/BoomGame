@@ -69,7 +69,6 @@ public class Player extends Sprite {
         this.main=main;
         this.x=x;
         this.y=y;
-        System.out.println(name+" "+this.x+" "+this.y);
         //==============|Create the box2d body|==========
         if (main==true){
         BodyDef bdef = new BodyDef();

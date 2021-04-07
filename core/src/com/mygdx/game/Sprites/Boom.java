@@ -1,6 +1,7 @@
 package com.mygdx.game.Sprites;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,7 +29,9 @@ public class Boom extends Sprite {
     private boolean isDestroy = false;
 
     //
-    private Animation middle,left_tail,right_tail,up_tail,down_tail,body_x,body_y;
+    Explosion explosion;
+
+    //
     public Boom(World world, Vector2 position,int direction, int Power ){
         super(GameManager.getAssetManager().get("Pack/PlayerandBoom.pack", TextureAtlas.class).findRegion("Bomb"));
         stateTimer=0;
@@ -99,9 +102,13 @@ public class Boom extends Sprite {
 
     }
     public void update(float dt) {
-
+        if (Time >40){
         setPosition(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2);
         setRegion(getFrame(dt));
+        }
+        else{
+            explosion.update(dt);
+        }
 
 
     }
@@ -139,6 +146,8 @@ public class Boom extends Sprite {
 
             }
         }
+        explosion = new Explosion(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2,1,1,1,1);
+
     }
     private boolean CheckDead(Vector2 Point1, Vector2 Point2, float Power, Array<Walls> WallList){
         double Distance = Math.sqrt(Math.pow((Point1.x  - Point2.x), 2) + Math.pow((Point1.y  - Point2.y), 2));
@@ -181,5 +190,12 @@ public class Boom extends Sprite {
         else return false;
     }
 
+    @Override
+    public void draw(Batch batch) {
+        super.draw(batch);
+        if (Time<=40){
+            explosion.draw(batch);
+        }
 
+    }
 }

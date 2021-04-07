@@ -27,6 +27,9 @@ public class Items extends Object{
 
         sprite = new Sprite((Texture) GameManager.getAssetManager().get("Pack/objects.png"));
         Array<TextureRegion> frame = new Array<>();
+
+
+
         for (int i=0;i<6;i++){
             if (MyScreen.mapName.equals("Forest"))
                 frame.add(new TextureRegion(sprite.getTexture(),i*20,20,20,20));
