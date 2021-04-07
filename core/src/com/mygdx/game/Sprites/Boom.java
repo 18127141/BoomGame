@@ -132,8 +132,7 @@ public class Boom extends Sprite {
         stateTimer=0;
         Array<Items> MaybeDetroy = new Array();
 
-        if (CheckDead(player.b2body.getPosition(), b2body.getPosition(),Power,WallList))
-            player.Dead();
+
         world.destroyBody(b2body);
         for (int i=0; i<BoxList.size;i++){
             final Items Temp = BoxList.get(i);
@@ -155,6 +154,8 @@ public class Boom extends Sprite {
                 BoxList.add(Temp);
             }else DetroyList.add(Temp);
         }
+        if (CheckDead(player.b2body.getPosition(), b2body.getPosition(),Power,WallList) && CheckCollision(player.b2body.getPosition(), b2body.getPosition(),Power,DetroyList))
+            player.Dead();
         for (int i =0;i<DetroyList.size;i++){
             DetroyList.get(i).Destroy(world,DetroyList.get(i).body.getPosition().x,DetroyList.get(i).body.getPosition().y);
         }
