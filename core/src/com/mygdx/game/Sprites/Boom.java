@@ -131,8 +131,6 @@ public class Boom extends Sprite {
         isDestroy=true;
         stateTimer=0;
         Array<Items> MaybeDetroy = new Array();
-
-
         world.destroyBody(b2body);
         for (int i=0; i<BoxList.size;i++){
             final Items Temp = BoxList.get(i);
@@ -140,8 +138,6 @@ public class Boom extends Sprite {
             if (CheckDead(Temp.body.getPosition(),b2body.getPosition(),Power,WallList))
             {
                 MaybeDetroy.add(Temp);
-                BoxList.removeIndex(i);
-                i--;
             }
         }
 
@@ -150,9 +146,9 @@ public class Boom extends Sprite {
         DetroyList = new Array();
         for (int i=0; i <MaybeDetroy.size;i++){
             Items Temp = MaybeDetroy.get(i);
-            if (CheckCollision(Temp.body.getPosition(),b2body.getPosition(),Power,MaybeDetroy)==false){
-                BoxList.add(Temp);
-            }else DetroyList.add(Temp);
+            if (CheckCollision(Temp.body.getPosition(),b2body.getPosition(),Power,MaybeDetroy)){
+                DetroyList.add(Temp);
+            }
         }
         if (CheckDead(player.b2body.getPosition(), b2body.getPosition(),Power,WallList) && CheckCollision(player.b2body.getPosition(), b2body.getPosition(),Power,DetroyList))
             player.Dead();
@@ -166,7 +162,7 @@ public class Boom extends Sprite {
     private boolean CheckDead(Vector2 Point1, Vector2 Point2, float Power, Array<Walls> WallList){
         double Distance = Math.sqrt(Math.pow((Point1.x  - Point2.x), 2) + Math.pow((Point1.y  - Point2.y), 2));
 
-        if (Distance < Power/Main.PPM )
+        if (Math.ceil(Distance*100) < Power )
         {
 //            System.out.println((int)(Point2.x*100/20) + " "+ (int)(Point1.x*100/20) );
 //            System.out.println((int)(Point2.y*100/20) +" "+(int)(Point1.y*100/20));
@@ -207,7 +203,7 @@ public class Boom extends Sprite {
 
         double Distance = Math.sqrt(Math.pow((Point1.x  - Point2.x), 2) + Math.pow((Point1.y  - Point2.y), 2));
 
-        if (Distance < Power/Main.PPM )
+        if (Math.ceil(Distance*100) < Power )
         {
 //            System.out.println((int)(Point2.x*100/20) + " "+ (int)(Point1.x*100/20) );
 //            System.out.println((int)(Point2.y*100/20) +" "+(int)(Point1.y*100/20));
@@ -222,7 +218,7 @@ public class Boom extends Sprite {
                     Vector2 Temp = WallList.get(i).body.getPosition();
                     if ( (int)(Temp.x*100/20) == (int)(Point2.x*100/20)){
                         double Distance2 = Math.sqrt(Math.pow((Temp.x  - Point2.x), 2) + Math.pow((Temp.y  - Point2.y), 2));
-                        if(Distance > Distance2){
+                        if((int)(Distance*1000) > (int)(Distance2*1000)){
                             return false;
                         }
                     }
@@ -233,7 +229,7 @@ public class Boom extends Sprite {
                     Vector2 Temp = WallList.get(i).body.getPosition();
                     if ((int)(Point2.y*100/20) ==(int)(Temp.y*100/20)){
                         double Distance2 = Math.sqrt(Math.pow((Temp.x  - Point2.x), 2) + Math.pow((Temp.y  - Point2.y), 2));
-                        if(Distance > Distance2){
+                        if((int)(Distance*1000) > (int)(Distance2*1000)){
                             return false;
                         }
                     }
