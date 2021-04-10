@@ -183,6 +183,7 @@ public class Boom extends Sprite {
                     }
                 }
                 return true;
+
             }else if ((int)(Point2.y*100/20) ==(int)(Point1.y*100/20)){
                 for (int i=0; i<WallList.size;i++){
                     Vector2 Temp = WallList.get(i).body.getPosition();

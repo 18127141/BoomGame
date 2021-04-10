@@ -23,7 +23,7 @@ public class Lobby implements Screen {
     public Array<String> player;
     public Stage stage;
     Skin skin;  Viewport viewport;
-
+    boolean available = true;
     public OrthographicCamera cam;
 
     public Lobby(Main game)   {
@@ -35,6 +35,7 @@ public class Lobby implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         getRoomsize(game.roomname);
+
         final TextButton join_btn = new TextButton("Join", skin, "round");
 
         join_btn.setPosition(100,100);
@@ -54,8 +55,7 @@ public class Lobby implements Screen {
         stage.addActor(join_btn);
     }
     public void StartGame(){
-        System.out.println(quanity);
-        game.db.addPlayertoRoom("Test",game.playerName,Main.posx[(int)quanity],Main.poxy[(int)quanity]);
+
         game.setScreen(new MyScreen(game));
 
     }
@@ -63,7 +63,7 @@ public class Lobby implements Screen {
         game.db.db.child("rooms/"+Room).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                quanity++;
+
             }
 
             @Override
@@ -72,6 +72,10 @@ public class Lobby implements Screen {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getName().equals(game.roomname))
+                    available=false;
+
+
 
             }
 
@@ -95,7 +99,10 @@ public class Lobby implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        if (!available){
+            game.roomname="Test";
+            game.setScreen(new MainHall(game));
+        }
         stage.draw();
 
     }
@@ -117,11 +124,17 @@ public class Lobby implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     @Override
     public void dispose() {
+        if (game.roomname.equals(game.playerName)){
+            game.db.db.child("rooms/"+game.roomname).setValue(null);
+        }
+        else{
+            game.db.db.child("rooms/"+game.roomname+"/"+game.playerName).setValue(null);
 
+        }
     }
 }

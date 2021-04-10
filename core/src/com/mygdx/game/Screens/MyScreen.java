@@ -157,7 +157,24 @@ public class MyScreen implements Screen {
 
     public void initPlayer(){
         player = new Player(world,BoomList,Main.posx[c],Main.poxy[c],game.playerName,true);
-        getPlayerfromDataBase();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // do something important here, asynchronously to the rendering thread
+                //final Result result = createResult();
+                // post a Runnable to the rendering thread that processes the result
+                getPlayerfromDataBase();
+
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        // process the result, e.g. add it to an Array<Result> field of the ApplicationListener.
+                        //results.add(result);
+                    }
+                });
+            }
+        }).start();
 
     }
     public void setMap(String map){
@@ -307,6 +324,6 @@ public class MyScreen implements Screen {
         b2dr.dispose();
         mapp.dispose();
         renderer.dispose();
-        game.db.deletePlayerfromRoom("Test",game.playerName);
+        game.db.deletePlayerfromRoom(game.roomname,game.playerName);
     }
 }

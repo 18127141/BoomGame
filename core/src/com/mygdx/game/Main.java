@@ -9,9 +9,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Firebase.firebase;
 import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.ResourceManager.GameManager;
+import com.mygdx.game.Screens.MainHall;
 import com.mygdx.game.Screens.Mainmenu;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Main extends Game {
@@ -34,11 +36,13 @@ public class Main extends Game {
 
 
 
+
 	//====================|GameManager|/////////
 	public GameManager manager;
 
 	@Override
 	public void create() {
+
 		TakenName = new ArrayList<>();
 		db = new firebase(this);
 		manager = new GameManager();
@@ -55,6 +59,7 @@ public class Main extends Game {
 
 		//setScreen(new MyScreen(this));
 		setScreen(new Mainmenu(this));
+		//setScreen(new MainHall(this));
 	}
 
 	@Override

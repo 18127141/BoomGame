@@ -35,7 +35,7 @@ public class Mainmenu implements Screen {
     Skin skin;
     Label option,credit,play,Exit;
     public OrthographicCamera cam;
-    public Mainmenu(Main game){
+    public Mainmenu(final Main game){
         this.game = game;
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         background = GameManager.getAssetManager().get("title_background-little.png", Texture.class);
@@ -79,8 +79,13 @@ public class Mainmenu implements Screen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (game.playerName.equals("")){
+                    LoginScreen();
+                }
+                else{
+                    game.setScreen(new MainHall(game));
+                }
 
-                LoginScreen();
             }
         });
 
@@ -192,7 +197,7 @@ public class Mainmenu implements Screen {
                         game.playerName =  name_field.getText();
 
 
-                        game.setScreen(new Lobby(game));
+                        game.setScreen(new MainHall(game));
                     }
                     else
                     {
