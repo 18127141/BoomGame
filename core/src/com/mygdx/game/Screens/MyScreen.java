@@ -140,7 +140,16 @@ public class MyScreen implements Screen {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.getName().equals("_RoomStatus")) {
+                    for (int i=0;i<PlayerList.size;i++){
+                        Player temp= PlayerList.get(i);
+                        if (temp.name.equals(dataSnapshot.getName())){
+                            PlayerList.removeIndex(i);
+                            break;
+                        }
+                    }
 
+                }
             }
 
             @Override
@@ -332,5 +341,8 @@ public class MyScreen implements Screen {
         mapp.dispose();
         renderer.dispose();
         game.db.deletePlayerfromRoom(game.roomname, game.playerName);
+        if (PlayerList.size ==0){
+            game.db.db.child("rooms/" + game.roomname).child("_RoomStatus").setValue(null);
+        }
     }
 }

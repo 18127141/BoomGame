@@ -28,17 +28,18 @@ import java.util.HashMap;
 
 public class MainHall implements Screen {
     private Main game;
-    public long quanity=0;
+    public long quanity = 0;
     public Array<String> player;
     public Stage stage;
-    Skin skin;  Viewport viewport;
+    Skin skin;
+    Viewport viewport;
     public OrthographicCamera cam;
     Table scrollTable;
     public HashMap<String, Integer> rooms;
 
-    public MainHall(final Main game)   {
+    public MainHall(final Main game) {
         this.game = game;
-        rooms=new HashMap<>();
+        rooms = new HashMap<>();
 
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         cam = new OrthographicCamera();
@@ -49,10 +50,10 @@ public class MainHall implements Screen {
 
         //
         Button createRoom = new TextButton("CREATE A ROOM", skin, "round");
-        createRoom.setPosition(Main.WIDTH/2-createRoom.getMinWidth()/2,10);
+        createRoom.setPosition(Main.WIDTH / 2 - createRoom.getMinWidth() / 2, 10);
         Button Back = new TextButton("Back", skin, "round");
-        Back.setPosition(0,10);
-        Back.addListener(new InputListener(){
+        Back.setPosition(0, 10);
+        Back.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -64,38 +65,39 @@ public class MainHall implements Screen {
                 game.setScreen(new Mainmenu(game));
             }
         });
-        createRoom.addListener(new InputListener(){
-        @Override
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+        createRoom.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-            return true;
-        }
+                return true;
+            }
 
-        @Override
-        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-            game.db.addPlayertoRoom(game.playerName,game.playerName,Main.posx[0],Main.poxy[0]);
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.db.AddRoomStatus(game.playerName, false);
 
-            //add room status
-            game.db.AddRoomStatus(game.playerName,false);
-            //
-            game.roomname=game.playerName;
-            game.setScreen(new Lobby(game));
+                game.db.addPlayertoRoom(game.playerName, game.playerName, Main.posx[0], Main.poxy[0]);
 
-        }
-    });
+                //add room status
+                //
+                game.roomname = game.playerName;
+                game.setScreen(new Lobby(game));
+
+            }
+        });
         stage.addActor(Back);
         stage.addActor(createRoom);
-        Label title = new Label("List Rooms",skin,"title");
+        Label title = new Label("List Rooms", skin, "title");
         title.setAlignment(Align.center);
-        title.setPosition(0,250);
-        title.setSize(Main.WIDTH,70);
+        title.setPosition(0, 250);
+        title.setSize(Main.WIDTH, 70);
         stage.addActor(title);
 
         //Scroll
         scrollTable = new Table();
 
         final ScrollPane scroller = new ScrollPane(scrollTable);
-        scroller.setPosition(Main.WIDTH/2-scroller.getWidth()/2,100);
+        scroller.setPosition(Main.WIDTH / 2 - scroller.getWidth() / 2, 100);
 
         this.stage.addActor(scroller);
         new Thread(new Runnable() {
@@ -117,57 +119,80 @@ public class MainHall implements Screen {
         }).start();
 
 
-
     }
-    public void GetRoom(){
+
+    public void GetRoom() {
         game.db.db.child("rooms").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                final String tmp = dataSnapshot.getName();
-                rooms.put(tmp,Integer.valueOf((int)dataSnapshot.getChildrenCount()));
-                Label text = new Label(tmp, skin,"title-plain");
-                text.setAlignment(Align.center);
+                if ((boolean)dataSnapshot.child("_RoomStatus").getValue() == false) {
+                    final String tmp = dataSnapshot.getName();
+                    rooms.put(tmp, Integer.valueOf((int) dataSnapshot.getChildrenCount()));
+                    Label text = new Label(tmp, skin, "title-plain");
+                    text.setAlignment(Align.center);
 //                text.setWrap(true);
-                text.addListener(new InputListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        return true;
-                    }
+                    text.addListener(new InputListener() {
+                        @Override
+                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                            return true;
+                        }
 
-                    @Override
-                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        System.out.println(rooms.get(tmp));
+                        @Override
+                        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                            System.out.println(rooms.get(tmp));
 
-                        game.db.addPlayertoRoom(tmp,game.playerName,Main.posx[rooms.get(tmp)],Main.poxy[rooms.get(tmp)]);
-                        game.roomname=tmp;
-                        game.setScreen(new Lobby(game));
+                            game.db.addPlayertoRoom(tmp, game.playerName, Main.posx[rooms.get(tmp) - 1], Main.poxy[rooms.get(tmp) - 1]);
+                            game.roomname = tmp;
+                            game.setScreen(new Lobby(game));
 
-                    }
-                });
+                        }
+                    });
 
 
                     scrollTable.add(text);
                     scrollTable.row();
 
 
-
+                }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-               rooms.put(dataSnapshot.getName(),Integer.valueOf((int)dataSnapshot.getChildrenCount()));
+                if ((boolean)dataSnapshot.child("_RoomStatus").getValue() == true){
+                    //room has started
+                    int i = 0;
+                    String key="";
+                    for (String j : rooms.keySet()) {
+                        key=j;
+                        if (j.equals(dataSnapshot.getName())) break;
+                        i++;
+                    }
+                    if (scrollTable.getChildren().size!=0){
+                        scrollTable.removeActorAt(i, true);
+                        rooms.remove(key);
+                    }
+                }
+                else{
+                    rooms.put(dataSnapshot.getName(), Integer.valueOf((int) dataSnapshot.getChildrenCount()));
+
+                }
 
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                int i=0;
-                for (String j : rooms.keySet()){
+                int i = 0;
+                String key="";
+                for (String j : rooms.keySet()) {
+                    key=j;
                     if (j.equals(dataSnapshot.getName())) break;
                     i++;
                 }
-                scrollTable.removeActorAt(i,true);
+                if (scrollTable.getChildren().size!=0){
+                    scrollTable.removeActorAt(i, true);
+                    rooms.remove(key);
+                }
+
             }
 
             @Override
@@ -181,6 +206,7 @@ public class MainHall implements Screen {
             }
         });
     }
+
     @Override
     public void show() {
 
@@ -190,7 +216,7 @@ public class MainHall implements Screen {
     public void render(float delta) {
         stage.act();
 
-        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
 
