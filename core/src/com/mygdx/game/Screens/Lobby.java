@@ -24,9 +24,10 @@ public class Lobby implements Screen {
     public Stage stage;
     Skin skin;  Viewport viewport;
     boolean available = true;
+    boolean start = false;
     public OrthographicCamera cam;
 
-    public Lobby(Main game)   {
+    public Lobby(final Main game)   {
         this.game = game;
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         cam = new OrthographicCamera();
@@ -34,7 +35,23 @@ public class Lobby implements Screen {
         stage = new Stage(viewport, Main.batch);
         Gdx.input.setInputProcessor(stage);
 
-        getRoomsize(game.roomname);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // do something important here, asynchronously to the rendering thread
+                //final Result result = createResult();
+                // post a Runnable to the rendering thread that processes the result
+                getRoomsize(game.roomname);
+
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        // process the result, e.g. add it to an Array<Result> field of the ApplicationListener.
+                        //results.add(result);
+                    }
+                });
+            }
+        }).start();
 
         final TextButton join_btn = new TextButton("Join", skin, "round");
 
@@ -48,14 +65,18 @@ public class Lobby implements Screen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                StartGame();
+                //Only host can start the game
+                if (game.playerName.equals(game.roomname)){
+                    game.db.AddRoomStatus(game.roomname,true);
+                    StartGame();
+                }
 
             }
         });
         stage.addActor(join_btn);
     }
     public void StartGame(){
-
+        start = true;
         game.setScreen(new MyScreen(game));
 
     }
@@ -74,7 +95,10 @@ public class Lobby implements Screen {
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getName().equals(game.roomname))
                     available=false;
-
+                if (dataSnapshot.getName().equals("_RoomStatus") && !game.playerName.equals(game.roomname) )
+                {
+                    start = true;
+                }
 
 
             }
@@ -103,6 +127,9 @@ public class Lobby implements Screen {
             game.roomname="Test";
             game.setScreen(new MainHall(game));
         }
+        if (start){
+            StartGame();
+        }
         stage.draw();
 
     }
@@ -129,12 +156,15 @@ public class Lobby implements Screen {
 
     @Override
     public void dispose() {
-        if (game.roomname.equals(game.playerName)){
-            game.db.db.child("rooms/"+game.roomname).setValue(null);
-        }
-        else{
-            game.db.db.child("rooms/"+game.roomname+"/"+game.playerName).setValue(null);
 
+        if (!start){
+            if (game.roomname.equals(game.playerName)){
+                game.db.db.child("rooms/"+game.roomname).setValue(null);
+            }
+            else{
+                game.db.db.child("rooms/"+game.roomname+"/"+game.playerName).setValue(null);
+
+            }
         }
     }
 }

@@ -81,6 +81,15 @@ public class firebase {
     public void AddBoom(String room,String player){
         db.getRef().child("rooms/"+room+"/"+player).child("action").setValue("Planted");
     }
+    public void AddRoomStatus(String room,boolean s){
+        if (!s){
+            db.getRef().child("rooms/"+room).child("_RoomStatus").setValue(false);
+        }
+        else{
+            db.getRef().child("rooms/"+room).child("_RoomStatus").setValue(null);
+
+        }
+    }
 
 
     class cordinate{

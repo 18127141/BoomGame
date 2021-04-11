@@ -74,6 +74,10 @@ public class MainHall implements Screen {
         @Override
         public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             game.db.addPlayertoRoom(game.playerName,game.playerName,Main.posx[0],Main.poxy[0]);
+
+            //add room status
+            game.db.AddRoomStatus(game.playerName,false);
+            //
             game.roomname=game.playerName;
             game.setScreen(new Lobby(game));
 
@@ -156,7 +160,12 @@ public class MainHall implements Screen {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                int i=0;
+                for (String j : rooms.keySet()){
+                    if (j.equals(dataSnapshot.getName())) break;
+                    i++;
+                }
+                scrollTable.removeActorAt(i,true);
             }
 
             @Override

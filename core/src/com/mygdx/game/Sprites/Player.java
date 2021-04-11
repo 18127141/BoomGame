@@ -62,7 +62,9 @@ public class Player extends Sprite {
     //400 20
     //400 240
     public Player(World world,Array<Boom> BoomList,double x,double y,String name,boolean main){
+
         super(GameManager.getAssetManager().get("Pack/PlayerandBoom.pack", TextureAtlas.class).findRegion("playerAnimation"));
+        //System.out.println(x+" "+y);
         this.BoomList = BoomList;
         this.world = world;
         this.name=name;

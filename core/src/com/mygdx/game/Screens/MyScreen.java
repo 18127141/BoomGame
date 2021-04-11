@@ -80,7 +80,6 @@ public class MyScreen implements Screen {
         game.db.db.child("rooms/"+game.roomname).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                 if (!dataSnapshot.getName().equals(game.playerName)){
 
                     PlayerList.add(new Player(world,BoomList,(double)dataSnapshot.child("x").getValue(),(double)dataSnapshot.child("y").getValue(),dataSnapshot.getName(),false));
@@ -156,7 +155,7 @@ public class MyScreen implements Screen {
     }
 
     public void initPlayer(){
-        player = new Player(world,BoomList,Main.posx[c],Main.poxy[c],game.playerName,true);
+        //player = new Player(world,BoomList,Main.posx[c],Main.poxy[c],game.playerName,true);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -189,14 +188,17 @@ public class MyScreen implements Screen {
             Player temp=PlayerList.get(i);
             temp.updateother(dt);
         }
+        if (player!=null)
         player.handleInput(game.controller,game);
         //PlayerList.get(index).handleInput(game.controller);
         world.step(1/60f,6,2);
         game.cam.update();
-
-        player.update(dt);
-        //update the firebase
-        updatefirebase();
+        if (player!=null)
+        {
+            player.update(dt);
+            //update the firebase
+            updatefirebase();
+        }
 
         //
 
@@ -204,12 +206,14 @@ public class MyScreen implements Screen {
         renderer.setView(game.cam);
     }
     public void updatefirebase(){
+
         String a,b;
         if (player.state== Player.State.Stand) a="Stand";
         else a="Run";
         if (player.previous==Player.State.Run) b="Run";
         else b="Stand";
         game.db.SetPlayerXY(game.roomname,game.playerName,player.b2body.getPosition().x,player.b2body.getPosition().y,"Action",a,b,(int)player.direction);
+
     }
     public void BoomCountDown(float delta){
 
@@ -289,7 +293,7 @@ public class MyScreen implements Screen {
             Player temp=PlayerList.get(i);
             temp.draw(game.batch);
         }
-
+        if (player!=null)
         player.draw(game.batch);
 
         game.batch.end();
