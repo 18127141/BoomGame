@@ -82,13 +82,14 @@ public class firebase {
         db.getRef().child("rooms/"+room+"/"+player).child("action").setValue("Planted");
     }
     public void AddRoomStatus(String room,boolean s){
-        if (!s){
-            db.getRef().child("rooms/"+room).child("_RoomStatus").setValue(false);
-        }
-        else{
-            db.getRef().child("rooms/"+room).child("_RoomStatus").setValue(null);
-
-        }
+        db.getRef().child("rooms/"+room).child("_RoomStatus").setValue(s);
+//        if (!s){
+//            db.getRef().child("rooms/"+room).child("_RoomStatus").setValue(false);
+//        }
+//        else{
+//            db.getRef().child("rooms/"+room).child("_RoomStatus").setValue(null);
+//
+//        }
     }
 
 

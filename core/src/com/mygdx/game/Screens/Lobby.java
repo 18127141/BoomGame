@@ -89,16 +89,20 @@ public class Lobby implements Screen {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getName().equals(game.roomname))
-                    available=false;
                 if (dataSnapshot.getName().equals("_RoomStatus") && !game.playerName.equals(game.roomname) )
                 {
                     start = true;
                 }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getName().equals(game.roomname)){
+                    available=false;
+
+                }
+
+
 
 
             }

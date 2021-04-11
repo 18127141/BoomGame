@@ -137,6 +137,8 @@ public class MainHall implements Screen {
 
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                        System.out.println(rooms.get(tmp));
+
                         game.db.addPlayertoRoom(tmp,game.playerName,Main.posx[rooms.get(tmp)],Main.poxy[rooms.get(tmp)]);
                         game.roomname=tmp;
                         game.setScreen(new Lobby(game));
