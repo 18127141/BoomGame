@@ -26,6 +26,8 @@ public class MyScreen implements Screen {
     int c = 0;
     private Main game;
     Player player;
+    ChildEventListener listener;
+
     private TextureAtlas atlas;
     public Array<Boom> BoomList;
     public Array<Items> BoxList;
@@ -79,10 +81,10 @@ public class MyScreen implements Screen {
 
     public void getPlayerfromDataBase() {
 
-        game.db.db.child("rooms/" + game.roomname).addChildEventListener(new ChildEventListener() {
+        listener = game.db.db.child("rooms/" + game.roomname).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (!dataSnapshot.getName().equals("_RoomStatus")) {
+                if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap")) {
                     if (!dataSnapshot.getName().equals(game.playerName)) {
 
                         PlayerList.add(new Player(world, BoomList, (double) dataSnapshot.child("x").getValue(), (double) dataSnapshot.child("y").getValue(), dataSnapshot.getName(), false));
@@ -97,7 +99,7 @@ public class MyScreen implements Screen {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if (!dataSnapshot.getName().equals("_RoomStatus")) {
+                if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap")) {
                     if (!dataSnapshot.getName().equals(game.playerName)) {
                         //get the right Player to update
                         int index = 0;
@@ -140,7 +142,8 @@ public class MyScreen implements Screen {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.getName().equals("_RoomStatus")) {
+                System.out.println(dataSnapshot);
+                if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap") ) {
                     for (int i=0;i<PlayerList.size;i++){
                         Player temp= PlayerList.get(i);
                         if (temp.name.equals(dataSnapshot.getName())){
@@ -336,13 +339,16 @@ public class MyScreen implements Screen {
 
     @Override
     public void dispose() {
+        game.db.db.child("rooms/" + game.roomname).removeEventListener(listener);
         world.dispose();
         b2dr.dispose();
         mapp.dispose();
         renderer.dispose();
         game.db.deletePlayerfromRoom(game.roomname, game.playerName);
         if (PlayerList.size ==0){
-            game.db.db.child("rooms/" + game.roomname).child("_RoomStatus").setValue(null);
+//            game.db.db.child("rooms/" + game.roomname).child("_RoomStatus").setValue(null);
+//            game.db.db.child("rooms/" + game.roomname).child("_RoomMap").setValue(null);
+            game.db.db.child("rooms/" + game.roomname).setValue(null);
         }
     }
 }

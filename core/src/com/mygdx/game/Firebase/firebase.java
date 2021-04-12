@@ -69,6 +69,7 @@ public class firebase {
     public void addPlayertoRoom(String room,String player,float x,float y){
         cordinate Temp=new cordinate(x,y,"","Stand","Stand",0);
         db.getRef().child("rooms/"+room+"/"+player).setValue(Temp);
+        db.getRef().child("rooms/"+room+"/"+player).child("message").setValue("");
     }
     public void deletePlayerfromRoom(String room,String player){
         db.getRef().child("rooms/"+room+"/"+player).setValue(null);
@@ -83,13 +84,11 @@ public class firebase {
     }
     public void AddRoomStatus(String room,boolean s){
         db.getRef().child("rooms/"+room).child("_RoomStatus").setValue(s);
-//        if (!s){
-//            db.getRef().child("rooms/"+room).child("_RoomStatus").setValue(false);
-//        }
-//        else{
-//            db.getRef().child("rooms/"+room).child("_RoomStatus").setValue(null);
-//
-//        }
+
+    }
+    public void AddMap(String room,String s){
+        db.getRef().child("rooms/"+room).child("_RoomMap").setValue(s);
+
     }
 
 

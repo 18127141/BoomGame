@@ -36,7 +36,7 @@ public class MainHall implements Screen {
     public OrthographicCamera cam;
     Table scrollTable;
     public HashMap<String, Integer> rooms;
-
+    ChildEventListener listener;
     public MainHall(final Main game) {
         this.game = game;
         rooms = new HashMap<>();
@@ -75,7 +75,7 @@ public class MainHall implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 game.db.AddRoomStatus(game.playerName, false);
-
+                game.db.AddMap(game.playerName,"Forest");
                 game.db.addPlayertoRoom(game.playerName, game.playerName, Main.posx[0], Main.poxy[0]);
 
                 //add room status
@@ -122,7 +122,7 @@ public class MainHall implements Screen {
     }
 
     public void GetRoom() {
-        game.db.db.child("rooms").addChildEventListener(new ChildEventListener() {
+        listener = game.db.db.child("rooms").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if ((boolean)dataSnapshot.child("_RoomStatus").getValue() == false) {
@@ -130,7 +130,7 @@ public class MainHall implements Screen {
                     rooms.put(tmp, Integer.valueOf((int) dataSnapshot.getChildrenCount()));
                     Label text = new Label(tmp, skin, "title-plain");
                     text.setAlignment(Align.center);
-//                text.setWrap(true);
+//                  text.setWrap(true);
                     text.addListener(new InputListener() {
                         @Override
                         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -139,9 +139,9 @@ public class MainHall implements Screen {
 
                         @Override
                         public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                            System.out.println(rooms.get(tmp));
 
-                            game.db.addPlayertoRoom(tmp, game.playerName, Main.posx[rooms.get(tmp) - 1], Main.poxy[rooms.get(tmp) - 1]);
+
+                            game.db.addPlayertoRoom(tmp, game.playerName, Main.posx[rooms.get(tmp) - 2], Main.poxy[rooms.get(tmp) - 2]);
                             game.roomname = tmp;
                             game.setScreen(new Lobby(game));
 
@@ -202,7 +202,6 @@ public class MainHall implements Screen {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
             }
         });
     }
@@ -239,11 +238,11 @@ public class MainHall implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     @Override
     public void dispose() {
-
+        game.db.db.child("rooms").removeEventListener(listener);
     }
 }
