@@ -2,6 +2,7 @@ package com.mygdx.game.Sprites;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -272,7 +273,10 @@ public class Player extends Sprite {
                     BoomList.add(Temp);
                     TimePlanted=10;
                     AvaiableBoom--;
+                    //ADD boom
                     game.db.AddBoom(game.roomname,game.playerName);
+                    GameManager.getAssetManager().get("sounds/PlaceBomb.ogg", Sound.class).play();
+
                 }
                 else {
                     world.destroyBody(Temp.b2body);

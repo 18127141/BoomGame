@@ -1,5 +1,6 @@
 package com.mygdx.game.Sprites;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -44,6 +45,7 @@ public class Items extends Object{
     }
     public void Destroy(World world,float x,float y){
         super.Destroy(world,x,y);
+        GameManager.getAssetManager().get("sounds/Explosion.ogg", Sound.class).play();
 
         this.x = x;
         this.y =y;

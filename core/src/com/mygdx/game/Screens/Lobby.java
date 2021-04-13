@@ -286,7 +286,8 @@ public class Lobby implements Screen {
                         if (player.get(i).equals(dataSnapshot.getName())) break;
                         index++;
                     }
-                    player.removeIndex(index);
+                    if (!player.isEmpty())
+                        player.removeIndex(index);
                     players_list.setItems(player);
                 }
 

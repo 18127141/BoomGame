@@ -1,6 +1,7 @@
 package com.mygdx.game.ResourceManager;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,7 +27,9 @@ public class GameManager implements Disposable {
         //Loadminimap
         assetManager.load("map/minimap/Temple.png",Texture.class);
         assetManager.load("map/minimap/Forest.png",Texture.class);
-
+        //load Sound
+        assetManager.load("sounds/PlaceBomb.ogg", Sound.class);
+        assetManager.load("sounds/Explosion.ogg",Sound.class);
         assetManager.finishLoading();
 
     }
