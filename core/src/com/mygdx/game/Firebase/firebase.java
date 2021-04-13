@@ -90,6 +90,9 @@ public class firebase {
         db.getRef().child("rooms/"+room).child("_RoomMap").setValue(s);
 
     }
+    public void sendMsg(String room,String player,String msg){
+        db.getRef().child("rooms/"+room+"/"+player).child("message").setValue(msg);
+    }
 
 
     class cordinate{

@@ -48,9 +48,9 @@ public class MyScreen implements Screen {
     public TiledMap mapp;
     public OrthogonalTiledMapRenderer renderer;
 
-    public MyScreen(Main game) {
+    public MyScreen(Main game,String map) {
         this.game = game;
-
+        mapName=map;
         mapLoader = new TmxMapLoader();
         setMap(mapName);
 
@@ -142,7 +142,7 @@ public class MyScreen implements Screen {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                System.out.println(dataSnapshot);
+
                 if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap") ) {
                     for (int i=0;i<PlayerList.size;i++){
                         Player temp= PlayerList.get(i);
