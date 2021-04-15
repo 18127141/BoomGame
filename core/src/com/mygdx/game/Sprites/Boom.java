@@ -16,6 +16,8 @@ import com.mygdx.game.Main;
 import com.mygdx.game.ResourceManager.GameManager;
 import com.mygdx.game.Screens.MyScreen;
 
+import java.time.format.DateTimeFormatter;
+
 public class Boom extends Sprite {
 
     public World world;
@@ -28,6 +30,7 @@ public class Boom extends Sprite {
     public FixtureDef fdef;
     private boolean isDestroy = false;
     Array<Items>   DetroyList;
+    int Left,Right,Up,Down;
     //
     Explosion explosion;
 
@@ -37,6 +40,7 @@ public class Boom extends Sprite {
         stateTimer=0;
         this.world = world;
         this.Power = Power;
+        Left = Right =Up= Down = Power/20-1;
         //==============|Create the box2d body|==========
         BodyDef bdef = new BodyDef();
         float x = position.x;
@@ -135,7 +139,7 @@ public class Boom extends Sprite {
         for (int i=0; i<BoxList.size;i++){
             final Items Temp = BoxList.get(i);
 
-            if (CheckDead(Temp.body.getPosition(),b2body.getPosition(),Power,WallList))
+            if (CheckDead(Temp.body.getPosition(),b2body.getPosition(),Power,WallList) )
             {
                 MaybeDetroy.add(Temp);
             }
@@ -150,18 +154,47 @@ public class Boom extends Sprite {
                 DetroyList.add(Temp);
             }
         }
-        if (CheckDead(player.b2body.getPosition(), b2body.getPosition(),Power,WallList) && CheckCollision(player.b2body.getPosition(), b2body.getPosition(),Power,DetroyList))
+        if (CheckDead(player.b2body.getPosition(), b2body.getPosition(),Power,WallList) ==true && CheckDeadBox(player.b2body.getPosition(), b2body.getPosition(),Power,MaybeDetroy) ==true)
             player.Dead();
+        for(int i=0; i<WallList.size;i++){
+            if (WallList.get(i).bdef.position.x > b2body.getPosition().x && (int)(WallList.get(i).bdef.position.y*100/20) == (int)(b2body.getPosition().y*100/20) && Distance(WallList.get(i).bdef.position,b2body.getPosition())< Right  )
+                Right =Distance(WallList.get(i).body.getPosition(),b2body.getPosition()) -1;
+            else if (WallList.get(i).bdef.position.x < b2body.getPosition().x && (int)(WallList.get(i).bdef.position.y*100/20) == (int)(b2body.getPosition().y*100/20)  && Distance(WallList.get(i).bdef.position,b2body.getPosition())< Left )
+                Left =Distance(WallList.get(i).body.getPosition(),b2body.getPosition()) -1 ;
+            else if (WallList.get(i).bdef.position.y > b2body.getPosition().y && (int)(WallList.get(i).bdef.position.x*100/20) == (int)(b2body.getPosition().x*100/20)  && Distance(WallList.get(i).bdef.position,b2body.getPosition())< Up  )
+                Up =Distance(WallList.get(i).body.getPosition(),b2body.getPosition()) -1 ;
+            else if (WallList.get(i).bdef.position.y < b2body.getPosition().y && (int)(WallList.get(i).bdef.position.x*100/20) == (int)(b2body.getPosition().x*100/20)  && Distance(WallList.get(i).bdef.position,b2body.getPosition())< Down )
+                Down =Distance(WallList.get(i).body.getPosition(),b2body.getPosition())-1;
+        }
         for (int i =0;i<DetroyList.size;i++){
+            if (DetroyList.get(i).bdef.position.x > b2body.getPosition().x && (int)(DetroyList.get(i).bdef.position.y*100/20) == (int)(b2body.getPosition().y*100/20)  )
+                Right =Distance(DetroyList.get(i).body.getPosition(),b2body.getPosition());
+            else if (DetroyList.get(i).bdef.position.x < b2body.getPosition().x && (int)(DetroyList.get(i).bdef.position.y*100/20) == (int)(b2body.getPosition().y*100/20) )
+                Left =Distance(DetroyList.get(i).body.getPosition(),b2body.getPosition());
+            else if (DetroyList.get(i).bdef.position.y > b2body.getPosition().y && (int)(DetroyList.get(i).bdef.position.x*100/20) == (int)(b2body.getPosition().x*100/20)  )
+                Up =Distance(DetroyList.get(i).body.getPosition(),b2body.getPosition());
+            else if (DetroyList.get(i).bdef.position.y < b2body.getPosition().y && (int)(DetroyList.get(i).bdef.position.x*100/20) == (int)(b2body.getPosition().x*100/20) )
+                Down =Distance(DetroyList.get(i).body.getPosition(),b2body.getPosition());
             DetroyList.get(i).Destroy(world,DetroyList.get(i).body.getPosition().x,DetroyList.get(i).body.getPosition().y);
         }
-        explosion = new Explosion(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2,1,1,1,1);
+        if ((int)((this.b2body.getPosition().x*100+10)/20) - Left <=0 )
+            Left =(int)((this.b2body.getPosition().x*100+10)/20) -2;
+        if ((int)((this.b2body.getPosition().y*100+10)/20) - Down <=0 )
+            Down =(int)((this.b2body.getPosition().y*100+10)/20) -2 ;
+        if ((int)((this.b2body.getPosition().x*100+10)/20) + Right >=20 )
+            Right =20-(int)((this.b2body.getPosition().x*100+10)/20) -1 ;
+        if ((int)((this.b2body.getPosition().y*100+10)/20) + Up >=20 )
+            Up =20-(int)((this.b2body.getPosition().y*100+10)/20) -1;
+        explosion = new Explosion(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2,Left,Right,Up, Down);
 
 
-    }
+     }
+     int Distance (Vector2 P1, Vector2 P2){
+        System.out.println((Math.sqrt(Math.pow((P1.x  - P2.x), 2) + Math.pow((P1.y  - P2.y), 2))));
+        return (int)(((Math.sqrt(Math.pow((P1.x  - P2.x), 2) + Math.pow((P1.y  - P2.y), 2)))*100 +10)/20);
+     }
     private boolean CheckDead(Vector2 Point1, Vector2 Point2, float Power, Array<Walls> WallList){
         double Distance = Math.sqrt(Math.pow((Point1.x  - Point2.x), 2) + Math.pow((Point1.y  - Point2.y), 2));
-
         if (Math.ceil(Distance*100) < Power )
         {
 //            System.out.println((int)(Point2.x*100/20) + " "+ (int)(Point1.x*100/20) );
@@ -170,6 +203,7 @@ public class Boom extends Sprite {
 //            System.out.println("Distance: " + Distance);
 //            System.out.println(Power/Main.PPM);
 //            System.out.println(Point1.x + " "+ Point1.y);
+
             if ((int)(Point2.x*100/20) == (int)(Point1.x*100/20) )
             {
 
@@ -182,6 +216,7 @@ public class Boom extends Sprite {
                         }
                     }
                 }
+                System.out.print("TRUE1");
                 return true;
 
             }else if ((int)(Point2.y*100/20) ==(int)(Point1.y*100/20)){
@@ -194,44 +229,81 @@ public class Boom extends Sprite {
                         }
                     }
                 }
+                System.out.print("TRUE1");
                 return true;
             }
             else return false;
         }
         else return false;
     }
+    private boolean CheckDeadBox(Vector2 Point1, Vector2 Point2, float Power, Array<Items> WallList){
+        double Distance = Math.sqrt(Math.pow((Point1.x  - Point2.x), 2) + Math.pow((Point1.y  - Point2.y), 2));
+
+        if (Math.ceil(Distance*100) <= Power )
+        {
+            System.out.print("Start");
+            if( (int)(Point2.x*100/20) == (int)(Point1.x*100/20) ) {
+                System.out.print("TRUE2");
+                for (int i=0; i<WallList.size;i++){
+                    Vector2 Temp = WallList.get(i).body.getPosition();
+                        if ( (int)(Temp.x*100/20) == (int)(Point2.x*100/20) && ( (Point2.y< Temp.y && Point1.y > Temp.y) || (Point2.y> Temp.y && Point1.y < Temp.y) )){
+                            double Distance2 = Math.sqrt(Math.pow((Temp.x  - Point2.x), 2) + Math.pow((Temp.y  - Point2.y), 2));
+                            if((int)(Distance*1000) > (int)(Distance2*1000)  ){
+                                return false;
+                            }
+                        }
+
+                }
+                System.out.print("TRUE2");
+                return true;
+            }else if ((int)(Point2.y*100/20) ==(int)(Point1.y*100/20)){
+                System.out.print("TRUE2");
+                for (int i=0; i<WallList.size;i++){
+                    Vector2 Temp = WallList.get(i).body.getPosition();
+                        if ((int)(Point2.y*100/20) ==(int)(Temp.y*100/20) &&  ( (Point2.x< Temp.x && Point1.x > Temp.x) || (Point2.x> Temp.x && Point1.x < Temp.x) )){
+                            double Distance2 = Math.sqrt(Math.pow((Temp.x  - Point2.x), 2) + Math.pow((Temp.y  - Point2.y), 2));
+                            if((int)(Distance*1000) > (int)(Distance2*1000) ){
+                                return false;
+                            }
+                        }
+                }
+                System.out.print("TRUE2");
+                return true;
+            }
+            else return false;
+        }
+        else return false;
+    }
+
     private boolean CheckCollision(Vector2 Point1, Vector2 Point2, float Power, Array<Items> WallList){
 
         double Distance = Math.sqrt(Math.pow((Point1.x  - Point2.x), 2) + Math.pow((Point1.y  - Point2.y), 2));
 
-        if (Math.ceil(Distance*100) < Power )
+        if (Math.ceil(Distance*100) <= Power )
         {
-//            System.out.println((int)(Point2.x*100/20) + " "+ (int)(Point1.x*100/20) );
-//            System.out.println((int)(Point2.y*100/20) +" "+(int)(Point1.y*100/20));
-//
-//            System.out.println("Distance: " + Distance);
-//            System.out.println(Power/Main.PPM);
-//            System.out.println(Point1.x + " "+ Point1.y);
-            if ((int)(Point2.x*100/20) == (int)(Point1.x*100/20) )
+            if ((int)(Point2.x*100/20)  == (int)(Point1.x*100/20)  )
             {
-
                 for (int i=0; i<WallList.size;i++){
                     Vector2 Temp = WallList.get(i).body.getPosition();
-                    if ( (int)(Temp.x*100/20) == (int)(Point2.x*100/20)){
-                        double Distance2 = Math.sqrt(Math.pow((Temp.x  - Point2.x), 2) + Math.pow((Temp.y  - Point2.y), 2));
-                        if((int)(Distance*1000) > (int)(Distance2*1000)){
-                            return false;
+                    if (!Point1.epsilonEquals(Temp) ){
+                        if ( (int)(Temp.x*100/20)   == (int)(Point2.x*100/20)   && ( (Point2.y< Temp.y && Point1.y > Temp.y) || (Point2.y> Temp.y && Point1.y < Temp.y) )){
+                            double Distance2 = Math.sqrt(Math.pow((Temp.x  - Point2.x), 2) + Math.pow((Temp.y  - Point2.y), 2));
+                            if((int)(Distance*1000) > (int)(Distance2*1000)  ){
+                                return false;
+                            }
                         }
                     }
                 }
                 return true;
-            }else if ((int)(Point2.y*100/20) ==(int)(Point1.y*100/20)){
+            }else if ((int)(Point2.y*100/20)   ==(int)(Point1.y*100/20)  ){
                 for (int i=0; i<WallList.size;i++){
                     Vector2 Temp = WallList.get(i).body.getPosition();
-                    if ((int)(Point2.y*100/20) ==(int)(Temp.y*100/20)){
-                        double Distance2 = Math.sqrt(Math.pow((Temp.x  - Point2.x), 2) + Math.pow((Temp.y  - Point2.y), 2));
-                        if((int)(Distance*1000) > (int)(Distance2*1000)){
-                            return false;
+                    if (!Point1.epsilonEquals(Temp) ){
+                        if ((int)(Point2.y*100/20)   ==(int)(Temp.y*100/20)    &&  ( (Point2.x< Temp.x && Point1.x > Temp.x) || (Point2.x> Temp.x && Point1.x < Temp.x) )){
+                            double Distance2 = Math.sqrt(Math.pow((Temp.x  - Point2.x), 2) + Math.pow((Temp.y  - Point2.y), 2));
+                            if((int)(Distance*1000) > (int)(Distance2*1000)    ){
+                                return false;
+                            }
                         }
                     }
                 }
