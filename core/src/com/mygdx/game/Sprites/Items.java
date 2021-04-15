@@ -28,13 +28,21 @@ public class Items extends Object{
 
         sprite = new Sprite((Texture) GameManager.getAssetManager().get("Pack/objects.png"));
         Array<TextureRegion> frame = new Array<>();
+        if (MyScreen.mapName.equals("Forest")){
+            frame.add(new TextureRegion(sprite.getTexture(),0*20,20,20,20));
+        }
+        else if (MyScreen.mapName.equals("Temple")){
+            frame.add(new TextureRegion(sprite.getTexture(),0*20,40,20,20));
+        }
+        else if (MyScreen.mapName.equals("Cave")){
+            frame.add(new TextureRegion(sprite.getTexture(),0*20,100,20,20));
+        }
 
 
-
-        for (int i=0;i<6;i++){
+        for (int i=1;i<6;i++){
             if (MyScreen.mapName.equals("Forest"))
                 frame.add(new TextureRegion(sprite.getTexture(),i*20,20,20,20));
-            else if (MyScreen.mapName.equals("Temple"))
+            else if (MyScreen.mapName.equals("Temple") || MyScreen.mapName.equals("Cave"))
                 frame.add(new TextureRegion(sprite.getTexture(),i*20,40,20,20));
 
 
