@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="42" height="27" tilewidth="10" tileheight="10" infinite="0" nextlayerid="5" nextobjectid="60">
+<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="42" height="27" tilewidth="10" tileheight="10" infinite="0" nextlayerid="6" nextobjectid="105">
  <tileset firstgid="1" source="TileSet.tsx"/>
  <tileset firstgid="7179" source="objects.tsx"/>
  <layer id="1" name="Tile Layer 1" width="42" height="27">
@@ -105,26 +105,50 @@
   <object id="38" x="300" y="210" width="20" height="20"/>
   <object id="39" x="300" y="230" width="20" height="20"/>
  </objectgroup>
- <objectgroup id="4" name="Walls" visible="0">
-  <object id="40" x="0" y="0" width="20" height="270"/>
-  <object id="41" x="20" y="250" width="400" height="20"/>
-  <object id="42" x="400" y="0" width="20" height="250"/>
-  <object id="43" x="20" y="0" width="380" height="30"/>
-  <object id="44" x="40" y="50" width="40" height="40"/>
-  <object id="45" x="40" y="190" width="40" height="40"/>
-  <object id="46" x="80" y="110" width="60" height="20"/>
-  <object id="47" x="80" y="150" width="60" height="20"/>
-  <object id="48" x="100" y="190" width="20" height="20"/>
-  <object id="49" x="100" y="70" width="20" height="20"/>
-  <object id="50" x="180" y="110" width="60" height="20"/>
-  <object id="51" x="180" y="150" width="60" height="20"/>
-  <object id="52" x="300" y="70" width="20" height="20"/>
-  <object id="53" x="280" y="110" width="60" height="20"/>
-  <object id="54" x="280" y="150" width="60" height="20"/>
-  <object id="55" x="300" y="190" width="20" height="20"/>
-  <object id="56" x="340" y="190" width="40" height="40"/>
-  <object id="57" x="340" y="50" width="40" height="40"/>
-  <object id="58" x="200" y="70" width="20" height="20"/>
-  <object id="59" x="200" y="190" width="20" height="20"/>
+ <objectgroup id="5" name="Walls" visible="0">
+  <object id="60" x="0" y="0" width="20" height="270"/>
+  <object id="61" x="0" y="250" width="420" height="20"/>
+  <object id="62" x="400" y="0" width="20" height="270"/>
+  <object id="63" x="0" y="0" width="420" height="30"/>
+  <object id="64" x="40" y="50" width="20" height="20"/>
+  <object id="65" x="60" y="50" width="20" height="20"/>
+  <object id="66" x="40" y="70" width="20" height="20"/>
+  <object id="67" x="60" y="70" width="20" height="20"/>
+  <object id="68" x="40" y="190" width="20" height="20"/>
+  <object id="69" x="40" y="210" width="20" height="20"/>
+  <object id="70" x="60" y="190" width="20" height="20"/>
+  <object id="71" x="60" y="210" width="20" height="20"/>
+  <object id="72" x="100" y="70" width="20" height="20"/>
+  <object id="73" x="80" y="110" width="20" height="20"/>
+  <object id="74" x="100" y="110" width="20" height="20"/>
+  <object id="75" x="120" y="110" width="20" height="20"/>
+  <object id="76" x="80" y="150" width="20" height="20"/>
+  <object id="77" x="100" y="150" width="20" height="20"/>
+  <object id="78" x="120" y="150" width="20" height="20"/>
+  <object id="79" x="100" y="190" width="20" height="20"/>
+  <object id="80" x="180" y="110" width="20" height="20"/>
+  <object id="81" x="200" y="110" width="20" height="20"/>
+  <object id="82" x="220" y="110" width="20" height="20"/>
+  <object id="83" x="200" y="70" width="20" height="20"/>
+  <object id="84" x="180" y="150" width="20" height="20"/>
+  <object id="85" x="200" y="150" width="20" height="20"/>
+  <object id="86" x="220" y="150" width="20" height="20"/>
+  <object id="88" x="200" y="190" width="20" height="20"/>
+  <object id="89" x="300" y="70" width="20" height="20"/>
+  <object id="90" x="280" y="110" width="20" height="20"/>
+  <object id="91" x="300" y="110" width="20" height="20"/>
+  <object id="92" x="320" y="110" width="20" height="20"/>
+  <object id="93" x="280" y="150" width="20" height="20"/>
+  <object id="94" x="300" y="150" width="20" height="20"/>
+  <object id="95" x="320" y="150" width="20" height="20"/>
+  <object id="96" x="300" y="190" width="20" height="20"/>
+  <object id="97" x="340" y="190" width="20" height="20"/>
+  <object id="98" x="360" y="190" width="20" height="20"/>
+  <object id="99" x="340" y="210" width="20" height="20"/>
+  <object id="100" x="360" y="210" width="20" height="20"/>
+  <object id="101" x="340" y="70" width="20" height="20"/>
+  <object id="102" x="360" y="70" width="20" height="20"/>
+  <object id="103" x="340" y="50" width="20" height="20"/>
+  <object id="104" x="360" y="50" width="20" height="20"/>
  </objectgroup>
 </map>
