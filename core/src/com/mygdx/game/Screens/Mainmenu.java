@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -97,6 +99,10 @@ public class Mainmenu implements Screen {
         stage.addActor(option);
         stage.addActor(credit);
         stage.addActor(Exit);
+//        Touchpad touchpad = new Touchpad(5,skin);
+//        touchpad.setSize(100,100);
+//
+//        stage.addActor(touchpad);
 
     }
     //

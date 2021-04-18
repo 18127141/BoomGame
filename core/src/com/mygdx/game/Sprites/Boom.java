@@ -133,7 +133,10 @@ public class Boom extends Sprite {
     }
 
     public void  Destroy(Player player,  Array<Items> BoxList, Array<Walls> WallList){
-        GameManager.getAssetManager().get("sounds/Explosion.ogg", Sound.class).play();
+        if (Main.checkSound){
+            GameManager.getAssetManager().get("sounds/Explosion.ogg", Sound.class).play(Main.soundPosition/100);
+        }
+
 
         isDestroy=true;
         stateTimer=0;

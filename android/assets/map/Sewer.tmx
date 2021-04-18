@@ -107,7 +107,7 @@
   <object id="40" x="220" y="150" width="20" height="20"/>
   <object id="41" x="220" y="110" width="20" height="20"/>
  </objectgroup>
- <objectgroup id="4" name="Walls">
+ <objectgroup id="4" name="Walls" visible="0">
   <object id="42" x="0" y="0" width="20" height="270"/>
   <object id="43" x="0" y="0" width="420" height="30"/>
   <object id="44" x="0" y="250" width="420" height="20"/>

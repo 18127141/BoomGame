@@ -275,7 +275,9 @@ public class Player extends Sprite {
                     AvaiableBoom--;
                     //ADD boom
                     game.db.AddBoom(game.roomname,game.playerName);
-                    GameManager.getAssetManager().get("sounds/PlaceBomb.ogg", Sound.class).play();
+                    if (game.checkSound){
+                        GameManager.getAssetManager().get("sounds/PlaceBomb.ogg", Sound.class).play(game.soundPosition/100);
+                    }
 
                 }
                 else {

@@ -35,6 +35,11 @@ public class Main extends Game {
 	public ArrayList<String> TakenName;
 	public String roomname="Test";
 
+	//Music and sound
+	public static boolean checkMusic=true;
+	public static float musicPosition = 100;
+	public static boolean checkSound = true;
+	public static float soundPosition = 100;
 
 
 

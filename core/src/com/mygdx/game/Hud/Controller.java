@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,8 +22,8 @@ import com.mygdx.game.Main;
 public class Controller {
     public static Image l,bottom;
     Viewport viewport;
-    Stage stage;
-    boolean upPressed, downPressed, leftPressed, rightPressed, setBoomPressed;
+    public Stage stage;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, setBoomPressed,pausePressed;
     public OrthographicCamera cam;
 
     public Controller(){
@@ -177,6 +178,25 @@ public class Controller {
         stage.addActor(leftControls);
         stage.addActor(Right);
 
+        Image pause = new Image(new Texture("Box.png"));
+        pause.setSize(40,40);
+        pause.setPosition(221,1);
+        pause.setColor(0,0,0,0);
+        pause.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                pausePressed = true;
+            }
+        });
+        stage.addActor(pause);
+
 
     }
 
@@ -205,7 +225,7 @@ public class Controller {
     public boolean isRightPressed() {
         return rightPressed;
     }
-
+    public boolean ispausePressed(){return pausePressed;}
     public void resize(int width, int height){
         viewport.update(width, height);
     }
