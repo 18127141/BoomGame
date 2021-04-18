@@ -203,16 +203,16 @@ public class Boom extends Sprite {
         for (int i=0; i< BoomList.size;i++){
             if (!BoomList.get(i).b2body.getPosition().equals(b2body.getPosition())){
                 boolean Dragging =false;
-                if (BoomList.get(i).b2body.getPosition().x >= b2body.getPosition().x && (int)(BoomList.get(i).b2body.getPosition().y*100/20) == (int)(b2body.getPosition().y*100/20)   )
+                if (BoomList.get(i).b2body.getPosition().x >= b2body.getPosition().x && (int)(BoomList.get(i).b2body.getPosition().y*100/20) == (int)(b2body.getPosition().y*100/20)  && Distance(BoomList.get(i).b2body.getPosition(),b2body.getPosition())<= Right )
                     Dragging=true;
-                else if (BoomList.get(i).b2body.getPosition().x <= b2body.getPosition().x && (int)(BoomList.get(i).b2body.getPosition().y*100/20) == (int)(b2body.getPosition().y*100/20) )
+                else if (BoomList.get(i).b2body.getPosition().x <= b2body.getPosition().x && (int)(BoomList.get(i).b2body.getPosition().y*100/20) == (int)(b2body.getPosition().y*100/20) && Distance(BoomList.get(i).b2body.getPosition(),b2body.getPosition())<= Left)
                     Dragging=true;
-                else if (BoomList.get(i).b2body.getPosition().y >= b2body.getPosition().y && (int)(BoomList.get(i).b2body.getPosition().x*100/20) == (int)(b2body.getPosition().x*100/20)  )
+                else if (BoomList.get(i).b2body.getPosition().y >= b2body.getPosition().y && (int)(BoomList.get(i).b2body.getPosition().x*100/20) == (int)(b2body.getPosition().x*100/20) && Distance(BoomList.get(i).b2body.getPosition(),b2body.getPosition())<= Up )
                     Dragging=true;
-                else if (BoomList.get(i).b2body.getPosition().y <= b2body.getPosition().y && (int)(BoomList.get(i).b2body.getPosition().x*100/20) == (int)(b2body.getPosition().x*100/20) )
+                else if (BoomList.get(i).b2body.getPosition().y <= b2body.getPosition().y && (int)(BoomList.get(i).b2body.getPosition().x*100/20) == (int)(b2body.getPosition().x*100/20)&& Distance(BoomList.get(i).b2body.getPosition(),b2body.getPosition())<= Down )
                     Dragging=true;
-                if (Dragging == true && BoomList.get(i).Time>70){
-                    BoomList.get(i).Time=70;
+                if (Dragging == true && BoomList.get(i).Time>60){
+                    BoomList.get(i).Time=60;
                 }
             }
         }
