@@ -97,6 +97,12 @@ public class MyScreen implements Screen {
         initPlayer();
         music = GameManager.getAssetManager().get("music/"+mapName+".mp3",Music.class);
         music.setLooping(true);
+        if (game.checkMusic){
+            music.setVolume(game.musicPosition/100);
+        }
+        else{
+            music.setVolume(0);
+        }
         music.play();
 
 
@@ -297,7 +303,7 @@ public class MyScreen implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 a.remove();
-                game.setScreen(new Mainmenu(game));
+                showDialogConfirm("Are you sure to exit?");
 
             }
         });
@@ -388,6 +394,50 @@ public class MyScreen implements Screen {
         });
 
         ///===========
+        stage.addActor(a);
+
+    }
+    public void showDialogConfirm(String s){
+        final Dialog a = new Dialog("Confirm",skin);
+        a.setWidth(250);
+        a.setHeight(200);
+        a.setPosition(Main.WIDTH/2-a.getWidth()/2,Main.HEIGHT/2-a.getHeight()/2);
+
+        Label label = new Label(s,skin,"optional");
+
+        a.getContentTable().add(label).center().expand();
+        TextButton btn = new TextButton("Back", skin, "round");
+        a.getButtonTable().add(btn);
+        btn.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                a.remove();
+
+            }
+        });
+        TextButton btn1 = new TextButton("Yes", skin, "round");
+        a.getButtonTable().add(btn1);
+        btn1.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                a.remove();
+                game.setScreen(new Mainmenu(game));
+
+
+            }
+        });
         stage.addActor(a);
 
     }

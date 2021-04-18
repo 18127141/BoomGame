@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,11 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -93,7 +96,32 @@ public class Mainmenu implements Screen {
 
             }
         });
+        Exit.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
 
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.exit();
+                //System.exit(0);
+
+            }
+        });
+        option.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                optionScreen()        ;
+                //System.exit(0);
+
+            }
+        });
         stage.addActor(Bg);
         stage.addActor(play);
         stage.addActor(option);
@@ -239,5 +267,116 @@ public class Mainmenu implements Screen {
         });
         stage.addActor(join_btn);
         stage.addActor(login_cancel);
+    }
+    void optionScreen(){
+        play.remove();
+        option.remove();
+        credit.remove();
+        Exit.remove();
+        final Dialog a = new Dialog("Options",skin);
+        a.getTitleLabel().setAlignment(Align.center);
+        a.setSize(Main.WIDTH,Main.HEIGHT);
+        a.setPosition(Main.WIDTH/2,Main.HEIGHT/2);
+
+
+        final Button music_btn = new Button(skin,"music");
+        music_btn.setChecked(game.checkMusic);
+        a.getContentTable().add(music_btn).left();
+        music_btn.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (game.checkMusic) {
+                    game.checkMusic=false;
+                }
+                else {
+                    game.checkMusic=true;
+
+                }
+
+
+            }
+        });
+
+
+        final Slider slider = new Slider(0,100,0.1f,false,skin);
+        a.getContentTable().add(slider).right();
+        slider.setValue(game.musicPosition);
+        slider.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                game.musicPosition = slider.getValue();
+
+
+            }
+        });
+        //Sound button
+        a.getContentTable().row();
+        final Button sound_btn = new Button(skin,"sound");
+        sound_btn.setChecked(game.checkSound);
+        a.getContentTable().add(sound_btn).left();
+        sound_btn.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (game.checkSound) {
+                    game.checkSound=false;
+
+                }
+                else {
+                    game.checkSound=true;
+
+                }
+
+
+            }
+        });
+
+
+        final Slider slider1 = new Slider(0,100,0.1f,false,skin);
+        a.getContentTable().add(slider1).right();
+        slider1.setValue(game.soundPosition);
+        slider1.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                game.soundPosition = slider1.getValue();
+
+
+            }
+        });
+        TextButton btn = new TextButton("Back", skin, "round");
+        a.getButtonTable().add(btn).center();
+        btn.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                a.remove();
+                stage.addActor(play);
+                stage.addActor(option);
+                stage.addActor(credit);
+                stage.addActor(Exit);
+            }
+        });
+
+        stage.addActor(a);
     }
 }

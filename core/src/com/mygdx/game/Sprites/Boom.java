@@ -61,10 +61,9 @@ public class Boom extends Sprite {
                 y+=20/Main.PPM;
                 break;
         }
-        //System.out.println(x +  " " + y );
+
         x = (float) (((int)(position.x*100))/20)/5 + (float)0.1;
         y =  (float) (((int)(position.y*100))/20)/5 + (float)0.1;
-        //System.out.println(x +  " " + y );
 
         bdef.position.set(x, y)  ;
 
@@ -162,25 +161,19 @@ public class Boom extends Sprite {
             if (WallList.get(i).body.getPosition().x > b2body.getPosition().x && (int)((WallList.get(i).body.getPosition().y*100+5)/20) == (int)((b2body.getPosition().y*100+5)/20) && Distance(WallList.get(i).body.getPosition(),b2body.getPosition())< Right+1   )
                 {
                     this.Right =Distance(WallList.get(i).body.getPosition(),b2body.getPosition()) -1;
-                    System.out.println("R "+ Distance(WallList.get(i).body.getPosition(),b2body.getPosition()));
                 }
             if (WallList.get(i).body.getPosition().x < b2body.getPosition().x && (int)((WallList.get(i).body.getPosition().y*100+5)/20) == (int)((b2body.getPosition().y*100+5)/20) && Distance(WallList.get(i).body.getPosition(),b2body.getPosition())< Left+1 )
                 {
                     this.Left =Distance(WallList.get(i).body.getPosition(),b2body.getPosition()) -1;
-                    System.out.println("L "+ Distance(WallList.get(i).body.getPosition(),b2body.getPosition()));
                 }
             if (WallList.get(i).body.getPosition().y > b2body.getPosition().y && (int)((WallList.get(i).body.getPosition().x*100+5)/20) == (int)((b2body.getPosition().x*100+5)/20)  && Distance(WallList.get(i).body.getPosition(),b2body.getPosition())< Up+1  )
             {
                 this.Up =Distance(WallList.get(i).body.getPosition(),b2body.getPosition()) -1;
-                System.out.println("U "+Distance(WallList.get(i).body.getPosition(),b2body.getPosition()));
             }
             if (WallList.get(i).body.getPosition().y < b2body.getPosition().y && (int)((WallList.get(i).body.getPosition().x*100+5)/20) == (int)((b2body.getPosition().x*100+5)/20)  && Distance(WallList.get(i).body.getPosition(),b2body.getPosition())< Down+1 )
             {
                 this.Down =Distance(WallList.get(i).body.getPosition(),b2body.getPosition())-1;
-                System.out.println("D "+Distance(WallList.get(i).body.getPosition(),b2body.getPosition()));
             }
-            System.out.print(i);
-            System.out.println(" Distance "+ Distance(WallList.get(i).body.getPosition(),b2body.getPosition()) + " coordinatex " + WallList.get(i).body.getPosition().x + " " + WallList.get(i).body.getPosition().y);
 
         }
 
@@ -231,7 +224,6 @@ public class Boom extends Sprite {
                         }
                     }
                 }
-                System.out.print("TRUE1");
                 return true;
 
             }else if ((int)((Point2.y*100+5)/20) ==(int)((Point1.y*100+5)/20)  ){
@@ -244,7 +236,7 @@ public class Boom extends Sprite {
                         }
                     }
                 }
-                System.out.print("TRUE1");
+
                 return true;
             }
             else return false;
@@ -256,9 +248,7 @@ public class Boom extends Sprite {
 
         if (Math.ceil(Distance*100) <= Power )
         {
-            System.out.print("Start");
             if( (int)((Point2.x*100+5)/20) == (int)((Point1.x*100+5)/20) ) {
-                System.out.print("TRUE2");
                 for (int i=0; i<WallList.size;i++){
                     Vector2 Temp = WallList.get(i).body.getPosition();
                         if ( (int)((Temp.x*100+5)/20) == (int)((Point2.x*100+5)/20) && ( (Point2.y< Temp.y && Point1.y > Temp.y) || (Point2.y> Temp.y && Point1.y < Temp.y) )){
@@ -269,10 +259,8 @@ public class Boom extends Sprite {
                         }
 
                 }
-                System.out.print("TRUE2");
                 return true;
             }else if ((int)((Point2.y*100+5)/20) ==(int)((Point1.y*100+5)/20)){
-                System.out.print("TRUE2");
                 for (int i=0; i<WallList.size;i++){
                     Vector2 Temp = WallList.get(i).body.getPosition();
                         if ((int)((Point2.y*100+5)/20) ==(int)((Temp.y*100+5)/20) &&  ( (Point2.x< Temp.x && Point1.x > Temp.x) || (Point2.x> Temp.x && Point1.x < Temp.x) )){
@@ -282,7 +270,6 @@ public class Boom extends Sprite {
                             }
                         }
                 }
-                System.out.print("TRUE2");
                 return true;
             }
             else return false;
