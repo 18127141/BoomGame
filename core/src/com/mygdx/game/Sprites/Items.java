@@ -14,67 +14,75 @@ import com.mygdx.game.Main;
 import com.mygdx.game.ResourceManager.GameManager;
 import com.mygdx.game.Screens.MyScreen;
 
-public class Items extends Object{
-    public boolean isDestroy=false;
+public class Items extends Object {
+    public boolean isDestroy = false;
     private boolean isDead = false;
-    private Animation TimeOver ;
-    private float x,y;
+    private Animation TimeOver;
+    private float x, y;
     private Sprite sprite;
-    private float stateTimer=0;
-    public int Time =50;
+    private float stateTimer = 0;
+    public int Time = 50;
     private String name;
+
     public Items(World world, TiledMap map, Rectangle bounds) {
         super(world, map, bounds);
 
         sprite = new Sprite((Texture) GameManager.getAssetManager().get("Pack/objects.png"));
         Array<TextureRegion> frame = new Array<>();
-        if (MyScreen.mapName.equals("Forest")){
-            frame.add(new TextureRegion(sprite.getTexture(),0*20,20,20,20));
-        }
-        else if (MyScreen.mapName.equals("Temple")){
-            frame.add(new TextureRegion(sprite.getTexture(),0*20,40,20,20));
-        }
-        else if (MyScreen.mapName.equals("Cave")){
-            frame.add(new TextureRegion(sprite.getTexture(),0*20,100,20,20));
+        if (MyScreen.mapName.equals("Forest")) {
+            frame.add(new TextureRegion(sprite.getTexture(), 0 * 20, 20, 20, 20));
+        } else if (MyScreen.mapName.equals("Temple")) {
+            frame.add(new TextureRegion(sprite.getTexture(), 0 * 20, 40, 20, 20));
+        } else if (MyScreen.mapName.equals("Cave")) {
+            frame.add(new TextureRegion(sprite.getTexture(), 0 * 20, 100, 20, 20));
+        } else if (MyScreen.mapName.equals("Sewer")) {
+            frame.add(new TextureRegion(sprite.getTexture(), 0 * 20, 140, 20, 20));
+
         }
 
 
-        for (int i=1;i<6;i++){
+        for (int i = 1; i < 6; i++) {
             if (MyScreen.mapName.equals("Forest"))
-                frame.add(new TextureRegion(sprite.getTexture(),i*20,20,20,20));
+                frame.add(new TextureRegion(sprite.getTexture(), i * 20, 20, 20, 20));
             else if (MyScreen.mapName.equals("Temple") || MyScreen.mapName.equals("Cave"))
-                frame.add(new TextureRegion(sprite.getTexture(),i*20,40,20,20));
+                frame.add(new TextureRegion(sprite.getTexture(), i * 20, 40, 20, 20));
+            else if (MyScreen.mapName.equals("Sewer")) {
+                frame.add(new TextureRegion(sprite.getTexture(), i * 20, 60, 20, 20));
+
+            }
 
 
         }
-        TimeOver = new Animation(0.2f,frame);
+        TimeOver = new Animation(0.2f, frame);
 
 
     }
-    public void Destroy(World world,float x,float y){
-        super.Destroy(world,x,y);
-        GameManager.getAssetManager().get("sounds/Explosion.ogg", Sound.class).play();
+
+    public void Destroy(World world, float x, float y) {
+        super.Destroy(world, x, y);
 
         this.x = x;
-        this.y =y;
-        isDestroy =true;
-        sprite.setBounds(this.x-10/Main.PPM,this.y-10/Main.PPM,20/Main.PPM,20/Main.PPM);
+        this.y = y;
+        isDestroy = true;
+        sprite.setBounds(this.x - 10 / Main.PPM, this.y - 10 / Main.PPM, 20 / Main.PPM, 20 / Main.PPM);
 
 
     }
-    public void update(float dt){
-        if (isDestroy){
+
+    public void update(float dt) {
+        if (isDestroy) {
             sprite.setRegion(getFrame(dt));
 
         }
     }
 
     private TextureRegion getFrame(float dt) {
-        stateTimer=stateTimer+dt;
-        return (TextureRegion) TimeOver.getKeyFrame(stateTimer,false);
+        stateTimer = stateTimer + dt;
+        return (TextureRegion) TimeOver.getKeyFrame(stateTimer, false);
     }
-    public void draw(SpriteBatch batch){
-        if (isDestroy){
+
+    public void draw(SpriteBatch batch) {
+        if (isDestroy) {
             sprite.draw(batch);
 
         }

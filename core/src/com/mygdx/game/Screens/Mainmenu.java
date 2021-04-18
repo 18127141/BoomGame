@@ -2,6 +2,7 @@ package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -35,6 +36,7 @@ public class Mainmenu implements Screen {
     Skin skin;
     Label option,credit,play,Exit;
     public OrthographicCamera cam;
+    private Music music;
     public Mainmenu(final Main game){
         this.game = game;
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
@@ -43,6 +45,7 @@ public class Mainmenu implements Screen {
         viewport = new FitViewport(Main.WIDTH, Main.HEIGHT, cam);
         stage = new Stage(viewport, Main.batch);
         Gdx.input.setInputProcessor(stage);
+
 
         //=================================///////////
 

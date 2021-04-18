@@ -1,5 +1,6 @@
 package com.mygdx.game.Sprites;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -132,6 +133,8 @@ public class Boom extends Sprite {
     }
 
     public void  Destroy(Player player,  Array<Items> BoxList, Array<Walls> WallList){
+        GameManager.getAssetManager().get("sounds/Explosion.ogg", Sound.class).play();
+
         isDestroy=true;
         stateTimer=0;
         Array<Items> MaybeDetroy = new Array();

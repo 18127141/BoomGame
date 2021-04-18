@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 
 public class Main extends Game {
-	public static String []Maps ={"Forest","Temple","Cave"};
+	public static String []Maps ={"Forest","Temple","Cave","Sewer"};
 	public  static float PPM=100;
 	public static float WIDTH =480;
 	public static float HEIGHT =320;

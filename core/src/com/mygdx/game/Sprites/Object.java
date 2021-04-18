@@ -16,11 +16,11 @@ import com.mygdx.game.Screens.MyScreen;
 
 
 public abstract class Object  {
-    protected World world;
-    protected TiledMap map;
-    protected TiledMapTile tile;
-    protected Rectangle bounds;
-    protected Body body;
+    public World world;
+    public TiledMap map;
+    public TiledMapTile tile;
+    public Rectangle bounds;
+    public Body body;
     BodyDef bdef ;
     FixtureDef fdef;
     protected Fixture fixture;
