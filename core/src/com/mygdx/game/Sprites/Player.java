@@ -38,7 +38,7 @@ public class Player extends Sprite {
     private int boomCount =1;
     private int speedCount =1;
     private int rangeCount = 1;
-    boolean ALIVE = true;
+    public boolean ALIVE = true;
     final int MaxBoom = 5;
     final int MaxSpeed = 5;
     final int MaxRange = 5;

@@ -49,12 +49,13 @@ public abstract class Object  {
         int xx=(int)(Math.ceil(x*10));
         int yy=(int)(Math.ceil(y*10));
 
-        world.destroyBody(body);
+
         TiledMapTileLayer layer=(TiledMapTileLayer) map.getLayers().get(1);
         layer.getCell(xx,yy).setTile(null);
         layer.getCell(xx-1,yy).setTile(null);
         layer.getCell(xx,yy-1).setTile(null);
         layer.getCell(xx-1,yy-1).setTile(null);
+        world.destroyBody(body);
 
     }
     public void setCategoryFiler(short filterBit){

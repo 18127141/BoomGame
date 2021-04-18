@@ -59,12 +59,14 @@ public class Items extends Object {
     }
 
     public void Destroy(World world, float x, float y) {
-        super.Destroy(world, x, y);
+        if (isDestroy == false){
+            super.Destroy(world, x, y);
+            this.x = x;
+            this.y = y;
+            isDestroy = true;
+            sprite.setBounds(this.x - 10 / Main.PPM, this.y - 10 / Main.PPM, 20 / Main.PPM, 20 / Main.PPM);
+        }
 
-        this.x = x;
-        this.y = y;
-        isDestroy = true;
-        sprite.setBounds(this.x - 10 / Main.PPM, this.y - 10 / Main.PPM, 20 / Main.PPM, 20 / Main.PPM);
 
 
     }
@@ -72,7 +74,6 @@ public class Items extends Object {
     public void update(float dt) {
         if (isDestroy) {
             sprite.setRegion(getFrame(dt));
-
         }
     }
 

@@ -132,7 +132,7 @@ public class Boom extends Sprite {
         return region;
     }
 
-    public void  Destroy(Player player,  Array<Items> BoxList, Array<Walls> WallList){
+    public void  Destroy(Player player,  Array<Items> BoxList, Array<Walls> WallList, Array<Boom> BoomList){
         if (Main.checkSound){
             GameManager.getAssetManager().get("sounds/Explosion.ogg", Sound.class).play(Main.soundPosition/100);
         }
@@ -207,6 +207,22 @@ public class Boom extends Sprite {
         if (Left<0) Left=0;
         if (Down < 0)  Down =0;
         if (Up < 0) Up=0;
+        for (int i=0; i< BoomList.size;i++){
+            if (!BoomList.get(i).b2body.getPosition().equals(b2body.getPosition())){
+                boolean Dragging =false;
+                if (BoomList.get(i).b2body.getPosition().x >= b2body.getPosition().x && (int)(BoomList.get(i).b2body.getPosition().y*100/20) == (int)(b2body.getPosition().y*100/20)   )
+                    Dragging=true;
+                else if (BoomList.get(i).b2body.getPosition().x <= b2body.getPosition().x && (int)(BoomList.get(i).b2body.getPosition().y*100/20) == (int)(b2body.getPosition().y*100/20) )
+                    Dragging=true;
+                else if (BoomList.get(i).b2body.getPosition().y >= b2body.getPosition().y && (int)(BoomList.get(i).b2body.getPosition().x*100/20) == (int)(b2body.getPosition().x*100/20)  )
+                    Dragging=true;
+                else if (BoomList.get(i).b2body.getPosition().y <= b2body.getPosition().y && (int)(BoomList.get(i).b2body.getPosition().x*100/20) == (int)(b2body.getPosition().x*100/20) )
+                    Dragging=true;
+                if (Dragging == true && BoomList.get(i).Time>70){
+                    BoomList.get(i).Time=70;
+                }
+            }
+        }
         explosion = new Explosion(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/2,Left,Right,Up, Down);
 
 

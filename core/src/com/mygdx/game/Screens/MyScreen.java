@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -35,6 +36,12 @@ import com.mygdx.game.Sprites.Items;
 import com.mygdx.game.Sprites.Player;
 import com.mygdx.game.Sprites.Walls;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+import javax.rmi.CORBA.Tie;
+
 public class MyScreen implements Screen {
     int c = 0;
     Stage stage;
@@ -53,6 +60,11 @@ public class MyScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
     public static String mapName = "Forest";
+
+    Array<LocalTime> Time; // Create a date object
+    int runTimeDown = 100;
+    int lvHard = 1;
+
     float deltatime = 0;
     //Room
 
@@ -70,6 +82,15 @@ public class MyScreen implements Screen {
         mapName=map;
         mapLoader = new TmxMapLoader();
         setMap(mapName);
+        // THU  HEP BAN DO
+
+        Time = new Array<>();
+        Time.add(LocalTime.now());
+        for (int i =1; i<7; i++){
+            //Thay bien trong PlusSeconds de tang thoi gian thu  hep
+            Time.add(Time.get(0).plusSeconds(30*i));
+        }
+
         //=================        AddplayertoRoom====================
 
         //==================
@@ -402,45 +423,80 @@ public class MyScreen implements Screen {
         game.db.SetPlayerXY(game.roomname, game.playerName, player.b2body.getPosition().x, player.b2body.getPosition().y, "Action", a, b, (int) player.direction);
 
     }
+    public void TimeDown(){
 
+                if (runTimeDown>0 ) {
+                    runTimeDown--;
+                }
+                if (Time.size-1 >=lvHard){
+                    if (LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")).equals(Time.get(lvHard).format((DateTimeFormatter.ofPattern("HH:mm:ss")))) && runTimeDown ==0){
+                        System.out.println("Boooooom");
+                        runTimeDown = 100;
+                        lvHard++;
+                        for (int i =1; i < 5;i++){
+                            Vector2 tempV =new Vector2((float)0.3,(float)(0.4*i+0.2));
+                            Boom Temp = new Boom(world,tempV,1,20*lvHard);
+                            BoomList.add(Temp);
+                            tempV =new Vector2((float)3.8,(float)(0.4*i+0.2));
+                            Temp = new Boom(world,tempV,1,20*lvHard);
+                            BoomList.add(Temp);
+                        }
+                        for (int i =1; i < 9;i++){
+                            Vector2 tempV =new Vector2((float)(0.4*i+0.2),(float)0.2);
+                            Boom Temp = new Boom(world,tempV,1,20*(lvHard));
+                            BoomList.add(Temp);
+                            tempV =new Vector2((float)(0.4*i+0.2),(float)2.2);
+                            Temp = new Boom(world,tempV,1,20*(lvHard));
+                            BoomList.add(Temp);
+                        }
+
+
+                    }
+                }
+
+
+
+
+    }
     public void BoomCountDown(float delta) {
-
-        for (int i = 0; i < BoomList.size; i++) {
-            Boom Temp = BoomList.get(i);
-            Temp.Time -= 1;
-            Temp.update(delta);
-
-            if (Temp.Time == 50) {
-                Temp.Destroy(player, BoxList, WallList);
-            }
-
-            if (Temp.Time == 0) {
-                BoomList.removeValue(Temp, true);
-                i--;
-            }
-            if (Temp.Time == 150) {
-                Temp.fdef.filter.maskBits = MyScreen.PLAYER;
-                Temp.b2body.createFixture(Temp.fdef);
-            }
-
-        }
-        for (int i = 0; i < BoxList.size; i++) {
-            Items Temp = BoxList.get(i);
-            if (Temp.isDestroy) {
+        try{
+            for (int i = 0; i < BoomList.size; i++) {
+                Boom Temp = BoomList.get(i);
                 Temp.Time -= 1;
+                Temp.update(delta);
+
+                if (Temp.Time == 50) {
+                    Temp.Destroy(player, BoxList, WallList,BoomList);
+                }
+
+                if (Temp.Time == 0) {
+                    BoomList.removeValue(Temp, true);
+                    i--;
+                }
+                if (Temp.Time == 150) {
+                    Temp.fdef.filter.maskBits = MyScreen.PLAYER;
+                    Temp.b2body.createFixture(Temp.fdef);
+                }
 
             }
+            for (int i = 0; i < BoxList.size; i++) {
+                Items Temp = BoxList.get(i);
+                if (Temp.isDestroy) {
+                    Temp.Time -= 1;
 
-            Temp.update(delta);
+                }
+                Temp.update(delta);
 
 
-            if (Temp.Time == 0) {
-                BoxList.removeIndex(i);
-                i--;
+                if (Temp.Time == 0) {
+                    BoxList.removeIndex(i);
+                    i--;
+                }
             }
-
-
+        }catch (Exception e){
+            System.out.print("BoomList");
         }
+
     }
 
     @Override
@@ -451,7 +507,9 @@ public class MyScreen implements Screen {
     @Override
 
     public void render(float delta) {
+
         update(delta);
+
         BoomCountDown(delta);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -468,6 +526,7 @@ public class MyScreen implements Screen {
         game.batch.setProjectionMatrix(game.cam.combined);
 
         game.batch.begin();
+        TimeDown();
         for (int i = 0; i < BoomList.size; i++) {
             Boom item = BoomList.get(i);
             item.draw(game.batch);
@@ -478,16 +537,20 @@ public class MyScreen implements Screen {
         }
         for (int i = 0; i < PlayerList.size; i++) {
             Player temp = PlayerList.get(i);
+            if (!temp.ALIVE){
+                PlayerList.removeIndex(i);
+                i--;
+            }
             temp.draw(game.batch);
         }
         if (player != null)
             player.draw(game.batch);
-
         game.batch.end();
         game.controller.draw();
 
 
     }
+
 
     @Override
     public void resize(int width, int height) {
