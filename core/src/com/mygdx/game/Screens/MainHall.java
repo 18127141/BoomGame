@@ -1,4 +1,4 @@
-package com.mygdx.game.Screens;
+ package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -125,7 +125,7 @@ public class MainHall implements Screen {
         listener = game.db.db.child("rooms").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if ((boolean)dataSnapshot.child("_RoomStatus").getValue() == false) {
+                if (dataSnapshot.child("_RoomStatus").getValue()!=null && (boolean)dataSnapshot.child("_RoomStatus").getValue() == false) {
                     final String tmp = dataSnapshot.getName();
                     rooms.put(tmp, Integer.valueOf((int) dataSnapshot.getChildrenCount()));
                     Label text = new Label(tmp, skin, "title-plain");
@@ -158,7 +158,7 @@ public class MainHall implements Screen {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if ((boolean)dataSnapshot.child("_RoomStatus").getValue() == true){
+                if (dataSnapshot.child("_RoomStatus").getValue()!=null && (boolean)dataSnapshot.child("_RoomStatus").getValue() == true){
                     //room has started
                     int i = 0;
                     String key="";
@@ -167,7 +167,7 @@ public class MainHall implements Screen {
                         if (j.equals(dataSnapshot.getName())) break;
                         i++;
                     }
-                    if (scrollTable.getChildren().size!=0){
+                    if (scrollTable.getChildren().size!=0 && i < scrollTable.getChildren().size){
                         scrollTable.removeActorAt(i, true);
                         rooms.remove(key);
                     }

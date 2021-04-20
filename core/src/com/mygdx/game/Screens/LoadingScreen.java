@@ -40,8 +40,8 @@ public class LoadingScreen implements Screen {
         game.batch.begin();
 
 
-        int initialPosX=0;
-        int initialPosY=0;
+        float initialPosX=Main.WIDTH/2;
+        float initialPosY=Main.HEIGHT/2;
         game.batch.draw(loadingBarBg,initialPosX,initialPosY);
         game.batch.draw(loadingbarStart,initialPosX,         initialPosY);
         game.batch.draw(loadingbarMid,   initialPosX+loadingbarStart.getRegionWidth(),    initialPosY,loadingbarMid.getRegionWidth()*game.manager.getAssetManager().getProgress(), loadingbarMid.getRegionHeight());
