@@ -25,7 +25,7 @@ public class Boom extends Sprite {
     public Body b2body;
     private Animation CountDown ;
     private Animation TimeOver ;
-    public int Time = 150;
+    public int Time = 300;
     private int Power = 5;
     float stateTimer;
     public FixtureDef fdef;

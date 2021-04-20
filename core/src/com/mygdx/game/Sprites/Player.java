@@ -36,13 +36,13 @@ public class Player extends Sprite {
     public Body b2body;
     public Array<Boom> BoomList ;
     private int boomCount =1;
-    private int speedCount =1;
+    private float speedCount =-3;
     private int rangeCount = 1;
     public boolean ALIVE = true;
     final int MaxBoom = 5;
     final int MaxSpeed = 5;
     final int MaxRange = 5;
-    public int Power =  80;
+    public int Power =  40;
     final int TIME_PREPARE = 100;
     private Array<TextureRegion> stand;
 

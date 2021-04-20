@@ -1,9 +1,12 @@
 package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -64,7 +67,6 @@ public class MyScreen implements Screen {
     Array<LocalTime> Time; // Create a date object
     int runTimeDown = 100;
     int lvHard = 1;
-
     float deltatime = 0;
     //Room
 
@@ -576,6 +578,7 @@ public class MyScreen implements Screen {
         game.batch.setProjectionMatrix(game.cam.combined);
 
         game.batch.begin();
+        game.controller.Joy();
         TimeDown();
         for (int i = 0; i < BoomList.size; i++) {
             Boom item = BoomList.get(i);
