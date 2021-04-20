@@ -176,7 +176,10 @@ public class Lobby implements Screen {
         title2.setPosition(scroller1.getX() + scroller1.getWidth() + 25, 250);
         title2.setSize(Main.WIDTH / 4, 50);
         stage.addActor(title2);
+        //mapTable = new Table();
         MapTable();
+
+
 
         Button left = new Button(skin, "left");
         left.setPosition(title2.getX(), message_field.getY() - 5);
@@ -226,12 +229,16 @@ public class Lobby implements Screen {
     }
 
     public void MapTable() {
+
         mapTable = new Table();
         mapTable.setPosition(311, 110);
         mapTable.setSize(160, 120);
         Image minimap = new Image((Texture) GameManager.getAssetManager().get("map/minimap/" + map + ".png"));
+
+
         mapTable.add(minimap);
-        stage.addActor(mapTable);
+        if (mapTable!=null)
+            stage.addActor(mapTable);
 
     }
 
@@ -266,7 +273,7 @@ public class Lobby implements Screen {
                 }
                 if (!dataSnapshot.getName().equals("_RoomMap") && !dataSnapshot.getName().equals("_RoomStatus")) {
                     String msg = (String) dataSnapshot.child("message").getValue();
-                    if (!msg.equals("")) {
+                    if (msg!=null && !msg.equals("")) {
                         scrollTable.add(new Label("<" + dataSnapshot.getName() + ">: " + msg, skin)).top().left();
                         scrollTable.row();
                     }
@@ -313,7 +320,6 @@ public class Lobby implements Screen {
 
     @Override
     public void render(float delta) {
-        stage.act();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (!available) {
@@ -324,8 +330,10 @@ public class Lobby implements Screen {
             StartGame();
         }
         stage.draw();
+        stage.act();
 
     }
+
 
     @Override
     public void resize(int width, int height) {
