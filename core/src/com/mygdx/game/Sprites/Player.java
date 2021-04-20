@@ -3,6 +3,7 @@ package com.mygdx.game.Sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -94,7 +95,7 @@ public class Player extends Sprite {
 
         b2body.setLinearDamping(10f);
         }
-
+        Texture black = GameManager.getAssetManager().get("Pack/DarkPlayer.png", Texture.class);
         //===========================|GET Player Graphics|===============
         state=State.Stand;
         previous= State.Stand;
@@ -102,7 +103,10 @@ public class Player extends Sprite {
         //Standing
         stand = new Array<TextureRegion>();
         for (int i=0;i<4;i++){
-            stand.add( new TextureRegion(getTexture(),3*i*20+1,0,20,30));
+            if (main)
+                stand.add( new TextureRegion(black,3*i*20+1,0,20,30));
+            else
+                stand.add( new TextureRegion(getTexture(),3*i*20+1,0,20,30));
 
         }
 
@@ -110,7 +114,10 @@ public class Player extends Sprite {
 
         Array<TextureRegion> frame = new Array<>();
         for (int i=1;i<3;i++){
-            frame.add(new TextureRegion(getTexture(),i*20+1,0,20,30));
+            if (main)
+                frame.add(new TextureRegion(black,i*20+1,0,20,30));
+            else
+                frame.add(new TextureRegion(getTexture(),i*20+1,0,20,30));
             frame.add(stand.get(0));
 
         }
@@ -119,7 +126,10 @@ public class Player extends Sprite {
 
         //======================Run LEFT
         for (int i=4;i<6;i++){
-            frame.add(new TextureRegion(getTexture(),i*20+1,0,20,30));
+            if (main)
+                frame.add(new TextureRegion(black,i*20+1,0,20,30));
+            else
+                frame.add(new TextureRegion(getTexture(),i*20+1,0,20,30));
             frame.add(stand.get(1));
 
         }
@@ -128,7 +138,10 @@ public class Player extends Sprite {
 
         //===============Run RIGHT
         for (int i=7;i<9;i++){
-            frame.add(new TextureRegion(getTexture(),i*20+1,0,20,30));
+            if (main)
+                frame.add(new TextureRegion(black,i*20+1,0,20,30));
+            else
+                frame.add(new TextureRegion(getTexture(),i*20+1,0,20,30));
             frame.add(stand.get(2));
         }
         RunRight = new Animation(0.1f,frame);
@@ -136,7 +149,10 @@ public class Player extends Sprite {
 
         //=======Run UP
         for (int i=10;i<12;i++){
-            frame.add(new TextureRegion(getTexture(),i*20+1,0,20,30));
+            if (main)
+                frame.add(new TextureRegion(black,i*20+1,0,20,30));
+            else
+                frame.add(new TextureRegion(getTexture(),i*20+1,0,20,30));
             frame.add(stand.get(3));
 
         }
