@@ -163,14 +163,25 @@ public class MyScreen implements Screen {
 
                         if (dataSnapshot.child("State").getValue().equals("Run")) {
                             PlayerList.get(index).state = Player.State.Run;
-                        } else {
+                        } else if (dataSnapshot.child("State").getValue().equals("Stand")) {
                             PlayerList.get(index).state = Player.State.Stand;
+
+                        }
+                        else{
+                            PlayerList.get(index).state = Player.State.Dead;
+                            PlayerList.get(index).stateTimer=0;
 
                         }
                         if (dataSnapshot.child("prevState").getValue().equals("Stand")) {
                             PlayerList.get(index).previous = Player.State.Stand;
-                        } else {
+                        } else if (dataSnapshot.child("prevState").getValue().equals("Run")){
                             PlayerList.get(index).previous = Player.State.Run;
+                        }
+                        else{
+                            PlayerList.get(index).previous = Player.State.Dead;
+                            PlayerList.get(index).stateTimer=0;
+
+
                         }
 
 //                    PlayerList.get(index).state= (Player.State) dataSnapshot.child("State").getValue();
@@ -185,6 +196,9 @@ public class MyScreen implements Screen {
                         PlayerList.get(index).direction = direction;
                         if (dataSnapshot.child("action").getValue().equals("Planted")) {
                             BoomList.add(new Boom(world, new Vector2((float) x, (float) y), (int) direction, PlayerList.get(index).Power));
+                        }
+                        else if (dataSnapshot.child("action").getValue().equals("ReallyDead")){
+                            PlayerList.get(index).ReallyDead=true;
                         }
 
 
@@ -257,10 +271,19 @@ public class MyScreen implements Screen {
         for (int i = 0; i < PlayerList.size; i++) {
             Player temp = PlayerList.get(i);
             temp.updateother(dt);
+
         }
 
-        if (player != null)
+        if (player != null){
             player.handleInput(game.controller, game);
+            if (player.ReallyDead){
+                if (c==0)
+                {
+                    game.db.setDead(game.roomname,game.playerName);
+                    c=1;
+                }
+            }
+        }
         //PlayerList.get(index).handleInput(game.controller);
 
         world.step(1 / 60f, 6, 2);
@@ -469,9 +492,13 @@ public class MyScreen implements Screen {
 
         String a, b;
         if (player.state == Player.State.Stand) a = "Stand";
-        else a = "Run";
+            else a = "Run";
         if (player.previous == Player.State.Run) b = "Run";
-        else b = "Stand";
+            else b = "Stand";
+        if (player.state == Player.State.Dead) {
+            a="Dead";
+            b="Dead";
+        }
         game.db.SetPlayerXY(game.roomname, game.playerName, player.b2body.getPosition().x, player.b2body.getPosition().y, "Action", a, b, (int) player.direction);
 
     }
@@ -590,13 +617,14 @@ public class MyScreen implements Screen {
         }
         for (int i = 0; i < PlayerList.size; i++) {
             Player temp = PlayerList.get(i);
-            if (!temp.ALIVE){
-                PlayerList.removeIndex(i);
-                i--;
-            }
-            temp.draw(game.batch);
+//            if (temp.ReallyDead){
+//                PlayerList.removeIndex(i);
+//                i--;
+//            }
+            if (!temp.ReallyDead)
+                temp.draw(game.batch);
         }
-        if (player != null)
+        if (player != null && !player.ReallyDead)
             player.draw(game.batch);
         game.batch.end();
         game.controller.draw();

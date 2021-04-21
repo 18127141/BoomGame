@@ -257,7 +257,8 @@ public class Lobby implements Screen {
                     MapTable();
                 } else if (!dataSnapshot.getName().equals("_RoomStatus")) {
                     player.add(dataSnapshot.getName());
-                    players_list.setItems(player);
+                    if (player.size!=0)
+                        players_list.setItems(player);
                 }
             }
 

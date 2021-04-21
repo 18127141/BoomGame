@@ -82,6 +82,9 @@ public class firebase {
     public void AddBoom(String room,String player){
         db.getRef().child("rooms/"+room+"/"+player).child("action").setValue("Planted");
     }
+    public void setDead(String room,String player){
+        db.getRef().child("rooms/"+room+"/"+player).child("action").setValue("ReallyDead");
+    }
     public void AddRoomStatus(String room,boolean s){
         db.getRef().child("rooms/"+room).child("_RoomStatus").setValue(s);
 

@@ -30,7 +30,7 @@ public class Player extends Sprite {
     public boolean main=true;
     public String name="";
     public long direction =0;
-    public enum State{Run,Stand};
+    public enum State{Run,Stand,Dead};
     public State state;
     public State previous;
     public World world;
@@ -39,26 +39,31 @@ public class Player extends Sprite {
     private int boomCount =1;
     private float speedCount =-3;
     private int rangeCount = 1;
+    private int life=1;
     public boolean ALIVE = true;
+    public boolean ReallyDead = false;
     final int MaxBoom = 5;
     final int MaxSpeed = 5;
     final int MaxRange = 5;
     public int Power =  40;
     final int TIME_PREPARE = 100;
+    int Time_dead =100;
     private Array<TextureRegion> stand;
 
     private Animation RunDown;
     private Animation RunUp;
     private Animation RunLeft;
     private Animation RunRight;
+    private Animation Dead;
     private Array<Animation> Run;
-    private float stateTimer;
+    public float stateTimer;
     //1s nut an se nhan 4 lan thong tin PressTrue nen bien nay de delay so lan dat bom 1s lai
     int TimePlanted = 0;
     //DEM THOI GIAN CO BOM MOI
     int PrepareTime = TIME_PREPARE;
     //SO BOM CO THE DAT
     int  AvaiableBoom = MaxBoom;
+
     //20 20
     //20 240
     //400 20
@@ -163,6 +168,17 @@ public class Player extends Sprite {
         Run.add(RunLeft);
         Run.add(RunRight);
         Run.add(RunUp);
+        //dead
+        frame.clear();
+        for (int i=0;i<7;i++){
+            if (main)
+                frame.add(new TextureRegion(black,i*20+478,0,20,30));
+            else
+                frame.add(new TextureRegion(getTexture(),i*20+478,0,20,30));
+            //478
+
+        }
+        Dead = new Animation(0.3f,frame);
 
         setBounds(0,0,20/Main.PPM,30/Main.PPM);
         setRegion(stand.get(0));
@@ -170,9 +186,21 @@ public class Player extends Sprite {
 
     }
     public void update(float dt){
-        if (ALIVE == false)
-            return;
+        if (ALIVE == false){
+            Time_dead-=1;
+            if (Time_dead<=0){
+                //animation chet ket thuc
+                //kiem tra mang song
+                if (life <=0){
+                    ReallyDead=true;
 
+                }
+                else{
+                    //hoi sinh tai vi tri nao do
+                }
+            }
+
+        }
         setPosition(b2body.getPosition().x-getWidth()/2,b2body.getPosition().y-getHeight()/3);
         setRegion(getFrame(dt));
 
@@ -198,7 +226,7 @@ public class Player extends Sprite {
 
     }
     public TextureRegion getFrame(float dt){
-        if (main==true){
+        if (main==true && ALIVE){
             State currentState = getState();
             state=currentState;
             updateDirection();
@@ -211,6 +239,9 @@ public class Player extends Sprite {
                 break;
             case Run:
                 region = (TextureRegion) Run.get((int)direction).getKeyFrame(stateTimer,true);
+                break;
+            case Dead:
+                region = (TextureRegion) Dead.getKeyFrame(stateTimer,false);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + state);
@@ -308,6 +339,11 @@ public class Player extends Sprite {
         }
     }
     public void Dead(){
+
         ALIVE = false;
+        state=State.Dead;
+        previous=State.Dead;
+        stateTimer=0;
+        life--;
     }
 }
