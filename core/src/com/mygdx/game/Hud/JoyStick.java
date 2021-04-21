@@ -43,6 +43,7 @@ public class JoyStick {
         Joy = new Image(new Texture("flatDark25.png"));
         Joy.setSize(50,50);
         Joy.setPosition(20,20);
+        Joy.setColor(0,0,0,0);
         Center = new Image(new Texture("flatDark25.png"));
         Center.setSize(1,1);
         Center.setPosition(16,16);

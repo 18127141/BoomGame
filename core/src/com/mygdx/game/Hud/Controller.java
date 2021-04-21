@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,8 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Main;
@@ -50,12 +54,15 @@ public class Controller {
             int w=20;
             int h=20;
 
-        BG = new Image(new Texture("flatDark25.png"));
+        //BG = new Image(new Texture("flatDark25.png"));
+        BG = new Image(new TextureRegion(new Texture("joystick.png"),0,0,124,124));
         BG.setSize(80,80);
         BG.setPosition((float) 12.5,(float) 12.5);
-        Joy = new Image(new Texture("flatDark25.png"));
+        //BG.setColor(0,0,0,0.5f);
+        Joy = new Image(new TextureRegion(new Texture("joystick.png"),130,26,75,75));
         Joy.setSize(50,50);
-        Joy.setPosition(30,30);
+        Joy.setPosition(BG.getX()+BG.getWidth()/2-Joy.getWidth()/2,BG.getY()+BG.getHeight()/2-Joy.getHeight()/2);
+
 
         Image setBoomImg = new Image(new Texture("flatDark25.png"));
         setBoomImg.setSize(w+35, h+35);
@@ -189,7 +196,6 @@ public class Controller {
 
         stage.addActor(Left);
         stage.addActor(rightControls);
-        //stage.addActor(leftControls);
         stage.addActor(Right);
 
         Image pause = new Image(new Texture("Box.png"));
@@ -212,6 +218,22 @@ public class Controller {
         stage.addActor(pause);
         stage.addActor(BG);
         stage.addActor(Joy);
+        //stage.addActor(leftControls);
+//        Skin touchpadskin = new Skin();
+//
+//        touchpadskin.add("touchBackground",new TextureRegion(new Texture("joystick.png"),0,0,124,124));
+//        touchpadskin.add("touchKnob",new TextureRegion(new Texture("joystick.png"),130,26,75,75));
+//        Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
+//        Drawable touchBackGround = touchpadskin.getDrawable("touchBackground");
+//        Drawable touchKnob = touchpadskin.getDrawable("touchKnob");
+//
+//
+//        touchpadStyle.background=touchBackGround;
+//        touchpadStyle.knob=touchKnob;
+//
+//        Touchpad joystick = new Touchpad(6,touchpadStyle);
+//
+//        stage.addActor(joystick);
 
 
 
@@ -267,14 +289,16 @@ public class Controller {
 
             }
 
-        }else
-            Joy.setPosition(30,30);
+        }else{
+            float aa=0.5f;
+            Joy.setPosition(BG.getX()+BG.getWidth()/2-Joy.getWidth()/2+aa,BG.getY()+BG.getHeight()/2-Joy.getHeight()/2+aa);
+        }
 
     }
     public void draw(){
         countdown--;
         stage.draw();
-//        joyStick.draw();
+        //joyStick.draw();
 
     }
     public boolean isUpPressed() {
