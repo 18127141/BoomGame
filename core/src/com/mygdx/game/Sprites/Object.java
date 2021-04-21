@@ -29,7 +29,7 @@ public abstract class Object  {
         this.map = map;
         this.bounds = bounds;
 
-         bdef = new BodyDef();
+        bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         fdef = new FixtureDef();
 
@@ -41,9 +41,10 @@ public abstract class Object  {
         body = world.createBody(bdef);
         shape.setAsBox((float)bounds.getWidth()/2/Main.PPM,(float)bounds.getHeight()/2/Main.PPM);
         fdef.shape = shape;
-        fdef.filter.categoryBits = MyScreen.ITEMS ;
+        fdef.filter.categoryBits = MyScreen.Wall ;
         fdef.filter.maskBits = MyScreen.PLAYER ;
         body.createFixture(fdef);
+
     }
     public void Destroy(World world,float x, float y){
         int xx=(int)(Math.ceil(x*10));

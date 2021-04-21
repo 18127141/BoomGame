@@ -35,6 +35,7 @@ import com.mygdx.game.Hud.Controller;
 import com.mygdx.game.Main;
 import com.mygdx.game.ResourceManager.GameManager;
 import com.mygdx.game.Sprites.Boom;
+import com.mygdx.game.Sprites.ITEM;
 import com.mygdx.game.Sprites.Items;
 import com.mygdx.game.Sprites.Player;
 import com.mygdx.game.Sprites.Walls;
@@ -58,6 +59,7 @@ public class MyScreen implements Screen {
     public Array<Items> BoxList;
     public Array<Walls> WallList;
     public Array<Player> PlayerList;
+    public Array<ITEM> ItemList;
     public static short PLAYER, ITEMS, BOOM, Wall;
     //Box2d
     private World world;
@@ -97,10 +99,10 @@ public class MyScreen implements Screen {
 
         //==================
 
-        PLAYER = 2;
-        ITEMS = 4;
-        BOOM = 8;
-        Wall = 16;
+        PLAYER = 1;
+        ITEMS = 2;
+        BOOM = 4;
+        Wall = 8;
         //important
         game.controller = new Controller();
         stage = game.controller.stage;
@@ -110,12 +112,13 @@ public class MyScreen implements Screen {
         BoxList = new Array<Items>();
         WallList = new Array<Walls>();
         PlayerList = new Array<Player>();
+        ItemList = new Array<ITEM>();
         /////==============================================Create Box2d WORld==================================
         world = new World(new Vector2(), true);
         b2dr = new Box2DDebugRenderer();
-        b2dr.setDrawBodies(false);
+        b2dr.setDrawBodies(true);
         //Box2d World
-        new WorldBuilder(world, mapp, BoxList, WallList);
+        new WorldBuilder(world, mapp, BoxList, WallList, ItemList);
         //======================================================================
         initPlayer();
         music = GameManager.getAssetManager().get("music/"+mapName+".mp3",Music.class);
@@ -545,7 +548,7 @@ public class MyScreen implements Screen {
                 Temp.update(delta);
 
                 if (Temp.Time == 50) {
-                    Temp.Destroy(player, BoxList, WallList,BoomList);
+                    Temp.Destroy(player, BoxList, WallList,BoomList,ItemList);
                 }
 
                 if (Temp.Time == 0) {
@@ -611,18 +614,40 @@ public class MyScreen implements Screen {
             Boom item = BoomList.get(i);
             item.draw(game.batch);
         }
+        for(int i=0;i<ItemList.size;i++){
+            ITEM item = ItemList.get(i);
+            if (item.isDestroy==true){
+                ItemList.removeIndex(i);
+                i--;
+            }else {
+
+                item.draw(game.batch);
+                item.update(delta);
+            }
+            item.GetEffect(this.player);
+
+        }
         for (int i = 0; i < BoxList.size; i++) {
             Items item = BoxList.get(i);
             item.draw(game.batch);
         }
         for (int i = 0; i < PlayerList.size; i++) {
             Player temp = PlayerList.get(i);
+
 //            if (temp.ReallyDead){
 //                PlayerList.removeIndex(i);
 //                i--;
 //            }
             if (!temp.ReallyDead)
                 temp.draw(game.batch);
+
+            if (!temp.ALIVE){
+                PlayerList.removeIndex(i);
+                i--;
+            }
+            temp.draw(game.batch);
+
+
         }
         if (player != null && !player.ReallyDead)
             player.draw(game.batch);

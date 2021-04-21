@@ -76,7 +76,6 @@ public class Boom extends Sprite {
 
         fdef.shape= shape;
         fdef.filter.categoryBits =MyScreen.BOOM ;
-        fdef.filter.maskBits = MyScreen.ITEMS ;
         b2body.createFixture(fdef);
         b2body.setLinearDamping(10f);
         //=================|Run DOWN|
@@ -131,7 +130,7 @@ public class Boom extends Sprite {
         return region;
     }
 
-    public void  Destroy(Player player,  Array<Items> BoxList, Array<Walls> WallList, Array<Boom> BoomList){
+    public void  Destroy(Player player,  Array<Items> BoxList, Array<Walls> WallList, Array<Boom> BoomList, Array<ITEM> ItemList){
         if (Main.checkSound){
             GameManager.getAssetManager().get("sounds/Explosion.ogg", Sound.class).play(Main.soundPosition/100);
         }
@@ -157,6 +156,15 @@ public class Boom extends Sprite {
         }
         if (CheckDead(player.b2body.getPosition(), b2body.getPosition(),Power,WallList) ==true && CheckDeadBox(player.b2body.getPosition(), b2body.getPosition(),Power,MaybeDetroy) ==true)
             player.Dead();
+       for (int i=0;i< ItemList.size;i++){
+           ITEM temp = ItemList.get(i);
+           System.out.println( "ITEM: " + i);
+           if (CheckDead(temp.body.getPosition(), b2body.getPosition(),Power,WallList) ==true && CheckDeadBox(temp.body.getPosition(), b2body.getPosition(),Power,MaybeDetroy) ==true)
+           {
+               temp.Destroy(world,temp.body.getPosition().x,temp.body.getPosition().y);
+               System.out.println("Detroy");
+           }
+       }
         for(int i=0; i<WallList.size;i++){
             if (WallList.get(i).body.getPosition().x > b2body.getPosition().x && (int)((WallList.get(i).body.getPosition().y*100+5)/20) == (int)((b2body.getPosition().y*100+5)/20) && Distance(WallList.get(i).body.getPosition(),b2body.getPosition())< Right+1   )
                 {

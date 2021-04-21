@@ -41,10 +41,14 @@ public class Player extends Sprite {
     private int rangeCount = 1;
     private int life=1;
     public boolean ALIVE = true;
+
     public boolean ReallyDead = false;
-    final int MaxBoom = 5;
+
+    private int Life = 1;
+    int MaxBoom = 5;
+
     final int MaxSpeed = 5;
-    final int MaxRange = 5;
+    final int MaxRange = 100;
     public int Power =  40;
     final int TIME_PREPARE = 100;
     int Time_dead =100;
@@ -92,8 +96,8 @@ public class Player extends Sprite {
         shape.setRadius(9f/ Main.PPM);
 
         fdef.shape= shape;
-        fdef.filter.categoryBits = (short) 2 ;
-        fdef.filter.maskBits = MyScreen.ITEMS;
+        fdef.filter.categoryBits = MyScreen.PLAYER ;
+        fdef.filter.maskBits = (short) (MyScreen.Wall);
         b2body.createFixture(fdef);
 
         //Ham nay se lam cho vat dung im khi khong chiu tac dung luc
@@ -340,10 +344,33 @@ public class Player extends Sprite {
     }
     public void Dead(){
 
-        ALIVE = false;
-        state=State.Dead;
-        previous=State.Dead;
-        stateTimer=0;
-        life--;
+
+        if(Life--==0){
+            ALIVE = false;
+            state=State.Dead;
+            previous=State.Dead;
+            stateTimer=0;
+        }
+
+    }
+    public void EarnItem(int type,int value){
+        if (type == 1){
+            MaxBoom+=value;
+        }
+        else if(type==2){
+            Power+=value;
+            if (Power>MaxRange){
+                Power=MaxRange;
+            }
+        }
+        else if(type==3){
+            speedCount+=value;
+            if (speedCount>MaxSpeed){
+                speedCount=MaxSpeed;
+            }
+        }else if (type==4){
+            Life+=1;
+        }
+
     }
 }

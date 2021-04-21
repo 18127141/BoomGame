@@ -23,10 +23,16 @@ public class Items extends Object {
     private float stateTimer = 0;
     public int Time = 50;
     private String name;
-
-    public Items(World world, TiledMap map, Rectangle bounds) {
+    private Rectangle bounds;
+    private TiledMap map;
+    private World world;
+    private Array<ITEM> ItemList;
+    public Items(World world, TiledMap map, Rectangle bounds, Array<ITEM> ItemList) {
         super(world, map, bounds);
-
+        this.bounds = bounds;
+        this.world=world;
+        this.map=map;
+        this.ItemList=ItemList;
         sprite = new Sprite((Texture) GameManager.getAssetManager().get("Pack/objects.png"));
         Array<TextureRegion> frame = new Array<>();
         if (MyScreen.mapName.equals("Forest")) {
@@ -60,15 +66,14 @@ public class Items extends Object {
 
     public void Destroy(World world, float x, float y) {
         if (isDestroy == false){
+            ITEM item =new ITEM(this.world,this.map,this.bounds);
+            this.ItemList.add(item);
             super.Destroy(world, x, y);
             this.x = x;
             this.y = y;
             isDestroy = true;
             sprite.setBounds(this.x - 10 / Main.PPM, this.y - 10 / Main.PPM, 20 / Main.PPM, 20 / Main.PPM);
         }
-
-
-
     }
 
     public void update(float dt) {
