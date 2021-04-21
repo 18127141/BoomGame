@@ -66,13 +66,14 @@ public class Items extends Object {
 
     public void Destroy(World world, float x, float y) {
         if (isDestroy == false){
-            ITEM item =new ITEM(this.world,this.map,this.bounds);
-            this.ItemList.add(item);
+
             super.Destroy(world, x, y);
             this.x = x;
             this.y = y;
             isDestroy = true;
             sprite.setBounds(this.x - 10 / Main.PPM, this.y - 10 / Main.PPM, 20 / Main.PPM, 20 / Main.PPM);
+            ITEM item =new ITEM(this.world,this.map,this.bounds);
+            ItemList.add(item);
         }
     }
 

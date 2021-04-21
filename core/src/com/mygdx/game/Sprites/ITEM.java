@@ -74,7 +74,6 @@ public class ITEM  {
     }
     public void Destroy(World world,float x, float y){
         if (isDestroy == false){
-
             world.destroyBody(body);
             this.x = x;
             this.y = y;
