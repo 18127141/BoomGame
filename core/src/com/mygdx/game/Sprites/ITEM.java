@@ -41,6 +41,7 @@ public class ITEM  {
     public Body body;
     BodyDef bdef ;
     FixtureDef fdef;
+    Array<TextureRegion> frame;
     protected Fixture fixture;
     public ITEM(World world, TiledMap map, Rectangle bounds) {
 
@@ -63,11 +64,16 @@ public class ITEM  {
         body.createFixture(fdef);
 
         //Animation cu~
-        sprite = new Sprite((Texture) GameManager.getAssetManager().get("Pack/objects.png"));
-        Array<TextureRegion> frame = new Array<>();
-        frame.add(new TextureRegion(sprite.getTexture(), 0 * 20, 20, 20, 20));
-        frame.add(new TextureRegion(sprite.getTexture(), 20, 20, 20, 20));
-        TimeOver = new Animation(0.2f, frame);
+        sprite = new Sprite((Texture) GameManager.getAssetManager().get("Pack/items.png"));
+        sprite.setBounds(body.getPosition().x-10/Main.PPM, body.getPosition().y-10/Main.PPM,20 / Main.PPM, 20 / Main.PPM);
+        frame = new Array<>();
+        frame.add(new TextureRegion(sprite.getTexture(), 25, 3, 20, 20));
+        frame.add(new TextureRegion(sprite.getTexture(), 3, 3, 20, 20));
+        frame.add(new TextureRegion(sprite.getTexture(), 47, 3, 20, 20));
+        frame.add(new TextureRegion(sprite.getTexture(), 47+22, 3, 20, 20));
+
+
+
         if (typeItem == 0) {
             this.Destroy(world,body.getPosition().x,body.getPosition().y);
         }
@@ -113,16 +119,16 @@ public class ITEM  {
     }
 
     public void update(float dt) {
-        if (isDestroy) {
+        //System.out.println(isDestroy);
+        if (!isDestroy) {
             sprite.setRegion(getFrame(dt));
         }
     }
     private TextureRegion getFrame(float dt) {
-        stateTimer = stateTimer + dt;
-        return (TextureRegion) TimeOver.getKeyFrame(stateTimer, false);
+        return frame.get(typeItem-1);
     }
     public void draw(SpriteBatch batch) {
-        if (isDestroy) {
+        if (!isDestroy) {
             sprite.draw(batch);
         }
 

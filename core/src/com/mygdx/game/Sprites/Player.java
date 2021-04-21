@@ -39,7 +39,6 @@ public class Player extends Sprite {
     private int boomCount =1;
     private float speedCount =-3;
     private int rangeCount = 1;
-    private int life=1;
     public boolean ALIVE = true;
 
     public boolean ReallyDead = false;
@@ -192,16 +191,17 @@ public class Player extends Sprite {
     public void update(float dt){
         if (ALIVE == false){
             Time_dead-=1;
+
             if (Time_dead<=0){
                 //animation chet ket thuc
                 //kiem tra mang song
-                if (life <=0){
+
                     ReallyDead=true;
 
-                }
-                else{
-                    //hoi sinh tai vi tri nao do
-                }
+
+
+
+
             }
 
         }
@@ -345,7 +345,7 @@ public class Player extends Sprite {
     public void Dead(){
 
 
-        if(Life--==0){
+        if(--Life==0){
             ALIVE = false;
             state=State.Dead;
             previous=State.Dead;

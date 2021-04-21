@@ -202,6 +202,7 @@ public class MyScreen implements Screen {
                         }
                         else if (dataSnapshot.child("action").getValue().equals("ReallyDead")){
                             PlayerList.get(index).ReallyDead=true;
+
                         }
 
 
@@ -283,6 +284,7 @@ public class MyScreen implements Screen {
                 if (c==0)
                 {
                     game.db.setDead(game.roomname,game.playerName);
+
                     c=1;
                 }
             }
@@ -620,9 +622,9 @@ public class MyScreen implements Screen {
                 ItemList.removeIndex(i);
                 i--;
             }else {
-
-                item.draw(game.batch);
                 item.update(delta);
+                item.draw(game.batch);
+
             }
             item.GetEffect(this.player);
 
@@ -634,18 +636,9 @@ public class MyScreen implements Screen {
         for (int i = 0; i < PlayerList.size; i++) {
             Player temp = PlayerList.get(i);
 
-//            if (temp.ReallyDead){
-//                PlayerList.removeIndex(i);
-//                i--;
-//            }
+
             if (!temp.ReallyDead)
                 temp.draw(game.batch);
-
-            if (!temp.ALIVE){
-                PlayerList.removeIndex(i);
-                i--;
-            }
-            temp.draw(game.batch);
 
 
         }

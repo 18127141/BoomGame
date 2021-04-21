@@ -25,6 +25,7 @@ public class GameManager implements Disposable {
         assetManager.load("bottom.png", Texture.class);
         assetManager.load("title_background-little.png", Texture.class);
         assetManager.load("Pack/objects.png", Texture.class);
+        assetManager.load("Pack/items.png", Texture.class);
         assetManager.load("Pack/Boom.png", Texture.class);
         assetManager.load("Pack/DarkPlayer.png", Texture.class);
 

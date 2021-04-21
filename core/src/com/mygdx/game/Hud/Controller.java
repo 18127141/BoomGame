@@ -249,11 +249,11 @@ public class Controller {
         downPressed=false;
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
 
-            System.out.println( "WH:" + Gdx.graphics.getWidth() + " "+ Gdx.graphics.getHeight());
-            System.out.println("BF: " + Gdx.input.getX() + " "+ (Gdx.graphics.getHeight()-Gdx.input.getY()) );
+//            System.out.println( "WH:" + Gdx.graphics.getWidth() + " "+ Gdx.graphics.getHeight());
+//            System.out.println("BF: " + Gdx.input.getX() + " "+ (Gdx.graphics.getHeight()-Gdx.input.getY()) );
             float X =Gdx.input.getX() +deltaX -40*scale ;
             float Y =Gdx.graphics.getHeight() - Gdx.input.getY() - 40*scale;
-            System.out.println( X + " " + Y + " " );
+//            System.out.println( X + " " + Y + " " );
 
             if (X < Gdx.graphics.getWidth()/2+deltaX){
                 if (X < 0  )
