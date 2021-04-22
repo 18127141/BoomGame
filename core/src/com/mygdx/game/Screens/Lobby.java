@@ -330,8 +330,11 @@ public class Lobby implements Screen {
         if (start) {
             StartGame();
         }
-        stage.draw();
-        stage.act();
+        if (stage!=null ){
+            stage.draw();
+            stage.act();
+        }
+
 
     }
 

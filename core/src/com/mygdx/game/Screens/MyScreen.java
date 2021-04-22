@@ -116,7 +116,7 @@ public class MyScreen implements Screen {
         /////==============================================Create Box2d WORld==================================
         world = new World(new Vector2(), true);
         b2dr = new Box2DDebugRenderer();
-        b2dr.setDrawBodies(true);
+        b2dr.setDrawBodies(false);
         //Box2d World
         new WorldBuilder(world, mapp, BoxList, WallList, ItemList);
         //======================================================================
@@ -624,9 +624,10 @@ public class MyScreen implements Screen {
             }else {
                 item.update(delta);
                 item.draw(game.batch);
+                item.GetEffect(this.player);
+
 
             }
-            item.GetEffect(this.player);
 
         }
         for (int i = 0; i < BoxList.size; i++) {

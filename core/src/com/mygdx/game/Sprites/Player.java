@@ -344,7 +344,6 @@ public class Player extends Sprite {
     }
     public void Dead(){
 
-
         if(--Life==0){
             ALIVE = false;
             state=State.Dead;
@@ -370,6 +369,7 @@ public class Player extends Sprite {
             }
         }else if (type==4){
             Life+=1;
+
         }
 
     }

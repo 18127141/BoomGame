@@ -100,7 +100,7 @@ public class ITEM  {
         //3 Speed
         //4 Life
         typeItem = (int)(Math.random()*5);
-        System.out.print("TYpe item " + typeItem);
+        //System.out.print("TYpe item " + typeItem);
         if (typeItem==1 || typeItem==3 || typeItem==4){
             value=1;
         }else if(typeItem==2){
@@ -108,6 +108,7 @@ public class ITEM  {
         }
     }
     public void GetEffect(Player player){
+
         Vector2 Point1 = player.b2body.getPosition();
         Vector2 Point2 = this.body.getPosition();
         double Distance = Math.sqrt(Math.pow((Point1.x  - Point2.x), 2) + Math.pow((Point1.y  - Point2.y), 2));
