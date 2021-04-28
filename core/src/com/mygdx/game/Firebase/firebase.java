@@ -73,6 +73,7 @@ public class firebase {
     }
     public void deletePlayerfromRoom(String room,String player){
         db.getRef().child("rooms/"+room+"/"+player).setValue(null);
+        System.out.println("WWTF");
 
     }
     public void SetPlayerXY(String room,String player,float x,float y,String Action,String a,String b,int direction){

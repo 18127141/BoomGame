@@ -522,7 +522,6 @@ public class MyScreen implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 a.remove();
-                game.roomname = "Test";
 
                 game.setScreen(new Mainmenu(game));
 
@@ -720,18 +719,22 @@ public class MyScreen implements Screen {
     @Override
     public void dispose() {
         game.db.db.child("rooms/" + game.roomname).removeEventListener(listener);
-        game.db.db.child("rooms/" + game.roomname+"/Items").removeEventListener(item_listener);
+        //game.db.db.child("rooms/" + game.roomname+"/Items").removeEventListener(item_listener);
         music.dispose();
         world.dispose();
         b2dr.dispose();
         mapp.dispose();
         renderer.dispose();
+        System.out.println("HEHE boiz");
         game.db.deletePlayerfromRoom(game.roomname, game.playerName);
+
         if (PlayerList.size ==0){
 //            game.db.db.child("rooms/" + game.roomname).child("_RoomStatus").setValue(null);
 //            game.db.db.child("rooms/" + game.roomname).child("_RoomMap").setValue(null);
             game.db.db.child("rooms/" + game.roomname).setValue(null);
         }
+
+
     }
 
 }
