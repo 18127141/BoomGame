@@ -43,20 +43,30 @@ public class ITEM  {
     FixtureDef fdef;
     Array<TextureRegion> frame;
     protected Fixture fixture;
-    public ITEM(World world, TiledMap map, Rectangle bounds) {
+    public ITEM(World world, TiledMap map, Rectangle bounds,double x,double y,long type) {
 
         this.world = world;
         this.map = map;
         this.bounds = bounds;
         // HAM RANDOM VAT PHAM
+        typeItem = (int) type;
+
         GenerateValue();
+
         bdef = new BodyDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(9f/ Main.PPM);
         fdef = new FixtureDef();
         //Render the items
         bdef.type = BodyDef.BodyType.StaticBody;
-        bdef.position.set((float)(bounds.getX()+bounds.getWidth()/2)/ Main.PPM,(float)(bounds.getY()+bounds.getHeight()/2)/Main.PPM);
+        //if (type==-1)
+            bdef.position.set((float)(bounds.getX()+bounds.getWidth()/2)/ Main.PPM,(float)(bounds.getY()+bounds.getHeight()/2)/Main.PPM);
+//        else{
+//            bdef.position.set((float)x,(float)y);
+//            typeItem = (int) type;
+//
+//        }
+
         body = world.createBody(bdef);
         fdef.shape = shape;
         fdef.filter.categoryBits = MyScreen.ITEMS ;
@@ -78,6 +88,7 @@ public class ITEM  {
             this.Destroy(world,body.getPosition().x,body.getPosition().y);
         }
     }
+
     public void Destroy(World world,float x, float y){
         if (isDestroy == false){
             world.destroyBody(body);
@@ -99,8 +110,7 @@ public class ITEM  {
         //2 Power
         //3 Speed
         //4 Life
-        typeItem = (int)(Math.random()*5);
-        //System.out.print("TYpe item " + typeItem);
+        //typeItem = (int)(Math.random()*5);
         if (typeItem==1 || typeItem==3 || typeItem==4){
             value=1;
         }else if(typeItem==2){
@@ -118,9 +128,20 @@ public class ITEM  {
         }
 
     }
+    public void GetEffectOther(Player player){
+
+        Vector2 Point1 = new Vector2((float)player.x,(float)player.y);
+
+        Vector2 Point2 = this.body.getPosition();
+        double Distance = Math.sqrt(Math.pow((Point1.x  - Point2.x), 2) + Math.pow((Point1.y  - Point2.y), 2));
+        if (Distance*100 <20){
+            player.EarnItem(this.typeItem,this.value);
+            this.Destroy(world,body.getPosition().x,body.getPosition().y);
+        }
+
+    }
 
     public void update(float dt) {
-        //System.out.println(isDestroy);
         if (!isDestroy) {
             sprite.setRegion(getFrame(dt));
         }

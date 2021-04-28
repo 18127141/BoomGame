@@ -284,7 +284,7 @@ public class Controller {
                         downPressed=true;
                 }
 
-                System.out.println( X + " " + Y + " " +    Cur.angleDeg(Ox));
+                //System.out.println( X + " " + Y + " " +    Cur.angleDeg(Ox));
                 Joy.setPosition(X,Y);
 
             }

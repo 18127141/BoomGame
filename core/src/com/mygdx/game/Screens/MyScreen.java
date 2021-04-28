@@ -52,7 +52,7 @@ public class MyScreen implements Screen {
     Skin skin;
     private Main game;
     Player player;
-    ChildEventListener listener;
+    ChildEventListener listener,item_listener;
 
     private TextureAtlas atlas;
     public Array<Boom> BoomList;
@@ -120,6 +120,7 @@ public class MyScreen implements Screen {
         //Box2d World
         new WorldBuilder(world, mapp, BoxList, WallList, ItemList);
         //======================================================================
+        getItemsFromDataBase();
         initPlayer();
         music = GameManager.getAssetManager().get("music/"+mapName+".mp3",Music.class);
         music.setLooping(true);
@@ -133,13 +134,50 @@ public class MyScreen implements Screen {
 
 
     }
+    public void getItemsFromDataBase(){
+        item_listener = game.db.db.child("rooms/" + game.roomname+"/Items").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                if (!game.playerName.equals(game.roomname)){
+
+                    long type = (long)dataSnapshot.getValue();
+
+                    int index =Integer.valueOf(dataSnapshot.getName());
+                    BoxList.get(index).typeItem = type;
+                    //ItemList.add(tmp);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        }
+        );
+    }
 
     public void getPlayerfromDataBase() {
 
         listener = game.db.db.child("rooms/" + game.roomname).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap")) {
+                if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap") &&!dataSnapshot.getName().equals("Items") ) {
                     if (!dataSnapshot.getName().equals(game.playerName)) {
 
                         PlayerList.add(new Player(world, BoomList, (double) dataSnapshot.child("x").getValue(), (double) dataSnapshot.child("y").getValue(), dataSnapshot.getName(), false));
@@ -154,7 +192,7 @@ public class MyScreen implements Screen {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap")) {
+                if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap") &&!dataSnapshot.getName().equals("Items") ) {
                     if (!dataSnapshot.getName().equals(game.playerName)) {
                         //get the right Player to update
                         int index = 0;
@@ -198,7 +236,7 @@ public class MyScreen implements Screen {
                         direction = (long) dataSnapshot.child("direction").getValue();
                         PlayerList.get(index).direction = direction;
                         if (dataSnapshot.child("action").getValue().equals("Planted")) {
-                            BoomList.add(new Boom(world, new Vector2((float) x, (float) y), (int) direction, PlayerList.get(index).Power));
+                            BoomList.add(new Boom(world, new Vector2((float) x, (float) y), (int) direction, PlayerList.get(index).Power,false));
                         }
                         else if (dataSnapshot.child("action").getValue().equals("ReallyDead")){
                             PlayerList.get(index).ReallyDead=true;
@@ -213,7 +251,7 @@ public class MyScreen implements Screen {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap") ) {
+                if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap") &&!dataSnapshot.getName().equals("Items")) {
                     for (int i=0;i<PlayerList.size;i++){
                         Player temp= PlayerList.get(i);
                         if (temp.name.equals(dataSnapshot.getName())){
@@ -484,7 +522,10 @@ public class MyScreen implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 a.remove();
+                game.roomname = "Test";
+
                 game.setScreen(new Mainmenu(game));
+
 
 
             }
@@ -519,18 +560,18 @@ public class MyScreen implements Screen {
                         lvHard++;
                         for (int i =1; i < 5;i++){
                             Vector2 tempV =new Vector2((float)0.3,(float)(0.4*i+0.2));
-                            Boom Temp = new Boom(world,tempV,1,20*lvHard);
+                            Boom Temp = new Boom(world,tempV,1,20*lvHard,true);
                             BoomList.add(Temp);
                             tempV =new Vector2((float)3.8,(float)(0.4*i+0.2));
-                            Temp = new Boom(world,tempV,1,20*lvHard);
+                            Temp = new Boom(world,tempV,1,20*lvHard,true);
                             BoomList.add(Temp);
                         }
                         for (int i =1; i < 9;i++){
                             Vector2 tempV =new Vector2((float)(0.4*i+0.2),(float)0.2);
-                            Boom Temp = new Boom(world,tempV,1,20*(lvHard));
+                            Boom Temp = new Boom(world,tempV,1,20*(lvHard),true);
                             BoomList.add(Temp);
                             tempV =new Vector2((float)(0.4*i+0.2),(float)2.2);
-                            Temp = new Boom(world,tempV,1,20*(lvHard));
+                            Temp = new Boom(world,tempV,1,20*(lvHard),true);
                             BoomList.add(Temp);
                         }
 
@@ -625,6 +666,10 @@ public class MyScreen implements Screen {
                 item.update(delta);
                 item.draw(game.batch);
                 item.GetEffect(this.player);
+                for (int j=0;j<PlayerList.size;j++){
+                    Player temp = PlayerList.get(j);
+                    item.GetEffectOther(temp);
+                }
 
 
             }
@@ -675,6 +720,7 @@ public class MyScreen implements Screen {
     @Override
     public void dispose() {
         game.db.db.child("rooms/" + game.roomname).removeEventListener(listener);
+        game.db.db.child("rooms/" + game.roomname+"/Items").removeEventListener(item_listener);
         music.dispose();
         world.dispose();
         b2dr.dispose();

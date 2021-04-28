@@ -36,8 +36,9 @@ public class Boom extends Sprite {
     Explosion explosion;
 
     //
-    public Boom(World world, Vector2 position,int direction, int Power ){
+    public Boom(World world, Vector2 position,int direction, int Power ,boolean main){
         super(GameManager.getAssetManager().get("Pack/PlayerandBoom.pack", TextureAtlas.class).findRegion("Bomb"));
+        if (!main) Time =290;
         stateTimer=0;
         this.world = world;
         this.Power = Power;
@@ -195,6 +196,8 @@ public class Boom extends Sprite {
             else if (DetroyList.get(i).body.getPosition().y < b2body.getPosition().y && (int)(DetroyList.get(i).body.getPosition().x*100/20) == (int)(b2body.getPosition().x*100/20) )
                 this.Down =Distance(DetroyList.get(i).body.getPosition(),b2body.getPosition());
             DetroyList.get(i).Destroy(world,DetroyList.get(i).body.getPosition().x,DetroyList.get(i).body.getPosition().y);
+
+
         }
         if ((int)((this.b2body.getPosition().x*100+5)/20) - Left <=0 )
             Left =(int)((this.b2body.getPosition().x*100+5)/20) -1;

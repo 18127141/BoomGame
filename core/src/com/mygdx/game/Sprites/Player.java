@@ -314,7 +314,7 @@ public class Player extends Sprite {
             if (TimePlanted == 0  && AvaiableBoom >0 && ALIVE != false)
             {
 
-                Boom Temp = new Boom(this.world, this.b2body.getPosition(),(int)this.direction,Power);
+                Boom Temp = new Boom(this.world, this.b2body.getPosition(),(int)this.direction,Power,true);
                 boolean Add = true;
                 for(int i =0; i< BoomList.size;i++){
                     if ((int)(BoomList.get(i).b2body.getPosition().x*100) == (int)(Temp.b2body.getPosition().x*100) && (int)(BoomList.get(i).b2body.getPosition().y*100) ==(int)(Temp.b2body.getPosition().y*100) )

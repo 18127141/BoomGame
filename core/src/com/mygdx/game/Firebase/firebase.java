@@ -96,7 +96,16 @@ public class firebase {
     public void sendMsg(String room,String player,String msg){
         db.getRef().child("rooms/"+room+"/"+player).child("message").setValue(msg);
     }
+    public void addItem(int index,int type,String room, boolean destroy){
 
+
+        if (!destroy)
+        db.getRef().child("rooms/"+room+"/Items").child(String.valueOf(index)).setValue(type);
+        else
+            db.getRef().child("rooms/"+room+"/Items").child(String.valueOf(index)).setValue(null);
+
+
+    }
 
     class cordinate{
         public float x,y;

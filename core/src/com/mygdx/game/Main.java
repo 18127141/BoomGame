@@ -29,11 +29,11 @@ public class Main extends Game {
 	public Viewport viewport;
 	public Texture texture;
 	public Controller controller;
-	public String playerName="";
+	public static String playerName="";
 	//fireBase instance
-	public firebase db;
+	public static firebase db;
 	public ArrayList<String> TakenName;
-	public String roomname="Test";
+	public static String roomname="Test";
 
 	//Music and sound
 	public static boolean checkMusic=true;

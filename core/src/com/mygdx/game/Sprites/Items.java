@@ -27,12 +27,24 @@ public class Items extends Object {
     private TiledMap map;
     private World world;
     private Array<ITEM> ItemList;
-    public Items(World world, TiledMap map, Rectangle bounds, Array<ITEM> ItemList) {
+    public long  typeItem =0;
+
+    public Items(World world, TiledMap map, Rectangle bounds, Array<ITEM> ItemList,long type,int index) {
         super(world, map, bounds);
+        if (type ==-1){
+            typeItem = (long)(Math.random()*5);
+            Main.db.addItem(index,  (int)typeItem, Main.roomname, false);
+
+
+        }
+        else{
+        typeItem=(long)type;
+        }
+
         this.bounds = bounds;
-        this.world=world;
-        this.map=map;
-        this.ItemList=ItemList;
+        this.world = world;
+        this.map = map;
+        this.ItemList = ItemList;
         sprite = new Sprite((Texture) GameManager.getAssetManager().get("Pack/objects.png"));
         Array<TextureRegion> frame = new Array<>();
         if (MyScreen.mapName.equals("Forest")) {
@@ -65,15 +77,20 @@ public class Items extends Object {
     }
 
     public void Destroy(World world, float x, float y) {
-        if (isDestroy == false){
+        if (isDestroy == false) {
 
             super.Destroy(world, x, y);
             this.x = x;
             this.y = y;
             isDestroy = true;
             sprite.setBounds(this.x - 10 / Main.PPM, this.y - 10 / Main.PPM, 20 / Main.PPM, 20 / Main.PPM);
-            ITEM item =new ITEM(this.world,this.map,this.bounds);
-            ItemList.add(item);
+
+                ITEM item = new ITEM(this.world, this.map, this.bounds, 0, 0, (int)typeItem);
+
+                ItemList.add(item);
+
+//                Main.db.addItem(ItemList.size - 1, x, y, item.typeItem, Main.roomname, false);
+
         }
     }
 
