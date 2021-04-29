@@ -89,8 +89,9 @@ public class Lobby implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 //Only host can start the game
-                if (game.playerName.equals(game.roomname)) {
-                    game.db.AddRoomStatus(game.roomname, true);
+                if (game.playerName.equals(game.roomname) && player.size>1) {
+
+                    game.db.AddRoomStatus(game.roomname, 1);
                     StartGame();
                 }
 

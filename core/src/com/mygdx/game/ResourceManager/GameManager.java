@@ -40,9 +40,15 @@ public class GameManager implements Disposable {
         for (int i=0;i< Main.Maps.length;i++){
             assetManager.load("music/"+Main.Maps[i]+".mp3",Music.class);
         }
+        //load victory music
+        assetManager.load("music/Victory.mp3",Music.class);
+        assetManager.load("music/Lose.mp3",Music.class);
+
+
         //load Sound
         assetManager.load("sounds/PlaceBomb.ogg", Sound.class);
         assetManager.load("sounds/Explosion.ogg",Sound.class);
+
         assetManager.finishLoading();
 
     }

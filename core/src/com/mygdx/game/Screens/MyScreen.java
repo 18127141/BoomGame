@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.mygdx.game.Builder.WorldBuilder;
 import com.mygdx.game.Hud.Controller;
@@ -52,8 +53,9 @@ public class MyScreen implements Screen {
     Skin skin;
     private Main game;
     Player player;
-    ChildEventListener listener,item_listener;
-
+    ChildEventListener listener, item_listener;
+    boolean gameOver = false;
+    int playercount = 0;
     private TextureAtlas atlas;
     public Array<Boom> BoomList;
     public Array<Items> BoxList;
@@ -81,18 +83,18 @@ public class MyScreen implements Screen {
     //music
     private Music music;
 
-    public MyScreen(Main game,String map) {
+    public MyScreen(Main game, String map) {
         this.game = game;
-        mapName=map;
+        mapName = map;
         mapLoader = new TmxMapLoader();
         setMap(mapName);
         // THU  HEP BAN DO
 
         Time = new Array<>();
         Time.add(LocalTime.now());
-        for (int i =1; i<7; i++){
+        for (int i = 1; i < 7; i++) {
             //Thay bien trong PlusSeconds de tang thoi gian thu  hep
-            Time.add(Time.get(0).plusSeconds(30*i));
+            Time.add(Time.get(0).plusSeconds(30 * i));
         }
 
         //=================        AddplayertoRoom====================
@@ -122,67 +124,73 @@ public class MyScreen implements Screen {
         //======================================================================
         getItemsFromDataBase();
         initPlayer();
-        music = GameManager.getAssetManager().get("music/"+mapName+".mp3",Music.class);
+        music = GameManager.getAssetManager().get("music/" + mapName + ".mp3", Music.class);
         music.setLooping(true);
-        if (game.checkMusic){
-            music.setVolume(game.musicPosition/100);
-        }
-        else{
+        if (game.checkMusic) {
+            music.setVolume(game.musicPosition / 100);
+        } else {
             music.setVolume(0);
         }
         music.play();
 
 
     }
-    public void getItemsFromDataBase(){
-        item_listener = game.db.db.child("rooms/" + game.roomname+"/Items").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                if (!game.playerName.equals(game.roomname)){
+    public void getItemsFromDataBase() {
+        item_listener = game.db.db.child("rooms/" + game.roomname + "/Items").addChildEventListener(
+                new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    long type = (long)dataSnapshot.getValue();
+                        if (!game.playerName.equals(game.roomname)) {
 
-                    int index =Integer.valueOf(dataSnapshot.getName());
-                    BoxList.get(index).typeItem = type;
-                    //ItemList.add(tmp);
+                            long type = (long) dataSnapshot.getValue();
+
+                            int index = Integer.valueOf(dataSnapshot.getName());
+                            BoxList.get(index).typeItem = type;
+                            //ItemList.add(tmp);
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
                 }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        }
         );
     }
 
+    //
+
+    //
     public void getPlayerfromDataBase() {
 
         listener = game.db.db.child("rooms/" + game.roomname).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap") &&!dataSnapshot.getName().equals("Items") ) {
+                if (!dataSnapshot.getName().equals("_RoomStatus") && !dataSnapshot.getName().equals("_RoomMap") && !dataSnapshot.getName().equals("Items")) {
                     if (!dataSnapshot.getName().equals(game.playerName)) {
-
+                        playercount++;
                         PlayerList.add(new Player(world, BoomList, (double) dataSnapshot.child("x").getValue(), (double) dataSnapshot.child("y").getValue(), dataSnapshot.getName(), false));
 
                     } else {
+                        playercount++;
+
                         player = new Player(world, BoomList, (double) dataSnapshot.child("x").getValue(), (double) dataSnapshot.child("y").getValue(), dataSnapshot.getName(), true);
 
                     }
@@ -192,7 +200,38 @@ public class MyScreen implements Screen {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap") &&!dataSnapshot.getName().equals("Items") ) {
+                if (dataSnapshot.getName().equals("_RoomStatus")){
+                    if ((long)dataSnapshot.getValue()==2){
+                        //Game over
+                        if (player!=null ){
+                            if ( player.ALIVE){
+                                System.out.println("YOU WIN");
+                                Gdx.app.postRunnable(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // process the result, e.g. add it to an Array<Result> field of the ApplicationListener.
+                                        game.setScreen(new VictoryScreen(game,"You Win"));
+                                    }
+                                });
+                            }
+                            else{
+                                System.out.println("YOU LOSE");
+                                Gdx.app.postRunnable(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // process the result, e.g. add it to an Array<Result> field of the ApplicationListener.
+                                        game.setScreen(new VictoryScreen(game,"You lose"));
+                                    }
+                                });
+
+
+                            }
+
+                        }
+
+                    }
+                }
+                else if (!dataSnapshot.getName().equals("_RoomStatus") && !dataSnapshot.getName().equals("_RoomMap") && !dataSnapshot.getName().equals("Items")) {
                     if (!dataSnapshot.getName().equals(game.playerName)) {
                         //get the right Player to update
                         int index = 0;
@@ -207,20 +246,18 @@ public class MyScreen implements Screen {
                         } else if (dataSnapshot.child("State").getValue().equals("Stand")) {
                             PlayerList.get(index).state = Player.State.Stand;
 
-                        }
-                        else{
+                        } else {
                             PlayerList.get(index).state = Player.State.Dead;
-                            PlayerList.get(index).stateTimer=0;
+                            PlayerList.get(index).stateTimer = 0;
 
                         }
                         if (dataSnapshot.child("prevState").getValue().equals("Stand")) {
                             PlayerList.get(index).previous = Player.State.Stand;
-                        } else if (dataSnapshot.child("prevState").getValue().equals("Run")){
+                        } else if (dataSnapshot.child("prevState").getValue().equals("Run")) {
                             PlayerList.get(index).previous = Player.State.Run;
-                        }
-                        else{
+                        } else {
                             PlayerList.get(index).previous = Player.State.Dead;
-                            PlayerList.get(index).stateTimer=0;
+                            PlayerList.get(index).stateTimer = 0;
 
 
                         }
@@ -236,10 +273,9 @@ public class MyScreen implements Screen {
                         direction = (long) dataSnapshot.child("direction").getValue();
                         PlayerList.get(index).direction = direction;
                         if (dataSnapshot.child("action").getValue().equals("Planted")) {
-                            BoomList.add(new Boom(world, new Vector2((float) x, (float) y), (int) direction, PlayerList.get(index).Power,false));
-                        }
-                        else if (dataSnapshot.child("action").getValue().equals("ReallyDead")){
-                            PlayerList.get(index).ReallyDead=true;
+                            BoomList.add(new Boom(world, new Vector2((float) x, (float) y), (int) direction, PlayerList.get(index).Power, false));
+                        } else if (dataSnapshot.child("action").getValue().equals("ReallyDead")) {
+                            PlayerList.get(index).ReallyDead = true;
 
                         }
 
@@ -251,10 +287,10 @@ public class MyScreen implements Screen {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                if (!dataSnapshot.getName().equals("_RoomStatus") &&!dataSnapshot.getName().equals("_RoomMap") &&!dataSnapshot.getName().equals("Items")) {
-                    for (int i=0;i<PlayerList.size;i++){
-                        Player temp= PlayerList.get(i);
-                        if (temp.name.equals(dataSnapshot.getName())){
+                if (!dataSnapshot.getName().equals("_RoomStatus") && !dataSnapshot.getName().equals("_RoomMap") && !dataSnapshot.getName().equals("Items")) {
+                    for (int i = 0; i < PlayerList.size; i++) {
+                        Player temp = PlayerList.get(i);
+                        if (temp.name.equals(dataSnapshot.getName())) {
                             PlayerList.removeIndex(i);
                             break;
                         }
@@ -304,11 +340,19 @@ public class MyScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(mapp, 1 / Main.PPM);
 
     }
+    public void CheckGameOver(){
+        if (playercount <2 ) return;
+        if (player!= null && !player.ALIVE) return;
+        for (int i = 0; i < PlayerList.size; i++) {
+            Player temp = PlayerList.get(i);
+            if (!temp.ReallyDead) return;
+            //ham nay se k return neu player con song va cac ng choi khac chet het
+        }
+        game.db.AddRoomStatus(Main.roomname,2);
 
+    }
     public void update(float dt) {
-
-
-
+        CheckGameOver();
         deltatime = dt;
         for (int i = 0; i < PlayerList.size; i++) {
             Player temp = PlayerList.get(i);
@@ -316,14 +360,13 @@ public class MyScreen implements Screen {
 
         }
 
-        if (player != null){
+        if (player != null) {
             player.handleInput(game.controller, game);
-            if (player.ReallyDead){
-                if (c==0)
-                {
-                    game.db.setDead(game.roomname,game.playerName);
+            if (player.ReallyDead) {
+                if (c == 0) {
+                    game.db.setDead(game.roomname, game.playerName);
 
-                    c=1;
+                    c = 1;
                 }
             }
         }
@@ -338,8 +381,8 @@ public class MyScreen implements Screen {
             updatefirebase();
         }
         //check paused
-        if (game.controller.ispausePressed()){
-            game.controller.pausePressed=false;
+        if (game.controller.ispausePressed()) {
+            game.controller.pausePressed = false;
 
             showDialog("You wish to Exit?");
             //paused
@@ -347,24 +390,23 @@ public class MyScreen implements Screen {
         }
 
 
-
-
         renderer.setView(game.cam);
     }
-    public void showDialog(String s){
-        final Dialog a = new Dialog("Options",skin);
+
+    public void showDialog(String s) {
+        final Dialog a = new Dialog("Options", skin);
         a.setWidth(300);
         a.setHeight(250);
-        a.setPosition(Main.WIDTH/2-a.getWidth()/2,Main.HEIGHT/2-a.getHeight()/2);
+        a.setPosition(Main.WIDTH / 2 - a.getWidth() / 2, Main.HEIGHT / 2 - a.getHeight() / 2);
 
-        Label label = new Label(s,skin,"optional");
+        Label label = new Label(s, skin, "optional");
 
 //        a.getContentTable().add(label).center().expand();
 
         TextButton btn = new TextButton("Back", skin, "round");
 
-        a.getButtonTable().add(btn).size(100,50);
-        btn.addListener(new InputListener(){
+        a.getButtonTable().add(btn).size(100, 50);
+        btn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -381,8 +423,9 @@ public class MyScreen implements Screen {
         TextButton btn1 = new TextButton("Exit", skin, "round");
         btn1.setWidth(100);
 
-        a.getButtonTable().add(btn1).size(100,50);;
-        btn1.addListener(new InputListener(){
+        a.getButtonTable().add(btn1).size(100, 50);
+        ;
+        btn1.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -397,10 +440,10 @@ public class MyScreen implements Screen {
             }
         });
         //Music button
-        final Button music_btn = new Button(skin,"music");
+        final Button music_btn = new Button(skin, "music");
         music_btn.setChecked(game.checkMusic);
         a.getContentTable().add(music_btn).left();
-        music_btn.addListener(new InputListener(){
+        music_btn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -410,12 +453,11 @@ public class MyScreen implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (game.checkMusic) {
-                    game.checkMusic=false;
+                    game.checkMusic = false;
                     music.setVolume(0);
-                }
-                else {
-                    game.checkMusic=true;
-                    music.setVolume(game.musicPosition/100);
+                } else {
+                    game.checkMusic = true;
+                    music.setVolume(game.musicPosition / 100);
 
                 }
 
@@ -424,7 +466,7 @@ public class MyScreen implements Screen {
         });
 
 
-        final Slider slider = new Slider(0,100,0.1f,false,skin);
+        final Slider slider = new Slider(0, 100, 0.1f, false, skin);
         a.getContentTable().add(slider).right();
         slider.setValue(game.musicPosition);
         slider.addListener(new ChangeListener() {
@@ -433,8 +475,8 @@ public class MyScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
 
                 game.musicPosition = slider.getValue();
-                if (game.checkMusic){
-                    music.setVolume(slider.getValue()/100);
+                if (game.checkMusic) {
+                    music.setVolume(slider.getValue() / 100);
 
                 }
 
@@ -442,10 +484,10 @@ public class MyScreen implements Screen {
         });
         //Sound button
         a.getContentTable().row();
-        final Button sound_btn = new Button(skin,"sound");
+        final Button sound_btn = new Button(skin, "sound");
         sound_btn.setChecked(game.checkSound);
         a.getContentTable().add(sound_btn).left();
-        sound_btn.addListener(new InputListener(){
+        sound_btn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -455,11 +497,10 @@ public class MyScreen implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (game.checkSound) {
-                    game.checkSound=false;
+                    game.checkSound = false;
 
-                }
-                else {
-                    game.checkSound=true;
+                } else {
+                    game.checkSound = true;
 
                 }
 
@@ -468,7 +509,7 @@ public class MyScreen implements Screen {
         });
 
 
-        final Slider slider1 = new Slider(0,100,0.1f,false,skin);
+        final Slider slider1 = new Slider(0, 100, 0.1f, false, skin);
         a.getContentTable().add(slider1).right();
         slider1.setValue(game.soundPosition);
         slider1.addListener(new ChangeListener() {
@@ -486,18 +527,19 @@ public class MyScreen implements Screen {
         stage.addActor(a);
 
     }
-    public void showDialogConfirm(String s){
-        final Dialog a = new Dialog("Confirm",skin);
+
+    public void showDialogConfirm(String s) {
+        final Dialog a = new Dialog("Confirm", skin);
         a.setWidth(250);
         a.setHeight(200);
-        a.setPosition(Main.WIDTH/2-a.getWidth()/2,Main.HEIGHT/2-a.getHeight()/2);
+        a.setPosition(Main.WIDTH / 2 - a.getWidth() / 2, Main.HEIGHT / 2 - a.getHeight() / 2);
 
-        Label label = new Label(s,skin,"optional");
+        Label label = new Label(s, skin, "optional");
 
         a.getContentTable().add(label).center().expand();
         TextButton btn = new TextButton("Back", skin, "round");
         a.getButtonTable().add(btn);
-        btn.addListener(new InputListener(){
+        btn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -512,7 +554,7 @@ public class MyScreen implements Screen {
         });
         TextButton btn1 = new TextButton("Yes", skin, "round");
         a.getButtonTable().add(btn1);
-        btn1.addListener(new InputListener(){
+        btn1.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -526,7 +568,6 @@ public class MyScreen implements Screen {
                 game.setScreen(new Mainmenu(game));
 
 
-
             }
         });
         stage.addActor(a);
@@ -537,60 +578,60 @@ public class MyScreen implements Screen {
 
         String a, b;
         if (player.state == Player.State.Stand) a = "Stand";
-            else a = "Run";
+        else a = "Run";
         if (player.previous == Player.State.Run) b = "Run";
-            else b = "Stand";
+        else b = "Stand";
         if (player.state == Player.State.Dead) {
-            a="Dead";
-            b="Dead";
+            a = "Dead";
+            b = "Dead";
         }
         game.db.SetPlayerXY(game.roomname, game.playerName, player.b2body.getPosition().x, player.b2body.getPosition().y, "Action", a, b, (int) player.direction);
 
     }
-    public void TimeDown(){
 
-                if (runTimeDown>0 ) {
-                    runTimeDown--;
+    public void TimeDown() {
+
+        if (runTimeDown > 0) {
+            runTimeDown--;
+        }
+        if (Time.size - 1 >= lvHard) {
+            if (LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")).equals(Time.get(lvHard).format((DateTimeFormatter.ofPattern("HH:mm:ss")))) && runTimeDown == 0) {
+                System.out.println("Boooooom");
+                runTimeDown = 100;
+                lvHard++;
+                for (int i = 1; i < 5; i++) {
+                    Vector2 tempV = new Vector2((float) 0.3, (float) (0.4 * i + 0.2));
+                    Boom Temp = new Boom(world, tempV, 1, 20 * lvHard, true);
+                    BoomList.add(Temp);
+                    tempV = new Vector2((float) 3.8, (float) (0.4 * i + 0.2));
+                    Temp = new Boom(world, tempV, 1, 20 * lvHard, true);
+                    BoomList.add(Temp);
                 }
-                if (Time.size-1 >=lvHard){
-                    if (LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")).equals(Time.get(lvHard).format((DateTimeFormatter.ofPattern("HH:mm:ss")))) && runTimeDown ==0){
-                        System.out.println("Boooooom");
-                        runTimeDown = 100;
-                        lvHard++;
-                        for (int i =1; i < 5;i++){
-                            Vector2 tempV =new Vector2((float)0.3,(float)(0.4*i+0.2));
-                            Boom Temp = new Boom(world,tempV,1,20*lvHard,true);
-                            BoomList.add(Temp);
-                            tempV =new Vector2((float)3.8,(float)(0.4*i+0.2));
-                            Temp = new Boom(world,tempV,1,20*lvHard,true);
-                            BoomList.add(Temp);
-                        }
-                        for (int i =1; i < 9;i++){
-                            Vector2 tempV =new Vector2((float)(0.4*i+0.2),(float)0.2);
-                            Boom Temp = new Boom(world,tempV,1,20*(lvHard),true);
-                            BoomList.add(Temp);
-                            tempV =new Vector2((float)(0.4*i+0.2),(float)2.2);
-                            Temp = new Boom(world,tempV,1,20*(lvHard),true);
-                            BoomList.add(Temp);
-                        }
-
-
-                    }
+                for (int i = 1; i < 9; i++) {
+                    Vector2 tempV = new Vector2((float) (0.4 * i + 0.2), (float) 0.2);
+                    Boom Temp = new Boom(world, tempV, 1, 20 * (lvHard), true);
+                    BoomList.add(Temp);
+                    tempV = new Vector2((float) (0.4 * i + 0.2), (float) 2.2);
+                    Temp = new Boom(world, tempV, 1, 20 * (lvHard), true);
+                    BoomList.add(Temp);
                 }
 
 
+            }
+        }
 
 
     }
+
     public void BoomCountDown(float delta) {
-        try{
+        try {
             for (int i = 0; i < BoomList.size; i++) {
                 Boom Temp = BoomList.get(i);
                 Temp.Time -= 1;
                 Temp.update(delta);
 
                 if (Temp.Time == 50) {
-                    Temp.Destroy(player, BoxList, WallList,BoomList,ItemList);
+                    Temp.Destroy(player, BoxList, WallList, BoomList, ItemList);
                 }
 
                 if (Temp.Time == 0) {
@@ -617,7 +658,7 @@ public class MyScreen implements Screen {
                     i--;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.print("BoomList");
         }
 
@@ -656,16 +697,16 @@ public class MyScreen implements Screen {
             Boom item = BoomList.get(i);
             item.draw(game.batch);
         }
-        for(int i=0;i<ItemList.size;i++){
+        for (int i = 0; i < ItemList.size; i++) {
             ITEM item = ItemList.get(i);
-            if (item.isDestroy==true){
+            if (item.isDestroy == true) {
                 ItemList.removeIndex(i);
                 i--;
-            }else {
+            } else {
                 item.update(delta);
                 item.draw(game.batch);
                 item.GetEffect(this.player);
-                for (int j=0;j<PlayerList.size;j++){
+                for (int j = 0; j < PlayerList.size; j++) {
                     Player temp = PlayerList.get(j);
                     item.GetEffectOther(temp);
                 }
@@ -719,19 +760,22 @@ public class MyScreen implements Screen {
     @Override
     public void dispose() {
         game.db.db.child("rooms/" + game.roomname).removeEventListener(listener);
-        //game.db.db.child("rooms/" + game.roomname+"/Items").removeEventListener(item_listener);
+        game.db.db.child("rooms/" + game.roomname + "/Items").removeEventListener(item_listener);
         music.dispose();
         world.dispose();
         b2dr.dispose();
         mapp.dispose();
         renderer.dispose();
-        System.out.println("HEHE boiz");
-        game.db.deletePlayerfromRoom(game.roomname, game.playerName);
+        if (gameOver) {
 
-        if (PlayerList.size ==0){
+        } else {
+            game.db.deletePlayerfromRoom(game.roomname, game.playerName);
+
+            if (PlayerList.size == 0) {
 //            game.db.db.child("rooms/" + game.roomname).child("_RoomStatus").setValue(null);
 //            game.db.db.child("rooms/" + game.roomname).child("_RoomMap").setValue(null);
-            game.db.db.child("rooms/" + game.roomname).setValue(null);
+                game.db.db.child("rooms/" + game.roomname).setValue(null);
+            }
         }
 
 

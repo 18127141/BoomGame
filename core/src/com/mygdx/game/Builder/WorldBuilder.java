@@ -16,7 +16,7 @@ public class WorldBuilder {
         //Render the items
         for (MapObject object: map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
-
+            //Host se random item type
             if (Main.roomname.equals(Main.playerName)) {
                 int tmp = BoxList.size;
                 BoxList.add( new Items(world,map,rect,ItemList,-1,tmp));

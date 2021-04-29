@@ -74,7 +74,9 @@ public class MainHall implements Screen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.db.AddRoomStatus(game.playerName, false);
+                //game.db.AddRoomStatus(game.playerName, false);
+                game.db.AddRoomStatus(game.playerName, 0);
+
                 game.db.AddMap(game.playerName,"Forest");
                 game.db.addPlayertoRoom(game.playerName, game.playerName, Main.posx[0], Main.poxy[0]);
 
@@ -125,7 +127,8 @@ public class MainHall implements Screen {
         listener = game.db.db.child("rooms").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.child("_RoomStatus").getValue()!=null && (boolean)dataSnapshot.child("_RoomStatus").getValue() == false) {
+                System.out.println(dataSnapshot.getName());
+                if (dataSnapshot.child("_RoomStatus").getValue()!=null && (long)dataSnapshot.child("_RoomStatus").getValue() == 0) {
                     final String tmp = dataSnapshot.getName();
                     rooms.put(tmp, Integer.valueOf((int) dataSnapshot.getChildrenCount()));
                     Label text = new Label(tmp, skin, "title-plain");
@@ -158,7 +161,7 @@ public class MainHall implements Screen {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.child("_RoomStatus").getValue()!=null && (boolean)dataSnapshot.child("_RoomStatus").getValue() == true){
+                if (dataSnapshot.child("_RoomStatus").getValue()!=null && (long)dataSnapshot.child("_RoomStatus").getValue() == 1){
                     //room has started
                     int i = 0;
                     String key="";

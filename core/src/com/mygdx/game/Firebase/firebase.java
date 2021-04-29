@@ -73,7 +73,6 @@ public class firebase {
     }
     public void deletePlayerfromRoom(String room,String player){
         db.getRef().child("rooms/"+room+"/"+player).setValue(null);
-        System.out.println("WWTF");
 
     }
     public void SetPlayerXY(String room,String player,float x,float y,String Action,String a,String b,int direction){
@@ -86,7 +85,7 @@ public class firebase {
     public void setDead(String room,String player){
         db.getRef().child("rooms/"+room+"/"+player).child("action").setValue("ReallyDead");
     }
-    public void AddRoomStatus(String room,boolean s){
+    public void AddRoomStatus(String room,int s){
         db.getRef().child("rooms/"+room).child("_RoomStatus").setValue(s);
 
     }
