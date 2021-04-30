@@ -272,7 +272,7 @@ public class Controller {
     //        Life.setPosition( 43 ,Main.HEIGHT  -10   -(162+36*2));
     //        //
     public void updateStat(String s, int value) {
-        System.out.println(s + " " + value);
+//        System.out.println(s + " " + value);
         if (s.equals("Speed")) {
 
 //            System.out.println("speed");

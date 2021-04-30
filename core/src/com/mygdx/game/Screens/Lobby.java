@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
@@ -89,10 +90,18 @@ public class Lobby implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 //Only host can start the game
-                if (game.playerName.equals(game.roomname) && player.size>1) {
+                if (game.playerName.equals(game.roomname) ) {
+                    if (player.size>1) {
+                        game.db.AddRoomStatus(game.roomname, 1);
+                        StartGame();
+                    }
+                    else {
+                        showDialog("So luong nguoi choi","phai lon hon 1");
 
-                    game.db.AddRoomStatus(game.roomname, 1);
-                    StartGame();
+                    }
+                }else{
+                    showDialog("Ban khong phai ","Truong Phong :( ");
+
                 }
 
             }
@@ -228,7 +237,36 @@ public class Lobby implements Screen {
 
 
     }
+    public void showDialog(String s,String s1){
+        final Dialog a = new Dialog("Warning",skin);
+        a.setWidth(200);
+        a.setHeight(150);
+        a.setPosition(Main.WIDTH/2-a.getWidth()/2,Main.HEIGHT/2-a.getHeight()/2);
 
+        Label label = new Label(s,skin,"optional");
+        Label label1 = new Label(s1,skin,"optional");
+
+        a.getContentTable().add(label).center().expand();
+        a.getContentTable().row();
+        a.getContentTable().add(label1).center().expand();
+        TextButton btn = new TextButton("OK", skin, "round");
+        a.getButtonTable().add(btn);
+        btn.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                a.remove();
+
+            }
+        });
+        stage.addActor(a);
+
+    }
     public void MapTable() {
 
         mapTable = new Table();

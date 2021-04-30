@@ -159,11 +159,11 @@ public class Boom extends Sprite {
             player.Dead();
        for (int i=0;i< ItemList.size;i++){
            ITEM temp = ItemList.get(i);
-           System.out.println( "ITEM: " + i);
+//           System.out.println( "ITEM: " + i);
            if (CheckDead(temp.body.getPosition(), b2body.getPosition(),Power,WallList) ==true && CheckDeadBox(temp.body.getPosition(), b2body.getPosition(),Power,MaybeDetroy) ==true)
            {
                temp.Destroy(world,temp.body.getPosition().x,temp.body.getPosition().y);
-               System.out.println("Detroy");
+//               System.out.println("Detroy");
            }
        }
         for(int i=0; i<WallList.size;i++){
