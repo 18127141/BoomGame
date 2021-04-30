@@ -37,6 +37,8 @@ public class MainHall implements Screen {
     Table scrollTable;
     public HashMap<String, Integer> rooms;
     ChildEventListener listener;
+
+
     public MainHall(final Main game) {
         this.game = game;
         rooms = new HashMap<>();
@@ -127,7 +129,6 @@ public class MainHall implements Screen {
         listener = game.db.db.child("rooms").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                System.out.println(dataSnapshot.getName());
                 if (dataSnapshot.child("_RoomStatus").getValue()!=null && (long)dataSnapshot.child("_RoomStatus").getValue() == 0) {
                     final String tmp = dataSnapshot.getName();
                     rooms.put(tmp, Integer.valueOf((int) dataSnapshot.getChildrenCount()));

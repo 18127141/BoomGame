@@ -37,15 +37,15 @@ public class Player extends Sprite {
     public Body b2body;
     public Array<Boom> BoomList ;
     private int boomCount =1;
-    private float speedCount =-3;
+    private int speedCount =-3;
     private int rangeCount = 1;
     public boolean ALIVE = true;
 
     public boolean ReallyDead = false;
 
     private int Life = 1;
-    int MaxBoom = 5;
-
+    int MaxBoom = 3;
+    int BoomMax = 9;
     final int MaxSpeed = 5;
     final int MaxRange = 100;
     public int Power =  40;
@@ -102,6 +102,10 @@ public class Player extends Sprite {
         //Ham nay se lam cho vat dung im khi khong chiu tac dung luc
 
         b2body.setLinearDamping(10f);
+            Main.controller.updateStat("Boom",MaxBoom);
+            Main.controller.updateStat("Power",(Power-20)/20);
+            Main.controller.updateStat("Speed",speedCount+4);
+            Main.controller.updateStat("Life",Life);
         }
         Texture black = GameManager.getAssetManager().get("Pack/DarkPlayer.png", Texture.class);
         //===========================|GET Player Graphics|===============
@@ -350,25 +354,51 @@ public class Player extends Sprite {
             previous=State.Dead;
             stateTimer=0;
         }
+        if (main){
+            Main.controller.updateStat("Life",Life);
+
+        }
 
     }
     public void EarnItem(int type,int value){
+
+
         if (type == 1){
             MaxBoom+=value;
+
+            if (MaxBoom>BoomMax){
+                MaxBoom=BoomMax;
+            }
+            if (main)
+                Main.controller.updateStat("Boom",MaxBoom);
         }
         else if(type==2){
+
             Power+=value;
             if (Power>MaxRange){
                 Power=MaxRange;
             }
+            if (main)
+                Main.controller.updateStat("Power",(Power-20)/20);
         }
         else if(type==3){
             speedCount+=value;
+
             if (speedCount>MaxSpeed){
                 speedCount=MaxSpeed;
             }
+            if (main)
+
+                Main.controller.updateStat("Speed",speedCount+4);
+
         }else if (type==4){
+
             Life+=1;
+
+            if (main)
+
+                Main.controller.updateStat("Life",Life);
+
 
         }
 

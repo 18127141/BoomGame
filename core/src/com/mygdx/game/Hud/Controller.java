@@ -17,32 +17,56 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Main;
+import com.mygdx.game.ResourceManager.GameManager;
 
 /**
  * Created by brentaureli on 10/23/15.
  */
 public class Controller {
-    public static Image l,bottom;
+    public static Image l, bottom;
     Viewport viewport;
     public Stage stage;
-    public boolean upPressed, downPressed, leftPressed, rightPressed, setBoomPressed,pausePressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, setBoomPressed, pausePressed;
     public OrthographicCamera cam;
-    Image Joy ;
+    Image Joy;
     Image BG;
     int countdown = 0;
     Vector2 Ox;
     JoyStick joyStick;
-    public Controller(){
+    Texture texture;
+    //number 0 to 9
+    Array<TextureRegion> number;
+    Image Power, Speed, Life, Boom;
+
+    public Controller() {
         joyStick = new JoyStick();
-        Ox = new Vector2(1,0);
+        Ox = new Vector2(1, 0);
         cam = new OrthographicCamera();
         viewport = new FitViewport(Main.WIDTH, Main.HEIGHT, cam);
         stage = new Stage(viewport, Main.batch);
+        texture = GameManager.getAssetManager().get("Pack/items.png", Texture.class);
+        //
+        number = new Array<>();
+        //56 25 10 16
+        number.add((new TextureRegion(texture, 56, 25, 10, 16)));
+        for (int i = 0; i < 9; i++) {
+            number.add((new TextureRegion(texture, 66 + i * 11, 25, 10, 16)));
 
-
+        }
+        //default
+        Power = new Image(number.get(1));
+        Speed = new Image(number.get(8));
+        Life = new Image(number.get(1));
+        Boom = new Image(number.get(1));
+        Power.setPosition(43, Main.HEIGHT - 10 - 126);
+        Boom.setPosition(43, Main.HEIGHT - 10 - 162);
+        Speed.setPosition(43, Main.HEIGHT - 10 - (162 + 36));
+        Life.setPosition(43, Main.HEIGHT - 10 - (162 + 36 * 2));
+        //
         Gdx.input.setInputProcessor(stage);
 
         Table leftControls = new Table();
@@ -51,21 +75,21 @@ public class Controller {
         leftControls.left().bottom();
 
 
-            int w=20;
-            int h=20;
+        int w = 20;
+        int h = 20;
 
         //BG = new Image(new Texture("flatDark25.png"));
-        BG = new Image(new TextureRegion(new Texture("joystick.png"),0,0,124,124));
-        BG.setSize(80,80);
-        BG.setPosition((float) 12.5,(float) 12.5);
+        BG = new Image(new TextureRegion(new Texture("joystick.png"), 0, 0, 124, 124));
+        BG.setSize(80, 80);
+        BG.setPosition((float) 20, (float) 12.5);
         //BG.setColor(0,0,0,0.5f);
-        Joy = new Image(new TextureRegion(new Texture("joystick.png"),130,26,75,75));
-        Joy.setSize(50,50);
-        Joy.setPosition(BG.getX()+BG.getWidth()/2-Joy.getWidth()/2,BG.getY()+BG.getHeight()/2-Joy.getHeight()/2);
+        Joy = new Image(new TextureRegion(new Texture("joystick.png"), 130, 26, 75, 75));
+        Joy.setSize(50, 50);
+        Joy.setPosition(BG.getX() + BG.getWidth() / 2 - Joy.getWidth() / 2, BG.getY() + BG.getHeight() / 2 - Joy.getHeight() / 2);
 
 
         Image setBoomImg = new Image(new Texture("flatDark25.png"));
-        setBoomImg.setSize(w+35, h+35);
+        setBoomImg.setSize(w + 35, h + 35);
 
         setBoomImg.addListener(new InputListener() {
 
@@ -153,7 +177,6 @@ public class Controller {
         leftControls.row().pad(2, 2, 2, 2);
 
 
-
         leftControls.add(leftImg).size(leftImg.getWidth(), leftImg.getHeight());
         leftControls.add();
         leftControls.add(rightImg).size(rightImg.getWidth(), rightImg.getHeight());
@@ -188,7 +211,7 @@ public class Controller {
         Right.bottom().right();
         Right.padRight(7);
         Right.padBottom(5);
-        setBoomImg.setColor(0,0,0,0);
+        setBoomImg.setColor(0, 0, 0, 0);
         Right.add(setBoomImg).size(setBoomImg.getWidth(), setBoomImg.getHeight());
 
 
@@ -199,9 +222,9 @@ public class Controller {
         stage.addActor(Right);
 
         Image pause = new Image(new Texture("Box.png"));
-        pause.setSize(60,60);
-        pause.setPosition(221,1);
-        pause.setColor(0,0,0,0);
+        pause.setSize(60, 60);
+        pause.setPosition(221, 1);
+        pause.setColor(0, 0, 0, 0);
         pause.addListener(new InputListener() {
 
             @Override
@@ -216,6 +239,11 @@ public class Controller {
             }
         });
         stage.addActor(pause);
+        stage.addActor(Boom);
+        stage.addActor(Speed);
+        stage.addActor(Power);
+        stage.addActor(Life);
+
         stage.addActor(BG);
         stage.addActor(Joy);
         //stage.addActor(leftControls);
@@ -236,78 +264,129 @@ public class Controller {
 //        stage.addActor(joystick);
 
 
+    }
+
+    //        Power.setPosition(43,Main.HEIGHT   -10 -126);
+    //        Boom.setPosition( 43 ,Main.HEIGHT  -10   - 162);
+    //        Speed.setPosition(43 , Main.HEIGHT -10  -(162+36));
+    //        Life.setPosition( 43 ,Main.HEIGHT  -10   -(162+36*2));
+    //        //
+    public void updateStat(String s, int value) {
+        System.out.println(s + " " + value);
+        if (s.equals("Speed")) {
+
+//            System.out.println("speed");
+
+            Speed.remove();
+            Speed = new Image(number.get(value));
+            Speed.setPosition(43, Main.HEIGHT - 10 - (162 + 36));
+
+            stage.addActor(Speed);
+        } else if (s.equals("Power")) {
+//            System.out.println("POwer");
+
+            Power.remove();
+            Power = new Image(number.get(value));
+            Power.setPosition(43, Main.HEIGHT - 10 - 126);
+            stage.addActor(Power);
+
+
+        } else if (s.equals("Life")) {
+//            System.out.println("life");
+
+            Life.remove();
+            Life = new Image(number.get(value));
+            Life.setPosition(43, Main.HEIGHT - 10 - (162 + 36 * 2));
+            stage.addActor(Life);
+
+
+        } else if (s.equals("Boom")) {
+//            System.out.println("Boom");
+
+            Boom.remove();
+            Boom = new Image(number.get(value));
+            Boom.setPosition(43, Main.HEIGHT - 10 - 162);
+            stage.addActor(Boom);
+        }
+
+
 
     }
-    public void Joy(){
-//        joyStick.Joy(this);
-        float scale = Gdx.graphics.getHeight()/Main.HEIGHT;
-        float deltaX = -(Gdx.graphics.getWidth() - Main.WIDTH*scale )/2;
 
-        upPressed=false;
-        leftPressed=false;
-        rightPressed=false;
-        downPressed=false;
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+    public void Joy() {
+//        joyStick.Joy(this);
+        float scale = Gdx.graphics.getHeight() / Main.HEIGHT;
+        float deltaX = -(Gdx.graphics.getWidth() - Main.WIDTH * scale) / 2;
+
+        upPressed = false;
+        leftPressed = false;
+        rightPressed = false;
+        downPressed = false;
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 
 //            System.out.println( "WH:" + Gdx.graphics.getWidth() + " "+ Gdx.graphics.getHeight());
 //            System.out.println("BF: " + Gdx.input.getX() + " "+ (Gdx.graphics.getHeight()-Gdx.input.getY()) );
-            float X =Gdx.input.getX() +deltaX -40*scale ;
-            float Y =Gdx.graphics.getHeight() - Gdx.input.getY() - 40*scale;
+            float X = Gdx.input.getX() + deltaX - 40 * scale;
+            float Y = Gdx.graphics.getHeight() - Gdx.input.getY() - 40 * scale;
 //            System.out.println( X + " " + Y + " " );
 
-            if (X < Gdx.graphics.getWidth()/2+deltaX){
-                if (X < 0  )
-                    X=0;
-                else if(X>Gdx.graphics.getWidth()-Joy.getWidth())
-                    X = Gdx.graphics.getWidth()-Joy.getWidth();
-                if (Y<0)
-                    Y=0;
-                else if(Y>Gdx.graphics.getHeight()-Joy.getHeight())
-                    Y = Gdx.graphics.getHeight()-Joy.getHeight();
-                if (Y >60)
+            if (X < Gdx.graphics.getWidth() / 2 + deltaX) {
+                if (X < 0)
+                    X = 0;
+                else if (X > Gdx.graphics.getWidth() - Joy.getWidth())
+                    X = Gdx.graphics.getWidth() - Joy.getWidth();
+                if (Y < 0)
+                    Y = 0;
+                else if (Y > Gdx.graphics.getHeight() - Joy.getHeight())
+                    Y = Gdx.graphics.getHeight() - Joy.getHeight();
+                if (Y > 60)
                     Y = 60;
-                if (X >60)
-                    X=60;
-                Vector2 Cur = new Vector2(X-30,Y-30);
-                if(countdown<=0){
+                if (X > 60)
+                    X = 60;
+                Vector2 Cur = new Vector2(X - 30, Y - 30);
+                if (countdown <= 0) {
 
-                    countdown=1;
+                    countdown = 1;
 
                     float Deg = Cur.angleDeg(Ox);
-                    if ((Deg <=45) || Deg>315)
-                        rightPressed=true;
-                    if (Deg>45 && Deg <=135)
-                        upPressed =true;
-                    if ((Deg>135 && Deg <=225))
-                        leftPressed=true;
-                    if ((Deg>225 && Deg <=315) )
-                        downPressed=true;
+                    if ((Deg <= 45) || Deg > 315)
+                        rightPressed = true;
+                    if (Deg > 45 && Deg <= 135)
+                        upPressed = true;
+                    if ((Deg > 135 && Deg <= 225))
+                        leftPressed = true;
+                    if ((Deg > 225 && Deg <= 315))
+                        downPressed = true;
                 }
 
                 //System.out.println( X + " " + Y + " " +    Cur.angleDeg(Ox));
-                Joy.setPosition(X,Y);
+                Joy.setPosition(X, Y);
 
             }
 
-        }else{
-            float aa=0.5f;
-            Joy.setPosition(BG.getX()+BG.getWidth()/2-Joy.getWidth()/2+aa,BG.getY()+BG.getHeight()/2-Joy.getHeight()/2+aa);
+        } else {
+            float aa = 0.5f;
+            Joy.setPosition(BG.getX() + BG.getWidth() / 2 - Joy.getWidth() / 2 + aa, BG.getY() + BG.getHeight() / 2 - Joy.getHeight() / 2 + aa);
         }
 
     }
-    public void draw(){
+
+    public void draw() {
         countdown--;
         stage.draw();
+        stage.act();
         //joyStick.draw();
 
     }
+
     public boolean isUpPressed() {
         return upPressed;
     }
-    public boolean isSetBoomPressed()
-    {
+
+    public boolean isSetBoomPressed() {
         return setBoomPressed;
     }
+
     public boolean isDownPressed() {
 
         return downPressed;
@@ -316,14 +395,20 @@ public class Controller {
     public boolean isLeftPressed() {
         return leftPressed;
     }
+
     public boolean isPlanted() {
         return setBoomPressed;
     }
+
     public boolean isRightPressed() {
         return rightPressed;
     }
-    public boolean ispausePressed(){return pausePressed;}
-    public void resize(int width, int height){
+
+    public boolean ispausePressed() {
+        return pausePressed;
+    }
+
+    public void resize(int width, int height) {
         viewport.update(width, height);
 
     }

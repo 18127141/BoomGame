@@ -28,7 +28,7 @@ public class Main extends Game {
 	public OrthographicCamera cam;
 	public Viewport viewport;
 	public Texture texture;
-	public Controller controller;
+	public static Controller controller;
 	public static String playerName="";
 	//fireBase instance
 	public static firebase db;
