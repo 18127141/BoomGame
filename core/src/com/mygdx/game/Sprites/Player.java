@@ -96,7 +96,7 @@ public class Player extends Sprite {
 
         fdef.shape= shape;
         fdef.filter.categoryBits = MyScreen.PLAYER ;
-        fdef.filter.maskBits = (short) (MyScreen.Wall);
+        fdef.filter.maskBits = (short) (MyScreen.Wall|MyScreen.BOOM);
         b2body.createFixture(fdef);
 
         //Ham nay se lam cho vat dung im khi khong chiu tac dung luc

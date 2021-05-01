@@ -76,7 +76,7 @@ public class Boom extends Sprite {
         shape.setRadius(9f/ Main.PPM);
 
         fdef.shape= shape;
-        fdef.filter.categoryBits =MyScreen.BOOM ;
+        fdef.filter.categoryBits =MyScreen.ITEMS ;
         b2body.createFixture(fdef);
         b2body.setLinearDamping(10f);
         //=================|Run DOWN|

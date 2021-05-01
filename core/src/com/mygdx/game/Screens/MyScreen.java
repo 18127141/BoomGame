@@ -44,9 +44,8 @@ import com.mygdx.game.Sprites.Walls;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-
+import com.mygdx.game.Sprites.Walls;
 import javax.rmi.CORBA.Tie;
-
 public class MyScreen implements Screen {
     int c = 0;
     Stage stage;
@@ -92,7 +91,7 @@ public class MyScreen implements Screen {
 
         Time = new Array<>();
         Time.add(LocalTime.now());
-        for (int i = 1; i < 7; i++) {
+        for (int i = 1; i <= 24; i++) {
             //Thay bien trong PlusSeconds de tang thoi gian thu  hep
             Time.add(Time.get(0).plusSeconds(30 * i));
         }
@@ -596,25 +595,97 @@ public class MyScreen implements Screen {
         }
         if (Time.size - 1 >= lvHard) {
             if (LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")).equals(Time.get(lvHard).format((DateTimeFormatter.ofPattern("HH:mm:ss")))) && runTimeDown == 0) {
-                System.out.println("Boooooom");
+
                 runTimeDown = 100;
                 lvHard++;
-                for (int i = 1; i < 5; i++) {
-                    Vector2 tempV = new Vector2((float) 0.3, (float) (0.4 * i + 0.2));
-                    Boom Temp = new Boom(world, tempV, 1, 20 * lvHard, true);
-                    BoomList.add(Temp);
-                    tempV = new Vector2((float) 3.8, (float) (0.4 * i + 0.2));
-                    Temp = new Boom(world, tempV, 1, 20 * lvHard, true);
-                    BoomList.add(Temp);
+                switch (mapName){
+                    case "Forest":{
+                        for (int i = 1; i < 5; i++) {
+                            Vector2 tempV = new Vector2((float) 0.3, (float) (0.4 * i + 0.2));
+
+                            Boom Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                            tempV = new Vector2((float) 3.8, (float) (0.4 * i + 0.2));
+                            Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                        }
+                        for (int i = 1; i < 9; i++) {
+                            Vector2 tempV = new Vector2((float) (0.4 * i + 0.2), (float) 0.2);
+                            Boom Temp = new Boom(world, tempV, 1, 20 *(int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                            tempV = new Vector2((float) (0.4 * i + 0.2), (float) 2.2);
+                            Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                        }
+                        break;
+                    }
+                    case "Temple":{
+                        for (int i = 1; i < 5; i++) {
+                            Vector2 tempV = new Vector2((float) 0.3, (float) (0.4 * i + 0.2));
+
+                            Boom Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                            tempV = new Vector2((float) 3.8, (float) (0.4 * i + 0.2));
+                            Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                        }
+                        for (int i = 1; i < 9; i++) {
+                            Vector2 tempV = new Vector2((float) (0.4 * i + 0.2), (float) 0.2);
+                            Boom Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                            tempV = new Vector2((float) (0.4 * i + 0.2), (float) 2.2);
+                            Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                        }
+                        break;
+                    }
+                    case "Cave":{
+                        for (int i = 1; i < 5; i++) {
+                            Vector2 tempV = new Vector2((float) 0.3, (float) (0.4 * i + 0.2));
+
+                            Boom Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                            tempV = new Vector2((float) 3.8, (float) (0.4 * i + 0.2));
+                            Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                        }
+                        for (int i = 1; i < 9; i++) {
+                            Vector2 tempV = new Vector2((float) (0.4 * i + 0.2), (float) 0.2);
+                            Boom Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                            tempV = new Vector2((float) (0.4 * i + 0.2), (float) 2.2);
+                            Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                        }
+                        break;
+                    }
+                    case "Sewer":{
+                        for (int i = 1; i < 5; i++) {
+                            Vector2 tempV = new Vector2((float) 0.3, (float) (0.4 * i + 0.2));
+
+                            Boom Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                            tempV = new Vector2((float) 3.8, (float) (0.4 * i + 0.2));
+                            Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                        }
+                        for (int i = 1; i < 9; i++) {
+                            Vector2 tempV = new Vector2((float) (0.4 * i + 0.2), (float) 0.2);
+                            Boom Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                            tempV = new Vector2((float) (0.4 * i + 0.2), (float) 2.2);
+                            Temp = new Boom(world, tempV, 1, 20 * (int)(lvHard/4+1), true);
+                            BoomList.add(Temp);
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+
                 }
-                for (int i = 1; i < 9; i++) {
-                    Vector2 tempV = new Vector2((float) (0.4 * i + 0.2), (float) 0.2);
-                    Boom Temp = new Boom(world, tempV, 1, 20 * (lvHard), true);
-                    BoomList.add(Temp);
-                    tempV = new Vector2((float) (0.4 * i + 0.2), (float) 2.2);
-                    Temp = new Boom(world, tempV, 1, 20 * (lvHard), true);
-                    BoomList.add(Temp);
-                }
+
+
+
 
 
             }
@@ -638,7 +709,9 @@ public class MyScreen implements Screen {
                     BoomList.removeValue(Temp, true);
                     i--;
                 }
-                if (Temp.Time == 150) {
+                int Distance=  (int)(((Math.sqrt(Math.pow((Temp.b2body.getPosition().x  - player.b2body.getPosition().x), 2) + Math.pow((Temp.b2body.getPosition().y  - player.b2body.getPosition().y), 2)))*100 +5)/20);
+                if (Distance>=1) {
+                    Temp.fdef.filter.categoryBits =MyScreen.BOOM ;
                     Temp.fdef.filter.maskBits = MyScreen.PLAYER;
                     Temp.b2body.createFixture(Temp.fdef);
                 }
