@@ -21,6 +21,7 @@ import com.mygdx.game.ResourceManager.GameManager;
 import com.mygdx.game.Screens.MyScreen;
 
 public class Player extends Sprite {
+
     //
     //0 is Down
     //1 is Left
@@ -145,6 +146,7 @@ public class Player extends Sprite {
             frame.add(stand.get(1));
 
         }
+        //Array <TextureRegion>
         RunLeft = new Animation(0.1f,frame);
         frame.clear();
 
